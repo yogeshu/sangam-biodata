@@ -1,0 +1,66 @@
+/* ServiceOfferings.module.css */
+.serviceOfferings {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(auto, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  .offering {
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+  
+  .offeringContent {
+    flex: 1;
+  }
+  
+  .offeringTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .offeringDescription {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+  
+  .readMoreBtn {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .offeringImageContainer {
+    margin-top: 1.5rem;
+  }
+  
+  .offeringImage {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  @media (min-width: 768px) {
+    .offering {
+      flex-direction: row;
+      align-items: center;
+    }
+  
+    .offeringContent {
+      flex: 1;
+      margin-right: 2rem;
+    }
+  
+    .offeringImageContainer {
+      flex: 1;
+      max-width: 400px;
+      margin-top: 0;
+    }
+  }
