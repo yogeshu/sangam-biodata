@@ -1,5 +1,7 @@
 // Header.js
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import styles from './Header.module.css';
 
 const Header = () => {
@@ -16,16 +18,17 @@ const Header = () => {
       </div>
       <nav className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ''}`}>
         <div className={styles.navLinks}>
-         
-          <a href="#" className={styles.navLink}>
+
+          <Link to="/services" className={styles.navLink}>
             Services
-          </a>
-          <a href="#" className={styles.navLink}>
+          </Link>
+          <Link to="/about" className={styles.navLink}>
             About
-          </a>
-          <a href="#" className={styles.navLink}>
+          </Link>
+          <Link to="/contact" className={styles.navLink}>
             Contact
-          </a>
+          </Link>
+
         </div>
         <div className={styles.ctaContainer}>
           <button className={styles.cta}>LET'S TALK</button>
