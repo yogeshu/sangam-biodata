@@ -1,6 +1,7 @@
 // Header.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import logo from 'assets/images/logo.png'
 
 import styles from './Header.module.css';
 
@@ -14,7 +15,8 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <div className={styles.logoContainer}>
-        <img src="/logo.png" alt="Sangam Logo" className={styles.logo} />
+     <Link to="/" style={{textDecoration: "none", color: "#000", fontWeight: 'bold'}}>   <img src={logo} alt="Sangam Logo" className={styles.logo} /> </Link>
+     <Link to="/" style={{textDecoration: "none", color: "#000", fontWeight: 'bold'}}><span className={styles.logoText}>Sangam Biodata</span> </Link>
       </div>
       <nav className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ''}`}>
         <div className={styles.navLinks}>

@@ -9,10 +9,12 @@
 
 .logoContainer {
     /* Styles for the logo container */
+    display: flex;
+    align-items: center;
 }
 
 .logo {
-    height: 2rem;
+    height: 4rem;
     /* Adjust the height as needed */
 }
 
