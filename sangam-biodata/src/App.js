@@ -1,8 +1,7 @@
 import {
   BrowserRouter as Router,
-  Routes,
-  Route
 } from 'react-router-dom';
+import AuthPage from 'pages/AuthPage/AuthPage';
 
 import HomePage from 'pages/HomePage/HomePage';
 import ServicesPage from 'pages/ServicesPage/ServicesPage';
@@ -15,22 +14,13 @@ import ContactPage from 'pages/ContactPage/ContactPage';
 // component
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
+import RoutesConfig from 'routes/RoutesConfig';
 
 function App() {
   return (
     <Router>
       <Header />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        {/*
-      
-        <Route path="/templates" element={<TemplateSalePage />} />
-        <Route path="/auth" element={<AuthenticationPage />} />
-        <Route path="/builder" element={<BuilderPage />} /> */}
-      </Routes>
+    <RoutesConfig/>
       <Footer />
     </Router>
   );
