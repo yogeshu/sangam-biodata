@@ -8,17 +8,20 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Set the persistence mode to local (across sessions)
     setPersistence(auth, browserLocalPersistence)
       .then(() => {
         console.log("Persistence mode set to local.");
-
-        // Listen for changes to the authentication state
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-          setUser(currentUser); // Update the state with the current user
-        });
-
-        return () => unsubscribe(); // Clean up listener on unmount
+        const unsubscribe = onAuthStateChanged(
+          auth,
+          (currentUser) => {
+            console.log("onAuthStateChanged callback triggered");
+            console.log("currentUser:", currentUser);
+            setUser(currentUser);
+          },
+          (error) => {
+            console.error("Error in onAuthStateChanged:", error);
+          }
+        );
       })
       .catch((error) => {
         console.error("Error setting persistence:", error);

@@ -1,7 +1,7 @@
+// RoutesConfig.jsx
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
-
 import HomePage from '../pages/HomePage/HomePage';
 import ServicesPage from '../pages/ServicesPage/ServicesPage';
 import AboutPage from '../pages/AboutPage/AboutPage';
@@ -19,9 +19,15 @@ const RoutesConfig = () => {
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/templates" element={<TemplateSalePage />} />
       <Route path="/auth" element={<AuthPage />} />
-
       {/* Protected Routes */}
-      <Route path="/builder" element={<ProtectedRoute element={BuilderPage} />} />
+      <Route
+        path="/builder"
+        element={
+          <ProtectedRoute>
+            <BuilderPage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };
