@@ -1,9 +1,9 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import firebase from 'firebase/compat/app';
+import { auth } from '../firebaseConfig';
 
 const ProtectedRoute = ({ element: Component }) => {
-  const user = firebase.auth().currentUser;
+  const user = auth.currentUser; // Use auth directly to check the current user state
 
   return user ? <Component /> : <Navigate to="/auth" />;
 };

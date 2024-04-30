@@ -35,11 +35,13 @@
   .imageContainer {
     flex: 1;
     max-width: 600px;
+    
   }
   
   .heroImage {
     max-width: 100%;
     height: auto;
+    border-radius: 25px;
   }
   
   @media (max-width: 768px) {
