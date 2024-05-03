@@ -1,99 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styles from './BuilderPage.module.css';
 
 const BuilderPage = () => {
-  const [template, setTemplate] = useState('Classic');
-  const [biodata, setBiodata] = useState({
-    personal: '',
-    family: '',
-    education: '',
-    career: '',
-    astrology: '',
-  });
-  const [showPreview, setShowPreview] = useState(false);
+    const [biodata, setBiodata] = useState({
+        personal: '', family: '', education: '', career: '', astrology: '', skills: '', hobbies: '', interests: ''
+    });
+    const [showPreview, setShowPreview] = useState(false);  // State to toggle preview modal
 
-  const handleChange = (section, value) => {
-    setBiodata((prev) => ({ ...prev, [section]: value }));
-  };
+    const handleChange = useCallback((section, value) => {
+        setBiodata(prev => ({ ...prev, [section]: value }));
+    }, []);
 
-  const handlePreview = () => {
-    setShowPreview(true);
-  };
+    const handlePreview = useCallback(() => {
+        setShowPreview(true);  // Toggle to show the preview modal
+    }, []);
 
-  const handleClosePreview = () => {
-    setShowPreview(false);
-  };
+    const handleClosePreview = useCallback(() => {
+        setShowPreview(false);  // Toggle to close the preview modal
+    }, []);
 
-  return (
-    <div className={styles.builderPage}>
-      <div className={styles.leftPanel}>
-        <h2 className={styles.heading}>Settings</h2>
-        <div className={styles.templateSelector}>
-          <label>Template:</label>
-          <select value={template} onChange={(e) => setTemplate(e.target.value)}>
-            <option value="Classic">Classic</option>
-            <option value="Modern">Modern</option>
-            {/* Add more options */}
-          </select>
-        </div>
-        <div className={styles.options}>
-          <label>
-            <input
-              type="checkbox"
-              onChange={() => {
-                /* Toggle astrology or other settings */
-              }}
-            />
-            Include Astrology
-          </label>
-          {/* More options as needed */}
-        </div>
-        <button className={styles.saveButton}>Save Progress</button>
-        <button className={styles.loadButton}>Load Existing</button>
-      </div>
-      <div className={styles.rightPanel}>
-        <h2 className={styles.heading}>Builder Form</h2>
-        {/* Add form sections */}
-        <div className={styles.formSection}>
-          <label>Personal Details:</label>
-          <input
-            type="text"
-            value={biodata.personal}
-            onChange={(e) => handleChange('personal', e.target.value)}
-          />
-        </div>
-        <div className={styles.formSection}>
-          <label>Family Background:</label>
-          <input
-            type="text"
-            value={biodata.family}
-            onChange={(e) => handleChange('family', e.target.value)}
-          />
-        </div>
-        {/* More form sections as needed */}
-        <button className={styles.previewButton} onClick={handlePreview}>
-          Preview
-        </button>
-      </div>
-      {showPreview && (
-        <div className={styles.previewModal}>
-          <div className={styles.previewContent}>
-            <h2>Preview</h2>
-            <div>
-              {/* Render preview content based on biodata and template */}
-              {/* You can create separate components for rendering the preview */}
-              <p>Personal Details: {biodata.personal}</p>
-              <p>Family Background: {biodata.family}</p>
-              {/* Render other sections */}
+    return (
+        <div className={styles.builderPage}>
+            <div className={styles.formSection}>
+                <h2 className={styles.heading}>Builder Form</h2>
+                {Object.entries(biodata).map(([key, value]) => (
+                    <div key={key} className={styles.inputGroup}>
+                        <label>{key.replace(/^\w/, c => c.toUpperCase())}:</label>
+                        <input
+                            type="text"
+                            value={value}
+                            onChange={(e) => handleChange(key, e.target.value)}
+                            placeholder={`Enter ${key}`}
+                            className={styles.input}
+                        />
+                    </div>
+                ))}
+                <button className={styles.previewButton} onClick={handlePreview}>Preview</button>
             </div>
-            <button className={styles.closePreviewButton} onClick={handleClosePreview}>
-              Close Preview
-            </button>
-          </div>
+            {showPreview && (
+                <div className={styles.previewModal}>
+                    <div className={styles.previewContent}>
+                        <h2>Preview</h2>
+                        {Object.entries(biodata).map(([key, value]) => (
+                            <p key={key}><strong>{key.replace(/^\w/, c => c.toUpperCase())}:</strong> {value}</p>
+                        ))}
+                        <button className={styles.closePreviewButton} onClick={handleClosePreview}>
+                            Close Preview
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default BuilderPage;
