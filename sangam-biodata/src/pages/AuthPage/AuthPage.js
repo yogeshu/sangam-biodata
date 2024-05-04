@@ -30,7 +30,7 @@ const AuthPage = () => {
       .then((userCredential) => {
         setSuccessMessage('Sign in successful!');
         
-        navigate('/builder'); // Navigate to Builder page on success
+        navigate('/select-template'); // Navigate to Builder page on success
         setErrorMessage('');
       })
       .catch((error) => {

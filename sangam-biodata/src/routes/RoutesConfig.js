@@ -9,6 +9,7 @@ import ContactPage from '../pages/ContactPage/ContactPage';
 import TemplateSalePage from '../pages/TemplateSalePage/TemplateSalePage';
 import AuthPage from '../pages/AuthPage/AuthPage';
 import BuilderPage from '../pages/BuilderPage/BuilderPage';
+import SelectTemplate from 'pages/SelectTemplate/SelectTemplate';
 
 const RoutesConfig = () => {
   return (
@@ -20,6 +21,7 @@ const RoutesConfig = () => {
       <Route path="/templates" element={<TemplateSalePage />} />
       <Route path="/auth" element={<AuthPage />} />
       {/* Protected Routes */}
+      <Route path='/select-template' element={<ProtectedRoute><SelectTemplate /></ProtectedRoute>} />
       <Route
         path="/builder"
         element={

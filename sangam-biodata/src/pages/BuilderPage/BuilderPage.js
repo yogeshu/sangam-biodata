@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
+import { useSearchParams } from 'react-router-dom';
+
 import styles from './BuilderPage.module.css';
 import ClassicTemplate from './Templates/ClassicTemplate';
 import ModernTemplate from './Templates/ModernTemplate';
@@ -58,7 +60,9 @@ const BuilderPage = () => {
     Instagram: '',
     LinkedIn: '',
   });
-  const [selectedTemplate, setSelectedTemplate] = useState('Classic');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialTemplate = searchParams.get('template') || 'Classic';
+  const [selectedTemplate, setSelectedTemplate] = useState(initialTemplate);
   const [selectedBackground, setSelectedBackground] = useState(backgrounds[0]);
   const [showPreview, setShowPreview] = useState(false);
   const [showPDFPreview, setShowPDFPreview] = useState(false);
