@@ -1,26 +1,58 @@
-// Header.js
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import logo from 'assets/images/logo.png'
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut, onAuthStateChanged } from "firebase/auth";
+import { auth } from "firebaseConfig";
 
-import styles from './Header.module.css';
+import logo from "assets/images/logo.png";
+import styles from "./Header.module.css";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate(); // Updated from useHistory to useNavigate
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+    });
+
+    return unsubscribe;
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const signOut = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        console.log("Sign-out successful");
+      })
+      .catch((error) => {
+        // An error happened.
+        console.log("Sign-out error", error);
+      });
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.logoContainer}>
-     <Link to="/" style={{textDecoration: "none", color: "#000", fontWeight: 'bold'}}>   <img src={logo} alt="Sangam Logo" className={styles.logo} /> </Link>
-     <Link to="/" style={{textDecoration: "none", color: "#000", fontWeight: 'bold'}}><span className={styles.logoText}>Sangam Biodata</span> </Link>
+        <Link
+          to="/"
+          style={{ textDecoration: "none", color: "#000", fontWeight: "bold" }}
+        >
+          <img src={logo} alt="Sangam Logo" className={styles.logo} />
+        </Link>
+        <Link
+          to="/"
+          style={{ textDecoration: "none", color: "#000", fontWeight: "bold" }}
+        >
+          <span className={styles.logoText}>Sangam Biodata</span>
+        </Link>
       </div>
-      <nav className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ''}`}>
+      <nav className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ""}`}>
         <div className={styles.navLinks}>
-
           <Link to="/services" className={styles.navLink}>
             Services
           </Link>
@@ -30,10 +62,17 @@ const Header = () => {
           <Link to="/contact" className={styles.navLink}>
             Contact
           </Link>
-
         </div>
         <div className={styles.ctaContainer}>
-         <Link to="/auth"> <button className={styles.cta}>Login</button> </Link>
+          {user ? (
+            <button className={styles.cta} onClick={signOut}>
+              Logout
+            </button>
+          ) : (
+            <Link to="/auth">
+              <button className={styles.cta}>Login / Sign Up</button>
+            </Link>
+          )}
         </div>
       </nav>
       <div className={styles.hamburgerMenu} onClick={toggleMenu}>
