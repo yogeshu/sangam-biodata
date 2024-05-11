@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styles from './SelectTemplate.module.css';
-import creativeTemplate from 'assets/images/backgrounds/first.jpg';
-import frameTemplate from 'assets/images/backgrounds/second.jpg';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./SelectTemplate.module.css";
+import creativeTemplate from "assets/images/backgrounds/first.jpg";
+import frameTemplate from "assets/images/backgrounds/second.jpg";
+import classic from "assets/images/backgrounds/classic.jpg";
+import attractive from "assets/images/backgrounds/attractive.jpg";
+import golden from "assets/images/backgrounds/golden.jpg";
+import flower from "assets/images/backgrounds/flower.jpg";
+import expensive from "assets/images/backgrounds/expensive.jpg";
+import elegant from "assets/images/backgrounds/elegant.jpg";
 
 const SelectTemplate = () => {
   const navigate = useNavigate();
@@ -10,10 +16,14 @@ const SelectTemplate = () => {
   const [selectedTemplateIndex, setSelectedTemplateIndex] = useState(0);
 
   const templates = [
-    { name: 'Classic', thumbnail: 'path/to/classic-thumbnail.png' },
-    { name: 'Modern', thumbnail: 'path/to/modern-thumbnail.png' },
-    { name: 'Creative', thumbnail: creativeTemplate },
-    { name: 'Frame', thumbnail: frameTemplate },
+    { name: "Classic", thumbnail: classic },
+    { name: "Creative", thumbnail: creativeTemplate },
+    { name: "Frame", thumbnail: frameTemplate },
+    { name: "Attractive", thumbnail: attractive },
+    { name: "Golden", thumbnail: golden },
+    { name: "Flower", thumbnail: flower },
+    { name: "Expensive", thumbnail: expensive },
+    { name: "Elegant", thumbnail: elegant },
   ];
 
   const handleSelectTemplate = (index) => {
