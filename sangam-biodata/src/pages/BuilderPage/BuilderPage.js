@@ -1,67 +1,111 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
-import { useSearchParams } from 'react-router-dom';
+import React, { useState, useCallback, useEffect } from "react";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { useSearchParams } from "react-router-dom";
 
-import styles from './BuilderPage.module.css';
-import ClassicTemplate from './Templates/ClassicTemplate';
-import ModernTemplate from './Templates/ModernTemplate';
-import CreativeTemplate from './Templates/CreativeTemplate';
-import FrameTemplate from './Templates/FrameTemplate';
+import styles from "./BuilderPage.module.css";
+import ClassicTemplate from "./Templates/ClassicTemplate";
+import ModernTemplate from "./Templates/ModernTemplate";
+import CreativeTemplate from "./Templates/CreativeTemplate";
+import FrameTemplate from "./Templates/FrameTemplate";
+import AttractiveTemplate from "./Templates/AttractiveTemplate";
+import GoldenTemplate from "./Templates/GoldenTemplate";
+import FlowerTemplate from "./Templates/FlowerTemplate";
+import ExpensiveTemplate from "./Templates/ExpensiveTemplate";
+import ElegantTemplate from "./Templates/ElegantTemplate";
 
 // Background options
 const backgrounds = [
-  { id: 1, name: 'Classic', value: '#ffffff' },
-  { id: 2, name: 'Modern', value: '#f2f2f2' },
-  { id: 3, name: 'Creative', value: 'https://example.com/creative-bg.jpg' },
-  { id: 4, name: 'Frame', value: 'https://example.com/frame-bg.jpg'}
+  { id: 1, name: "Classic", value: "#ffffff" },
+  { id: 2, name: "Modern", value: "#f2f2f2" },
+
   // Add more backgrounds as needed
 ];
-
+const SelectBox = ({ selectedTemplate, setSelectedTemplate }) => (
+  <div className={styles.selectContainer}>
+    <label htmlFor="template" className={styles.label}>
+      Template
+    </label>
+    <div className={styles.selectWrapper}>
+      <select
+        id="template"
+        name="template"
+        value={selectedTemplate}
+        onChange={(e) => setSelectedTemplate(e.target.value)}
+        className={styles.select}
+      >
+        <option value="Classic">Classic</option>
+        <option value="Modern">Modern</option>
+        <option value="Creative">Creative</option>
+        <option value="Frame">Frame</option>
+        <option value="Attractive">Attractive</option>
+        <option value="Golden">Golden</option>
+        <option value="Flower">Flower</option>
+        <option value="Expensive">Expensive</option>
+        <option value="Elegant">Elegant</option>
+      </select>
+      <div className={styles.arrowIcon}>
+        <svg
+          className={styles.arrowSvg}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fillRule="evenodd"
+            d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+);
 // BuilderPage Component
 const BuilderPage = () => {
   const [biodata, setBiodata] = useState({
-    FullName: '',
-    BirthName: '',
-    BirthDate: '',
-    BirthTime: '',
-    BirthCity: '',
-    Height: '',
-    Gotra: '',
-    Naadi: '',
-    Manglik: '',
-    MamKul: '',
-    Nakshatra: '',
-    Charan: '',
-    Rashi: '',
-    Cast: '',
-    Qualification: '',
-    Occupation: '',
-    OccupationCity: '',
-    Income: '',
-    FatherName: '',
-    MotherName: '',
-    FatherOccupation: '',
-    MotherOccupation: '',
-    Siblings: '',
-    SiblingDetails: '',
-    FamilyIncome: '',
-    FamilyType: '',
-    FamilyStatus: '',
-    FamilyValues: '',
-    FamilyLocation: '',
-    FamilyOrigin: '',
-    About: '',
-    Hobbies: '',
-    Expectation: '',
-    Contact: '',
-    Address: '',
-    Email: '',
-    Website: '',
-    Instagram: '',
-    LinkedIn: '',
+    FullName: "",
+    BirthName: "",
+    BirthDate: "",
+    BirthTime: "",
+    BirthCity: "",
+    Height: "",
+    Gotra: "",
+    Naadi: "",
+    Manglik: "",
+    MamKul: "",
+    Nakshatra: "",
+    Charan: "",
+    Rashi: "",
+    Cast: "",
+    Qualification: "",
+    Occupation: "",
+    OccupationCity: "",
+    Income: "",
+    FatherName: "",
+    MotherName: "",
+    FatherOccupation: "",
+    MotherOccupation: "",
+    Siblings: "",
+    SiblingDetails: "",
+    FamilyIncome: "",
+    FamilyType: "",
+    FamilyStatus: "",
+    FamilyValues: "",
+    FamilyLocation: "",
+    FamilyOrigin: "",
+    About: "",
+    Hobbies: "",
+    Expectation: "",
+    Contact: "",
+    Address: "",
+    Email: "",
+    Website: "",
+    Instagram: "",
+    LinkedIn: "",
   });
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialTemplate = searchParams.get('template') || 'Classic';
+  const initialTemplate = searchParams.get("template") || "Classic";
   const [selectedTemplate, setSelectedTemplate] = useState(initialTemplate);
   const [selectedBackground, setSelectedBackground] = useState(backgrounds[0]);
   const [showPreview, setShowPreview] = useState(false);
@@ -81,14 +125,30 @@ const BuilderPage = () => {
 
   const renderTemplate = () => {
     switch (selectedTemplate) {
-      case 'Classic':
+      case "Classic":
         return <ClassicTemplate biodata={biodata} />;
-      case 'Modern':
+      case "Modern":
         return <ModernTemplate biodata={biodata} />;
-      case 'Creative':
+      case "Creative":
         return <CreativeTemplate biodata={biodata} />;
-      case 'Frame':
-        return <FrameTemplate biodata={biodata} background={selectedBackground.value} />;
+      case "Frame":
+        return (
+          <FrameTemplate
+            biodata={biodata}
+            background={selectedBackground.value}
+          />
+        );
+      case "Attractive":
+        return <AttractiveTemplate biodata={biodata} />;
+      case "Golden":
+        return <GoldenTemplate biodata={biodata} />;
+      case "Flower":
+        return <FlowerTemplate biodata={biodata} />;
+      case "Expensive":
+        return <ExpensiveTemplate biodata={biodata} />;
+      case "Elegant":
+        return <ElegantTemplate biodata={biodata} />;
+
       default:
         return null;
     }
@@ -96,12 +156,52 @@ const BuilderPage = () => {
 
   useEffect(() => {
     if (showPreview || showPDFPreview) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     }
   }, [showPreview, showPDFPreview]);
-
+  const SelectBox = ({ selectedTemplate, setSelectedTemplate }) => (
+    <div className={styles.selectContainer}>
+      <label htmlFor="template" className={styles.label}>
+        Template
+      </label>
+      <div className={styles.selectWrapper}>
+        <select
+          id="template"
+          name="template"
+          value={selectedTemplate}
+          onChange={(e) => setSelectedTemplate(e.target.value)}
+          className={styles.select}
+        >
+          <option value="Classic">Classic</option>
+          <option value="Modern">Modern</option>
+          <option value="Creative">Creative</option>
+          <option value="Frame">Frame</option>
+          <option value="Attractive">Attractive</option>
+          <option value="Golden">Golden</option>
+          <option value="Flower">Flower</option>
+          <option value="Expensive">Expensive</option>
+          <option value="Elegant">Elegant</option>
+        </select>
+        <div className={styles.arrowIcon}>
+          <svg
+            className={styles.arrowSvg}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
   return (
     <>
       <div className={styles.builderPage}>
@@ -110,16 +210,10 @@ const BuilderPage = () => {
           {/* Personal Information and Template/Background Selection */}
           <div className={styles.formSection}>
             <div className={styles.templateSelector}>
-              <label>Template:</label>
-              <select
-                value={selectedTemplate}
-                onChange={(e) => setSelectedTemplate(e.target.value)}
-              >
-                <option value="Classic">Classic</option>
-                <option value="Modern">Modern</option>
-                <option value="Creative">Creative</option>
-                <option value="Frame">Frame</option>
-              </select>
+              <SelectBox
+                selectedTemplate={selectedTemplate}
+                setSelectedTemplate={setSelectedTemplate}
+              />
             </div>
             <div className={styles.backgroundSelector}>
               <label>Background:</label>
@@ -127,16 +221,19 @@ const BuilderPage = () => {
                 {backgrounds.map((bg) => (
                   <div
                     key={bg.id}
-                    className={`${styles.backgroundOption} ${selectedBackground.id === bg.id ? styles.selectedBackground : ''
-                      }`}
+                    className={`${styles.backgroundOption} ${
+                      selectedBackground.id === bg.id
+                        ? styles.selectedBackground
+                        : ""
+                    }`}
                     onClick={() => setSelectedBackground(bg)}
                     style={{
-                      backgroundColor: bg.value.startsWith('http')
-                        ? 'transparent'
+                      backgroundColor: bg.value.startsWith("http")
+                        ? "transparent"
                         : bg.value,
-                      backgroundImage: bg.value.startsWith('http')
+                      backgroundImage: bg.value.startsWith("http")
                         ? `url(${bg.value})`
-                        : 'none',
+                        : "none",
                     }}
                   ></div>
                 ))}
@@ -146,14 +243,14 @@ const BuilderPage = () => {
             {Object.entries(biodata).map(([key, value]) => (
               <div key={key} className={styles.inputGroup}>
                 <label>{key.replace(/^\w/, (c) => c.toUpperCase())}:</label>
-                {key === 'BirthTime' ? (
+                {key === "BirthTime" ? (
                   <input
                     type="time"
                     value={value}
                     onChange={(e) => handleChange(key, e.target.value)}
                     placeholder={`Enter ${key}`}
                   />
-                ) : key === 'BirthDate' ? (
+                ) : key === "BirthDate" ? (
                   <input
                     type="date"
                     value={value}
@@ -176,7 +273,6 @@ const BuilderPage = () => {
           </button>
         </div>
         {/* Preview and PDF Download */}
-
       </div>
 
       {showPreview && (
@@ -185,12 +281,16 @@ const BuilderPage = () => {
             <h2>Preview</h2>
             {Object.entries(biodata).map(([key, value]) => (
               <p key={key}>
-                <strong>{key.replace(/^\w/, (c) => c.toUpperCase())}:</strong> {value}
+                <strong>{key.replace(/^\w/, (c) => c.toUpperCase())}:</strong>{" "}
+                {value}
               </p>
             ))}
             <div className={styles.buttonGroup}>
               <button onClick={handleShowPDFPreview}>Show in PDF</button>
-              <button onClick={handleClosePreview} className={styles.closePreviewButton}>
+              <button
+                onClick={handleClosePreview}
+                className={styles.closePreviewButton}
+              >
                 Close Preview
               </button>
             </div>
@@ -200,23 +300,25 @@ const BuilderPage = () => {
       {showPDFPreview && (
         <div className={styles.pdfPreviewModal}>
           <div className={styles.pdfPreviewContent}>
-          <div className={styles.buttonGroup}>
+            <div className={styles.buttonGroup}>
               <PDFDownloadLink
                 document={renderTemplate()}
                 fileName={`${selectedTemplate.toLowerCase()}-resume.pdf`}
               >
                 {({ blob, url, loading, error }) =>
-                  loading ? 'Loading...' : 'Download PDF'
+                  loading ? "Loading..." : "Download PDF"
                 }
               </PDFDownloadLink>
-              <button onClick={handleClosePDFPreview} className={styles.closePreviewButton}>
+              <button
+                onClick={handleClosePDFPreview}
+                className={styles.closePreviewButton}
+              >
                 Close PDF
               </button>
             </div>
             <PDFViewer width="100%" height="100%">
               {renderTemplate()}
             </PDFViewer>
-            
           </div>
         </div>
       )}
