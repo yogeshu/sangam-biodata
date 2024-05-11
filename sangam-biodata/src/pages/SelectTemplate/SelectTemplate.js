@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./SelectTemplate.module.css";
 import creativeTemplate from "assets/images/backgrounds/first.jpg";
-import frameTemplate from "assets/images/backgrounds/second.jpg";
+import frameTemplate from "assets/images/backgrounds/frame.png";
 import classic from "assets/images/backgrounds/classic.jpg";
 import attractive from "assets/images/backgrounds/attractive.jpg";
 import golden from "assets/images/backgrounds/golden.jpg";

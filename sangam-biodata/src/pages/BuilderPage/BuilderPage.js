@@ -4,7 +4,6 @@ import { useSearchParams } from "react-router-dom";
 
 import styles from "./BuilderPage.module.css";
 import ClassicTemplate from "./Templates/ClassicTemplate";
-import ModernTemplate from "./Templates/ModernTemplate";
 import CreativeTemplate from "./Templates/CreativeTemplate";
 import FrameTemplate from "./Templates/FrameTemplate";
 import AttractiveTemplate from "./Templates/AttractiveTemplate";
@@ -136,8 +135,7 @@ const BuilderPage = () => {
     switch (selectedTemplate) {
       case "Classic":
         return <ClassicTemplate biodata={filteredData} />;
-      case "Modern":
-        return <ModernTemplate biodata={filteredData} />;
+
       case "Creative":
         return <CreativeTemplate biodata={filteredData} />;
       case "Frame":
@@ -184,7 +182,7 @@ const BuilderPage = () => {
           className={styles.select}
         >
           <option value="Classic">Classic</option>
-          <option value="Modern">Modern</option>
+
           <option value="Creative">Creative</option>
           <option value="Frame">Frame</option>
           <option value="Attractive">Attractive</option>
