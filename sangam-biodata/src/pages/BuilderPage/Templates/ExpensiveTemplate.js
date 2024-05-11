@@ -36,12 +36,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
+  sectionWrapper: {
+    marginTop: 35,
+  },
   section: {
-    marginBottom: 5,
+    marginBottom: 2,
     paddingLeft: 100,
     paddingRight: 100,
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingBottom: 1,
     display: "flex",
     flexDirection: "row", // Add this line
     alignItems: "center", // Add this line
@@ -71,14 +73,17 @@ const ExpensiveTemplate = ({ biodata, background }) => (
         <Image src={ExpensiveBackground} style={styles.pageBackground} />
 
         <Image src={ganesha} style={styles.imageBackground} />
-        {Object.entries(biodata).map(([sectionName, sectionValue]) => (
-          <View key={sectionName} style={styles.section}>
-            <Text style={styles.sectionTitle}>
-              {sectionName.replace(/^\w/, (c) => c.toUpperCase())}:
-            </Text>
-            <Text style={styles.sectionText}>{sectionValue}</Text>
-          </View>
-        ))}
+
+        <View style={styles.sectionWrapper}>
+          {Object.entries(biodata).map(([sectionName, sectionValue]) => (
+            <View key={sectionName} style={styles.section}>
+              <Text style={styles.sectionTitle}>
+                {sectionName.replace(/^\w/, (c) => c.toUpperCase())}:
+              </Text>
+              <Text style={styles.sectionText}>{sectionValue}</Text>
+            </View>
+          ))}
+        </View>
       </View>
     </Page>
   </Document>
