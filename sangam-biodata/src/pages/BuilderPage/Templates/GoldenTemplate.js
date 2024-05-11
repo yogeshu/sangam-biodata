@@ -9,7 +9,7 @@ import {
   Font,
 } from "@react-pdf/renderer";
 import fontPopins from "assets/fonts/Poppins-SemiBold.ttf";
-import classBackground from "assets/images/backgrounds/classic.jpg";
+import GoldenBackground from "assets/images/backgrounds/golden.jpg";
 import ganesha from "assets/images/pdf/ganesh.png";
 Font.register({ family: "Poppins", src: fontPopins });
 
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   },
   page: {
     flexDirection: "column",
-    backgroundImage: `url("${classBackground}")`, // Correct backgroundImage style
+    backgroundImage: `url("${GoldenBackground}")`, // Correct backgroundImage style
     backgroundRepeat: "repeat",
     backgroundPosition: "center",
     height: 1920,
@@ -68,7 +68,7 @@ const GoldenTemplate = ({ biodata, background }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.pageBackground}>
-        <Image src={classBackground} style={styles.pageBackground} />
+        <Image src={GoldenBackground} style={styles.pageBackground} />
 
         <Image src={ganesha} style={styles.imageBackground} />
         {Object.entries(biodata).map(([sectionName, sectionValue]) => (

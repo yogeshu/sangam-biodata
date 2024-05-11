@@ -37,11 +37,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   section: {
-    marginBottom: 5,
+    marginBottom: 1,
     paddingLeft: 100,
     paddingRight: 100,
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: 1,
+    paddingBottom: 1,
     display: "flex",
     flexDirection: "row", // Add this line
     alignItems: "center", // Add this line
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 12,
     fontWeight: 700,
-    marginBottom: 2,
+    marginBottom: 1,
   },
   sectionText: {
     fontSize: 12,

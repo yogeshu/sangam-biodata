@@ -112,9 +112,8 @@ const BuilderPage = () => {
   const [showPDFPreview, setShowPDFPreview] = useState(false);
 
   const handleChange = useCallback((section, value) => {
-    setBiodata((prev) => ({ ...prev, [section]: value }));
+    setBiodata((prev) => ({ ...prev, [section]: value.trim() }));
   }, []);
-
   const handlePreview = () => setShowPreview(true);
 
   const handleClosePreview = () => setShowPreview(false);
@@ -122,32 +121,42 @@ const BuilderPage = () => {
   const handleShowPDFPreview = () => setShowPDFPreview(true);
 
   const handleClosePDFPreview = () => setShowPDFPreview(false);
-
+  const filterEmptyFields = (data) => {
+    return Object.entries(data).reduce((acc, [key, value]) => {
+      if (value) {
+        // Only add non-empty values
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+  };
   const renderTemplate = () => {
+    const filteredData = filterEmptyFields(biodata); // Filter out empty fields
+
     switch (selectedTemplate) {
       case "Classic":
-        return <ClassicTemplate biodata={biodata} />;
+        return <ClassicTemplate biodata={filteredData} />;
       case "Modern":
-        return <ModernTemplate biodata={biodata} />;
+        return <ModernTemplate biodata={filteredData} />;
       case "Creative":
-        return <CreativeTemplate biodata={biodata} />;
+        return <CreativeTemplate biodata={filteredData} />;
       case "Frame":
         return (
           <FrameTemplate
-            biodata={biodata}
+            biodata={filteredData}
             background={selectedBackground.value}
           />
         );
       case "Attractive":
-        return <AttractiveTemplate biodata={biodata} />;
+        return <AttractiveTemplate biodata={filteredData} />;
       case "Golden":
-        return <GoldenTemplate biodata={biodata} />;
+        return <GoldenTemplate biodata={filteredData} />;
       case "Flower":
-        return <FlowerTemplate biodata={biodata} />;
+        return <FlowerTemplate biodata={filteredData} />;
       case "Expensive":
-        return <ExpensiveTemplate biodata={biodata} />;
+        return <ExpensiveTemplate biodata={filteredData} />;
       case "Elegant":
-        return <ElegantTemplate biodata={biodata} />;
+        return <ElegantTemplate biodata={filteredData} />;
 
       default:
         return null;
@@ -243,32 +252,26 @@ const BuilderPage = () => {
             {Object.entries(biodata).map(([key, value]) => (
               <div key={key} className={styles.inputGroup}>
                 <label>{key.replace(/^\w/, (c) => c.toUpperCase())}:</label>
-                {key === "BirthTime" ? (
-                  <input
-                    type="time"
-                    value={value}
-                    onChange={(e) => handleChange(key, e.target.value)}
-                    placeholder={`Enter ${key}`}
-                  />
-                ) : key === "BirthDate" ? (
-                  <input
-                    type="date"
-                    value={value}
-                    onChange={(e) => handleChange(key, e.target.value)}
-                    placeholder={`Enter ${key}`}
-                  />
-                ) : (
-                  <input
-                    type="text"
-                    value={value}
-                    onChange={(e) => handleChange(key, e.target.value)}
-                    placeholder={`Enter ${key}`}
-                  />
-                )}
+                <input
+                  type={
+                    key === "BirthDate"
+                      ? "date"
+                      : key === "BirthTime"
+                      ? "time"
+                      : "text"
+                  }
+                  value={value}
+                  onChange={(e) => handleChange(key, e.target.value)}
+                  placeholder={`Enter ${key}`}
+                />
               </div>
             ))}
           </div>
-          <button className={styles.previewButton} onClick={handlePreview}>
+          <button
+            className={styles.previewButton}
+            onClick={handlePreview}
+            disabled={Object.values(biodata).every((val) => !val)}
+          >
             Preview
           </button>
         </div>
@@ -279,7 +282,7 @@ const BuilderPage = () => {
         <div className={styles.previewModal}>
           <div className={styles.previewContent}>
             <h2>Preview</h2>
-            {Object.entries(biodata).map(([key, value]) => (
+            {Object.entries(filterEmptyFields(biodata)).map(([key, value]) => (
               <p key={key}>
                 <strong>{key.replace(/^\w/, (c) => c.toUpperCase())}:</strong>{" "}
                 {value}
@@ -297,6 +300,7 @@ const BuilderPage = () => {
           </div>
         </div>
       )}
+
       {showPDFPreview && (
         <div className={styles.pdfPreviewModal}>
           <div className={styles.pdfPreviewContent}>
@@ -305,9 +309,7 @@ const BuilderPage = () => {
                 document={renderTemplate()}
                 fileName={`${selectedTemplate.toLowerCase()}-resume.pdf`}
               >
-                {({ blob, url, loading, error }) =>
-                  loading ? "Loading..." : "Download PDF"
-                }
+                {({ loading }) => (loading ? "Loading..." : "Download PDF")}
               </PDFDownloadLink>
               <button
                 onClick={handleClosePDFPreview}
@@ -319,6 +321,20 @@ const BuilderPage = () => {
             <PDFViewer width="100%" height="100%">
               {renderTemplate()}
             </PDFViewer>
+            <div className={styles.buttonGroup}>
+              <PDFDownloadLink
+                document={renderTemplate()}
+                fileName={`${selectedTemplate.toLowerCase()}-resume.pdf`}
+              >
+                {({ loading }) => (loading ? "Loading..." : "Download PDF")}
+              </PDFDownloadLink>
+              <button
+                onClick={handleClosePDFPreview}
+                className={styles.closePreviewButton}
+              >
+                Close PDF
+              </button>
+            </div>
           </div>
         </div>
       )}

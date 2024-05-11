@@ -78,6 +78,13 @@
   color: #fff;
   cursor: pointer;
 }
+.previewButton:hover {
+  background-color: #0056b3;
+}
+.previewButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
 
 .previewModal,
 .pdfPreviewModal {
