@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ReactGA4 from "react-ga4";
+
 import styles from "./SelectTemplate.module.css";
 import creativeTemplate from "assets/images/backgrounds/first.jpg";
 import frameTemplate from "assets/images/backgrounds/frame.png";
@@ -29,11 +31,21 @@ const SelectTemplate = () => {
   const handleSelectTemplate = (index) => {
     setSelectedTemplateIndex(index);
     setShowModal(true);
+    ReactGA4.event({
+      category: "Template Selection",
+      action: "Select Template",
+      label: templates[index].name,
+    });
   };
 
   const handleConfirmTemplate = () => {
     navigate(`/builder?template=${templates[selectedTemplateIndex].name}`);
     setShowModal(false);
+    ReactGA4.event({
+      category: "Template Selection",
+      action: "Confirm Template",
+      label: templates[selectedTemplateIndex].name,
+    });
   };
 
   const handleCloseModal = () => {

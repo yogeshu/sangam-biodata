@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { useSearchParams } from "react-router-dom";
+import ReactGA4 from "react-ga4";
 
 import styles from "./BuilderPage.module.css";
 import ClassicTemplate from "./Templates/ClassicTemplate";
@@ -113,12 +114,22 @@ const BuilderPage = () => {
   const handleChange = useCallback((section, value) => {
     setBiodata((prev) => ({ ...prev, [section]: value.trim() }));
   }, []);
-  const handlePreview = () => setShowPreview(true);
-
+  const handlePreview = () => {
+    setShowPreview(true);
+    ReactGA4.event({
+      category: "Biodata",
+      action: "Preview",
+    });
+  };
   const handleClosePreview = () => setShowPreview(false);
 
-  const handleShowPDFPreview = () => setShowPDFPreview(true);
-
+  const handleShowPDFPreview = () => {
+    setShowPDFPreview(true);
+    ReactGA4.event({
+      category: "Biodata",
+      action: "Show PDF Preview",
+    });
+  };
   const handleClosePDFPreview = () => setShowPDFPreview(false);
   const filterEmptyFields = (data) => {
     return Object.entries(data).reduce((acc, [key, value]) => {
@@ -306,6 +317,13 @@ const BuilderPage = () => {
               <PDFDownloadLink
                 document={renderTemplate()}
                 fileName={`${selectedTemplate.toLowerCase()}-resume.pdf`}
+                onClick={() =>
+                  ReactGA4.event({
+                    category: "Biodata",
+                    action: "Download PDF1",
+                    label: selectedTemplate,
+                  })
+                }
               >
                 {({ loading }) => (loading ? "Loading..." : "Download PDF")}
               </PDFDownloadLink>
@@ -323,6 +341,13 @@ const BuilderPage = () => {
               <PDFDownloadLink
                 document={renderTemplate()}
                 fileName={`${selectedTemplate.toLowerCase()}-resume.pdf`}
+                onClick={() =>
+                  ReactGA4.event({
+                    category: "Biodata",
+                    action: "Download PDF2",
+                    label: selectedTemplate,
+                  })
+                }
               >
                 {({ loading }) => (loading ? "Loading..." : "Download PDF")}
               </PDFDownloadLink>

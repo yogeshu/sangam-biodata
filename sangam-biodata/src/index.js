@@ -1,15 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import { AuthProvider } from 'context/AuthContext';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import { AuthProvider } from "context/AuthContext";
+import reportWebVitals from "./reportWebVitals";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import ReactGA4 from "react-ga4";
+
+// Initialize Google Analytics
+const ga4react = ReactGA4.initialize("G-MHPV9691V5", {
+  dataStream: {
+    type: "web",
+    dataStreamId: "8140131579",
+  },
+});
+
+ga4react?.pageview(window.location.pathname + window.location.search);
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AuthProvider>
-    <App />
+      <App />
     </AuthProvider>
   </React.StrictMode>
 );
