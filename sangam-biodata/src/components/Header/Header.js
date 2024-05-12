@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut, onAuthStateChanged } from "firebase/auth";
-import { auth } from "firebaseConfig";
+import { auth } from "../../firebaseConfig";
 
 import logo from "assets/images/logo.png";
 import styles from "./Header.module.css";
@@ -23,18 +23,15 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const signOut = () => {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        console.log("Sign-out successful");
-      })
-      .catch((error) => {
-        // An error happened.
-        console.log("Sign-out error", error);
-      });
+  const signOutUser = async () => {
+    try {
+      await signOut(auth);
+      navigate("/auth");
+      console.log("Sign-out successful");
+    } catch (error) {
+      console.log("Sign-out error", error);
+    }
   };
-
   return (
     <header className={styles.header}>
       <div className={styles.logoContainer}>
@@ -65,7 +62,7 @@ const Header = () => {
         </div>
         <div className={styles.ctaContainer}>
           {user ? (
-            <button className={styles.cta} onClick={signOut}>
+            <button className={styles.cta} onClick={signOutUser}>
               Logout
             </button>
           ) : (
