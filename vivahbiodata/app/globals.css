@@ -1,2 +1,27 @@
 @import "tailwindcss";
+/* disabled es */
+@theme global {
+  /* 1. Your Custom Colors from the HTML */
+  --color-primary: #d41132;
+  --color-primary-dark: #b00e2a;
+  
+  --color-background-light: #fcf8f9;
+  --color-background-dark: #221013;
+  
+  --color-text-main: #1b0d10;
+  --color-text-muted: #9a4c59;
+  
+  --color-border-soft: #f3e7e9;
+  --color-border-strong: #e7cfd3;
 
+  /* 2. Your Fonts */
+  --font-display: "Noto Serif", serif;
+  --font-body: "Noto Sans", sans-serif;
+}
+
+/* 3. Global Reset */
+body {
+  background-color: var(--color-background-light);
+  color: var(--color-text-main);
+  font-family: var(--font-display);
+}
