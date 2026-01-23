@@ -1,4 +1,5 @@
 import React from 'react';
+import { Heart, User, CheckCircle } from 'lucide-react';
 
 const Hero = () => {
   return (
@@ -27,7 +28,7 @@ const Hero = () => {
               </button>
             </div>
             <div className="flex items-center justify-center md:justify-start gap-2 text-text-muted text-sm mt-2">
-              <span className="material-symbols-outlined text-[18px]">verified_user</span>
+              <CheckCircle size={18} />
               <span>No sign-up required for preview</span>
             </div>
           </div>
@@ -44,7 +45,7 @@ const Hero = () => {
                 <div className="bg-white/95 backdrop-blur-sm p-4 rounded-lg shadow-lg w-full">
                   <div className="flex items-center gap-3 border-b border-gray-100 pb-3 mb-2">
                     <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                      <span className="material-symbols-outlined">person</span>
+                      <User size={20} />
                     </div>
                     <div>
                       <p className="text-sm font-bold text-gray-900 font-body">Ananya Sharma</p>
@@ -53,7 +54,7 @@ const Hero = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-semibold text-green-600 flex items-center gap-1 font-body">
-                      <span className="material-symbols-outlined text-[14px]">check_circle</span> Verified
+                      <CheckCircle size={14} /> Verified
                     </span>
                     <span className="text-xs text-gray-400 font-body">Biodata #2049</span>
                   </div>

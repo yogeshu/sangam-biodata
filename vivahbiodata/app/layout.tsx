@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Providers from "@/components/Providers";
 
 export const metadata: Metadata = {
   title: "VivahBio - Create Marriage Biodata in 3 Minutes",
@@ -15,13 +14,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Load Fonts & Icons from Google */}
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+        {/* Lucide React icons are imported as components, no stylesheet needed */}
       </head>
       <body className="antialiased">
-        <Providers>
         {children}
-        </Providers>
       </body>
     </html>
   );

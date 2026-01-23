@@ -1,10 +1,11 @@
 import React from 'react';
+import { Lock, Users, Handshake } from 'lucide-react';
 
 const Features = () => {
   const features = [
-    { icon: 'lock', title: 'Private & Secure', desc: 'Your data is never made public. Only you control sharing.' },
-    { icon: 'diversity_3', title: 'Community Approved', desc: 'Formats designed keeping traditional values in mind.' },
-    { icon: 'handshake', title: 'Serious Inquiries', desc: 'A tool strictly for marriage, not a dating app.' },
+    { icon: Lock, title: 'Private & Secure', desc: 'Your data is never made public. Only you control sharing.' },
+    { icon: Users, title: 'Community Approved', desc: 'Formats designed keeping traditional values in mind.' },
+    { icon: Handshake, title: 'Serious Inquiries', desc: 'A tool strictly for marriage, not a dating app.' },
   ];
 
   return (
@@ -16,17 +17,20 @@ const Features = () => {
             <p className="text-text-muted text-sm font-body">We understand that privacy is paramount when looking for a life partner.</p>
           </div>
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
-            {features.map((feature, idx) => (
+            {features.map((feature, idx) => {
+              const IconComponent = feature.icon;
+              return (
               <div key={idx} className="flex flex-col gap-3 p-4 rounded-lg bg-background-light border border-border-soft">
                 <div className="text-primary">
-                  <span className="material-symbols-outlined text-3xl">{feature.icon}</span>
+                  <IconComponent size={32} />
                 </div>
                 <div>
                   <h4 className="font-bold text-text-main text-base">{feature.title}</h4>
                   <p className="text-text-muted text-sm mt-1 font-body">{feature.desc}</p>
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
         </div>
       </div>

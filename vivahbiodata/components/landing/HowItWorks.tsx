@@ -1,10 +1,11 @@
 import React from 'react';
+import { FileText, Grid3X3, Download } from 'lucide-react';
 
 const HowItWorks = () => {
   const steps = [
-    { icon: 'edit_document', title: '1. Enter Details', desc: 'Add personal, family, and horoscope details easily.' },
-    { icon: 'grid_view', title: '2. Select Template', desc: 'Choose from 10+ premium designs crafted for readability.' },
-    { icon: 'download', title: '3. Download PDF', desc: 'Get a high-quality PDF ready to share on WhatsApp.' },
+    { icon: FileText, title: '1. Enter Details', desc: 'Add personal, family, and horoscope details easily.' },
+    { icon: Grid3X3, title: '2. Select Template', desc: 'Choose from 10+ premium designs crafted for readability.' },
+    { icon: Download, title: '3. Download PDF', desc: 'Get a high-quality PDF ready to share on WhatsApp.' },
   ];
 
   return (
@@ -17,17 +18,20 @@ const HowItWorks = () => {
         {/* Connector Line (Desktop) */}
         <div className="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-border-strong -z-0 transform scale-x-75"></div>
         
-        {steps.map((step, idx) => (
+        {steps.map((step, idx) => {
+          const IconComponent = step.icon;
+          return (
           <div key={idx} className="flex flex-col items-center text-center gap-4 relative z-10">
             <div className={`size-16 rounded-full flex items-center justify-center shadow-lg mb-2 ${idx === 0 ? 'bg-primary text-white' : 'bg-white border-2 border-primary text-primary'}`}>
-              <span className="material-symbols-outlined text-3xl">{step.icon}</span>
+              <IconComponent size={32} />
             </div>
             <div>
               <h3 className="text-lg font-bold text-text-main">{step.title}</h3>
               <p className="text-sm text-text-muted mt-2 font-body">{step.desc}</p>
             </div>
           </div>
-        ))}
+        );
+        })}
       </div>
     </div>
   );

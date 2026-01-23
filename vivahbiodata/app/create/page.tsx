@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight, Download, Save, User, Users, Phone } from "lucide-react";
+import { ChevronRight, Download, Save, User, Users, Phone, Heart, FileText } from "lucide-react";
 import { cn } from "@/lib/utils"; // Ensure you created this in the previous step
 
 // --- Types ---
@@ -48,7 +48,7 @@ export default function CreateBiodata() {
         {/* Header */}
         <header className="flex items-center justify-between border-b border-border-soft px-6 py-4">
           <div className="flex items-center gap-2 text-primary">
-            <span className="material-symbols-outlined">edit_document</span>
+            <FileText size={20} />
             <h1 className="text-lg font-bold font-display">Edit Biodata</h1>
           </div>
           <button className="flex items-center gap-2 rounded-md bg-primary/10 px-4 py-2 text-sm font-bold text-primary transition hover:bg-primary/20">
@@ -139,7 +139,7 @@ export default function CreateBiodata() {
             {/* Header */}
             <div className="text-center mb-10 mt-6">
                <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <span className="material-symbols-outlined text-3xl">temple_hindu</span>
+                  <Heart size={36} />
                </div>
                <h2 className="text-3xl font-bold text-primary uppercase tracking-wider border-b-2 border-primary/20 pb-4 inline-block px-8">Marriage Biodata</h2>
             </div>

@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
+import { Heart, Sun, Moon, Menu, X } from "lucide-react";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -30,7 +31,7 @@ const Header = () => {
           {/* Logo Section */}
           <div className="flex items-center gap-4 text-primary">
             <div className="size-8 flex items-center justify-center rounded-full bg-primary/10 text-primary">
-              <span className="material-symbols-outlined">temple_hindu</span>
+              <Heart size={18} />
             </div>
             <h2 className="text-text-main text-xl font-bold leading-tight tracking-[-0.015em] dark:text-gray-100">
               VivahBio
@@ -58,9 +59,7 @@ const Header = () => {
                 className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 text-text-main dark:text-gray-100 transition-colors"
                 aria-label="Toggle Dark Mode"
               >
-                <span className="material-symbols-outlined text-[20px]">
-                  {theme === "dark" ? "light_mode" : "dark_mode"}
-                </span>
+                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
               </button>
             )}
 
@@ -77,9 +76,7 @@ const Header = () => {
                 onClick={toggleTheme}
                 className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 text-text-main dark:text-gray-100 transition-colors"
               >
-                <span className="material-symbols-outlined text-[20px]">
-                  {theme === "dark" ? "light_mode" : "dark_mode"}
-                </span>
+                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
               </button>
             )}
 
@@ -88,9 +85,7 @@ const Header = () => {
               onClick={toggleMenu}
               className="text-text-main dark:text-gray-100 p-1"
             >
-              <span className="material-symbols-outlined">
-                {isMobileMenuOpen ? "close" : "menu"}
-              </span>
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
