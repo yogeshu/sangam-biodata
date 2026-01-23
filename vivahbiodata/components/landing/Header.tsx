@@ -41,13 +41,17 @@ const Header = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex flex-1 justify-end gap-8 items-center">
             <div className="flex items-center gap-6">
-              {["Templates", "Pricing", "About Us"].map((item) => (
+              {[
+                { label: "Templates", href: "/templates" },
+                { label: "Samples", href: "/samples" },
+                { label: "About", href: "#" }
+              ].map((item) => (
                 <a
-                  key={item}
+                  key={item.label}
                   className="text-text-main dark:text-gray-300 hover:text-primary dark:hover:text-primary-dark text-sm font-medium leading-normal transition-colors"
-                  href="#"
+                  href={item.href}
                 >
-                  {item}
+                  {item.label}
                 </a>
               ))}
             </div>
@@ -64,7 +68,7 @@ const Header = () => {
             )}
 
             <button className="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary hover:bg-primary-dark transition-colors text-white text-sm font-bold leading-normal">
-              <span className="truncate">Create Biodata</span>
+              <a href="/create" className="truncate">Create Biodata</a>
             </button>
           </div>
 
