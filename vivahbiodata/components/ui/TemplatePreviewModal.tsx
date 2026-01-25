@@ -3,6 +3,8 @@
 import { X, Download, Edit, Check } from 'lucide-react';
 import { useState } from 'react';
 import type { TemplateMeta } from '@/lib/templates';
+import TemplateRenderer from '@/components/templates/TemplateRenderer';
+import type { BiodataData } from '@/components/templates/BaseTemplate';
 
 interface TemplatePreviewModalProps {
   template: TemplateMeta;
@@ -61,22 +63,20 @@ export default function TemplatePreviewModal({
               <div className="text-sm font-semibold text-text-main uppercase tracking-wide">
                 Live Preview
               </div>
-              <div className="border-2 border-border-soft rounded-lg overflow-hidden shadow-lg bg-white aspect-[1/1.414]">
-                {/* Template Preview would go here */}
-                <div 
-                  className="w-full h-full flex items-center justify-center text-text-muted p-8"
-                  style={{ 
-                    backgroundColor: template.background,
-                    color: template.accent 
-                  }}
-                >
-                  <div className="text-center space-y-4">
-                    <div className="text-6xl">📄</div>
-                    <p className="text-lg font-bold">Template Preview</p>
-                    <p className="text-sm opacity-75">
-                      Your biodata will appear here with all your details
-                    </p>
-                  </div>
+              <div className="border-2 border-border-soft rounded-lg overflow-auto shadow-lg bg-white" style={{ maxHeight: '600px' }}>
+                {/* Actual Template Preview */}
+                <div className="scale-50 origin-top-left" style={{ width: '200%', height: '200%' }}>
+                  <TemplateRenderer
+                    templateId={template.id}
+                    data={getSampleData()}
+                    colorTheme={template.colorThemes?.find(t => t.name === selectedTheme)}
+                    visibleSections={{
+                      horoscope: true,
+                      education: true,
+                      income: true,
+                      preferences: true,
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -178,4 +178,53 @@ export default function TemplatePreviewModal({
       </div>
     </div>
   );
+}
+
+// Sample data for preview
+function getSampleData(): BiodataData {
+  return {
+    fullName: "Priya Sharma",
+    gender: "Female",
+    dateOfBirth: "15th January 1995",
+    timeOfBirth: "10:30 AM",
+    birthPlace: "Mumbai, Maharashtra",
+    height: "5'4\"",
+    complexion: "Fair",
+    maritalStatus: "Never Married",
+    bloodGroup: "O+",
+    religion: "Hindu",
+    caste: "Brahmin",
+    gotra: "Bharadwaj",
+    rashi: "Taurus",
+    nakshatra: "Rohini",
+    manglik: "No",
+    religiousSymbol: "🕉️",
+    education: "MBA in Finance",
+    occupation: "Senior Financial Analyst",
+    company: "HDFC Bank Ltd.",
+    income: "₹12-15 Lakhs per annum",
+    fatherName: "Mr. Rajesh Sharma",
+    fatherOccupation: "Retired Government Officer",
+    motherName: "Mrs. Sunita Sharma",
+    motherOccupation: "Homemaker",
+    siblings: "One younger brother",
+    familyLocation: "Mumbai",
+    familyValues: "Traditional with modern outlook",
+    contactNumber: "+91 98765 43210",
+    email: "priya.sharma@example.com",
+    address: "123, Sunshine Apartments",
+    city: "Mumbai",
+    state: "Maharashtra",
+    partnerAge: "28-32 years",
+    partnerHeight: "5'8\" and above",
+    partnerLocation: "Mumbai, Pune, or nearby cities",
+    partnerEducation: "Graduate or Post-Graduate",
+    partnerOccupation: "Well-settled professional",
+    partnerManglik: "No preference",
+    photos: [],
+    customFields: [
+      { label: "Hobbies", value: "Reading, Yoga, Traveling" },
+      { label: "Languages Known", value: "Hindi, English, Marathi" }
+    ],
+  };
 }

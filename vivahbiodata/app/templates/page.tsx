@@ -7,6 +7,8 @@ import { Eye, Play, Heart, ArrowLeft } from "lucide-react";
 import CommonLayout from "@/components/common/CommonLayout";
 import TemplatePreviewModal from "@/components/ui/TemplatePreviewModal";
 import { saveSelectedTemplate } from "@/lib/utils/storage";
+import TemplateRenderer from "@/components/templates/TemplateRenderer";
+import type { BiodataData } from "@/components/templates/BaseTemplate";
 
 export default function TemplatesPage() {
   const router = useRouter();
@@ -110,27 +112,33 @@ function TemplateCard({ template, onPreview, onUse }: {
   return (
     <div className="group rounded-2xl border border-border-soft bg-white overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
       {/* Preview Image */}
-      <div className="relative h-96 bg-gradient-to-br from-background-light to-border-soft flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
-        <div className="text-center z-10">
-          <div className="flex size-20 items-center justify-center rounded-full bg-white/80 mx-auto mb-4 group-hover:scale-110 transition">
-            <Heart size={32} className="text-primary" />
-          </div>
-          <p className="text-text-muted font-semibold text-sm">{template.name}</p>
+      <div className="relative h-96 bg-gradient-to-br from-background-light to-border-soft overflow-hidden">
+        <div className="scale-[0.35] origin-top-left absolute" style={{ width: '285%', height: '285%' }}>
+          <TemplateRenderer
+            templateId={template.id}
+            data={getMiniSampleData()}
+            colorTheme={template.colorThemes?.[0]}
+            visibleSections={{
+              horoscope: true,
+              education: true,
+              income: false,
+              preferences: false,
+            }}
+          />
         </div>
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100">
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 pointer-events-none">
           <button
             onClick={onPreview}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-primary font-semibold rounded-lg hover:bg-gray-100 transition"
+            className="flex items-center gap-2 px-4 py-2 bg-white text-primary font-semibold rounded-lg hover:bg-gray-100 transition pointer-events-auto"
           >
             <Eye size={16} />
             Preview
           </button>
           <button
             onClick={onUse}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition pointer-events-auto"
           >
             <Play size={16} />
             Use
@@ -160,4 +168,50 @@ function TemplateCard({ template, onPreview, onUse }: {
       </div>
     </div>
   );
+}
+
+// Mini sample data for card previews
+function getMiniSampleData(): BiodataData {
+  return {
+    fullName: "Rohan Sharma",
+    gender: "Male",
+    dateOfBirth: "15th August 1995",
+    timeOfBirth: "09:30 AM",
+    birthPlace: "Jaipur, Rajasthan",
+    height: "5' 10\"",
+    complexion: "Fair",
+    maritalStatus: "Never Married",
+    bloodGroup: "O+",
+    religion: "Hindu",
+    caste: "Brahmin",
+    gotra: "Vashishtha",
+    rashi: "Mesha (Aries)",
+    nakshatra: "Bharani",
+    manglik: "No (Non-Manglik)",
+    religiousSymbol: "🕉️",
+    education: "B.Tech Computer Science",
+    occupation: "Software Engineer",
+    company: "TCS Ltd.",
+    income: "₹8-10 LPA",
+    fatherName: "Mr. Rajesh Sharma",
+    fatherOccupation: "Business",
+    motherName: "Mrs. Sunita Sharma",
+    motherOccupation: "Homemaker",
+    siblings: "One sister",
+    familyLocation: "Jaipur",
+    familyValues: "Traditional",
+    contactNumber: "+91 98765 43210",
+    email: "rohan@example.com",
+    address: "123, Gandhi Nagar",
+    city: "Jaipur",
+    state: "Rajasthan",
+    partnerAge: "24-28 years",
+    partnerHeight: "5'4\" - 5'8\"",
+    partnerLocation: "Rajasthan",
+    partnerEducation: "Graduate",
+    partnerOccupation: "Any",
+    partnerManglik: "No",
+    photos: [],
+    customFields: [],
+  };
 }
