@@ -3,27 +3,45 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { ArrowLeft, Download, Share2, CheckCircle, Lock } from "lucide-react";
+import TemplateRenderer from "@/components/templates/TemplateRenderer";
+import { loadBiodataFromLocal, loadSelectedTemplate, loadSelectedColorTheme } from "@/lib/utils/storage";
+import { templates } from "@/lib/templates";
+import type { BiodataData, VisibleSections } from "@/components/templates/BaseTemplate";
 
 export default function PreviewPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [data, setData] = useState<any>(null);
-  const [template, setTemplate] = useState<string>("classic");
+  const [data, setData] = useState<BiodataData | null>(null);
+  const [templateId, setTemplateId] = useState<string>("traditional-red");
+  const [colorTheme, setColorTheme] = useState<any>(null);
+  const [visibleSections, setVisibleSections] = useState<VisibleSections>({
+    horoscope: true,
+    education: true,
+    income: true,
+    preferences: true,
+  });
   const [isVerified, setIsVerified] = useState(false);
 
   useEffect(() => {
-    const dataParam = searchParams.get("data");
-    const templateParam = searchParams.get("template");
+    // Load data from localStorage
+    const savedData = loadBiodataFromLocal() as any;
+    const savedTemplate = loadSelectedTemplate() || "traditional-red";
+    const savedColorTheme = loadSelectedColorTheme();
     
-    if (dataParam) {
-      try {
-        setData(JSON.parse(decodeURIComponent(dataParam)));
-      } catch (e) {
-        console.error("Failed to parse form data", e);
-      }
+    if (savedData) {
+      setData(savedData as BiodataData);
+      setVisibleSections(savedData.visibleSections || visibleSections);
     }
-    if (templateParam) {
-      setTemplate(templateParam);
+    
+    setTemplateId(savedTemplate);
+    
+    // Find color theme from templates
+    if (savedColorTheme) {
+      const template = templates.find(t => t.id === savedTemplate);
+      const theme = template?.colorThemes?.find(ct => ct.name === savedColorTheme);
+      if (theme) {
+        setColorTheme(theme);
+      }
     }
   }, [searchParams]);
 
@@ -61,7 +79,12 @@ export default function PreviewPage() {
           {/* Preview */}
           <div className="lg:col-span-2">
             <div className="rounded-xl border border-border-soft bg-white shadow-lg overflow-hidden">
-              <BiodataPreview data={data} templateId={template} />
+              <TemplateRenderer 
+                templateId={templateId}
+                data={data}
+                colorTheme={colorTheme}
+                visibleSections={visibleSections}
+              />
             </div>
           </div>
 
@@ -99,7 +122,7 @@ export default function PreviewPage() {
             )}
 
             {/* Download Actions */}
-            <div className={cn("space-y-3 transition", !isVerified && "opacity-50 pointer-events-none")}>
+            <div className={!isVerified ? "opacity-50 pointer-events-none space-y-3 transition" : "space-y-3 transition"}>
               <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition">
                 <Download size={18} />
                 Download PDF

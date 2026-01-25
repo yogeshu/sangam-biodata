@@ -1,12 +1,26 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { templates } from "@/lib/templates";
+import { useState } from "react";
+import { templates, type TemplateMeta } from "@/lib/templates";
 import { Eye, Play, Heart, ArrowLeft } from "lucide-react";
 import CommonLayout from "@/components/common/CommonLayout";
+import TemplatePreviewModal from "@/components/ui/TemplatePreviewModal";
+import { saveSelectedTemplate } from "@/lib/utils/storage";
 
 export default function TemplatesPage() {
   const router = useRouter();
+  const [previewTemplate, setPreviewTemplate] = useState<TemplateMeta | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+
+  const handleSelectTemplate = (templateId: string, colorTheme?: string) => {
+    saveSelectedTemplate(templateId, colorTheme);
+    router.push(`/create?template=${templateId}${colorTheme ? `&theme=${colorTheme}` : ''}`);
+  };
+
+  const filteredTemplates = activeCategory === "all" 
+    ? templates 
+    : templates.filter(t => t.category === activeCategory.toLowerCase());
 
   return (
     <CommonLayout>
@@ -25,7 +39,7 @@ export default function TemplatesPage() {
               <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div>
                   <h1 className="text-3xl font-bold text-text-main">Biodata Templates</h1>
-                  <p className="text-sm text-text-muted mt-1">Choose from {templates.length}+ beautiful designs</p>
+                  <p className="text-sm text-text-muted mt-1">Choose from {filteredTemplates.length} beautiful designs</p>
                 </div>
               </div>
             </div>
@@ -36,13 +50,25 @@ export default function TemplatesPage() {
       <main className="mx-auto max-w-7xl px-4 py-12 md:px-8">
         {/* Filters/Categories */}
         <div className="mb-12 flex flex-wrap gap-3">
-          <button className="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold transition hover:bg-primary-dark">
+          <button 
+            onClick={() => setActiveCategory("all")}
+            className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
+              activeCategory === "all"
+                ? "bg-primary text-white"
+                : "border border-border-soft text-text-main hover:border-primary hover:text-primary"
+            }`}
+          >
             All Templates
           </button>
-          {["Classic", "Modern", "Traditional", "Elegant", "Premium"].map((cat) => (
+          {["Traditional", "Modern", "Elegant", "Minimal"].map((cat) => (
             <button
               key={cat}
-              className="px-4 py-2 rounded-full border border-border-soft text-text-main text-sm font-medium transition hover:border-primary hover:text-primary"
+              onClick={() => setActiveCategory(cat.toLowerCase())}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
+                activeCategory === cat.toLowerCase()
+                  ? "bg-primary text-white"
+                  : "border border-border-soft text-text-main hover:border-primary hover:text-primary"
+              }`}
             >
               {cat}
             </button>
@@ -51,19 +77,36 @@ export default function TemplatesPage() {
 
         {/* Templates Grid */}
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {templates.map((template) => (
-            <TemplateCard key={template.id} template={template} onPreview={() => router.push(`/templates/${template.id}`)} />
+          {filteredTemplates.map((template) => (
+            <TemplateCard 
+              key={template.id} 
+              template={template} 
+              onPreview={() => setPreviewTemplate(template)}
+              onUse={() => handleSelectTemplate(template.id)}
+            />
           ))}
         </div>
       </main>
+
+      {/* Preview Modal */}
+      {previewTemplate && (
+        <TemplatePreviewModal
+          template={previewTemplate}
+          isOpen={!!previewTemplate}
+          onClose={() => setPreviewTemplate(null)}
+          onSelect={handleSelectTemplate}
+        />
+      )}
     </div>
     </CommonLayout>
   );
 }
 
-function TemplateCard({ template, onPreview }: { template: any; onPreview: () => void }) {
-  const router = useRouter();
-
+function TemplateCard({ template, onPreview, onUse }: { 
+  template: TemplateMeta; 
+  onPreview: () => void;
+  onUse: () => void;
+}) {
   return (
     <div className="group rounded-2xl border border-border-soft bg-white overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
       {/* Preview Image */}
@@ -86,7 +129,7 @@ function TemplateCard({ template, onPreview }: { template: any; onPreview: () =>
             Preview
           </button>
           <button
-            onClick={() => router.push("/create?template=" + template.id)}
+            onClick={onUse}
             className="flex items-center gap-2 px-4 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition"
           >
             <Play size={16} />

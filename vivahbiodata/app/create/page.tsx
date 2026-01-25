@@ -23,6 +23,11 @@ import {
   Star,
   Users,
   LayoutTemplate,
+  Upload,
+  Plus,
+  X,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 type StepKey = "personal" | "family" | "horoscope" | "preferences" | "template";
@@ -59,6 +64,16 @@ type FormState = {
   partnerManglik: string;
   contactNumber: string;
   state: string;
+  // New fields for Phase 2
+  photos: string[]; // URLs of uploaded photos (max 2)
+  religiousSymbol: string; // Selected religious symbol
+  customFields: Array<{ label: string; value: string }>; // Max 5 custom fields
+  visibleSections: {
+    horoscope: boolean;
+    education: boolean;
+    income: boolean;
+    preferences: boolean;
+  };
 };
 
 type Step = {
@@ -118,6 +133,16 @@ export default function CreateBiodata() {
     partnerManglik: "",
     contactNumber: "",
     state: "",
+    // New fields
+    photos: [],
+    religiousSymbol: "🕉️", // Default Om symbol
+    customFields: [],
+    visibleSections: {
+      horoscope: true,
+      education: true,
+      income: true,
+      preferences: true,
+    },
   });
 
   const progress = useMemo(() => Math.round(((currentStep + 1) / steps.length) * 100), [currentStep]);
@@ -148,17 +173,22 @@ export default function CreateBiodata() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (name: keyof FormState, value: string) => {
+  const handleChange = (name: keyof FormState, value: any) => {
     setData((prev) => ({ ...prev, [name]: value }));
     setTouched((prev) => ({ ...prev, [name]: true }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
+    if (errors[name as string]) {
+      setErrors((prev) => ({ ...prev, [name as string]: "" }));
     }
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    handleChange(name as keyof FormState, value);
+    // Handle special cases for arrays and objects
+    if (name === 'photos' || name === 'customFields' || name === 'visibleSections') {
+      handleChange(name as keyof FormState, value);
+    } else {
+      handleChange(name as keyof FormState, value);
+    }
   };
 
   const nextStep = () => {
@@ -320,10 +350,56 @@ function FooterNav({ onBack, onNext, isFirst, isLast }: { onBack: () => void; on
 }
 
 function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, errors, touched }: { step: Step; errors?: Record<string, string>; touched?: Record<string, boolean>; data: FormState; onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void; selectedTemplate?: string; onTemplateChange?: (template: string) => void; }) {
+  const [localData, setLocalData] = useState(data);
+  
+  useEffect(() => {
+    setLocalData(data);
+  }, [data]);
+
+  const handlePhotoChange = (photos: string[]) => {
+    // Create synthetic event to update parent state
+    const syntheticEvent = {
+      target: { name: 'photos', value: photos }
+    } as any;
+    onChange(syntheticEvent);
+  };
+
+  const handleReligiousSymbolChange = (symbol: string) => {
+    const syntheticEvent = {
+      target: { name: 'religiousSymbol', value: symbol }
+    } as any;
+    onChange(syntheticEvent);
+  };
+
+  const handleCustomFieldsChange = (fields: Array<{ label: string; value: string }>) => {
+    const syntheticEvent = {
+      target: { name: 'customFields', value: fields }
+    } as any;
+    onChange(syntheticEvent);
+  };
+
+  const handleVisibilityToggle = (section: keyof FormState['visibleSections']) => {
+    const newVisibility = {
+      ...data.visibleSections,
+      [section]: !data.visibleSections[section]
+    };
+    const syntheticEvent = {
+      target: { name: 'visibleSections', value: newVisibility }
+    } as any;
+    onChange(syntheticEvent);
+  };
+
   if (step.key === "personal") {
     return (
       <div className="space-y-6">
         <Section title="Personal Information" icon={<Heart size={18} />}>Basic details to start your profile.</Section>
+        
+        {/* Photo Upload */}
+        <PhotoUpload photos={data.photos} onChange={handlePhotoChange} />
+        
+        {/* Religious Symbol */}
+        <ReligiousSymbolSelector selected={data.religiousSymbol} onChange={handleReligiousSymbolChange} />
+        
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <InputField label="Full Name" name="fullName" value={data.fullName} onChange={onChange} placeholder="e.g., Anjali Sharma" icon={<Users size={14} />} error={errors?.fullName} />
           <SelectField label="Gender" name="gender" value={data.gender} onChange={onChange} placeholder="Select Gender" options={["Male", "Female", "Non-binary"]} error={errors?.gender} />
@@ -336,6 +412,10 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
           <InputField label="Gothra" name="gothra" value={data.gothra} onChange={onChange} placeholder="e.g., Kashyapa" optional />
           <InputField label="Education" name="education" value={data.education} onChange={onChange} placeholder="e.g., MBA, B.Tech" icon={<GraduationCap size={14} />} />
         </div>
+        
+        {/* Custom Fields */}
+        <CustomFieldsManager fields={data.customFields} onChange={handleCustomFieldsChange} />
+        
         <HelperHint>Next step: Family details</HelperHint>
       </div>
     );
@@ -352,9 +432,13 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
           <InputField label="Mother's Occupation" name="motherOccupation" value={data.motherOccupation} onChange={onChange} placeholder="e.g., Homemaker" icon={<Home size={14} />} />
           <InputField label="Siblings Details" name="siblings" value={data.siblings} onChange={onChange} placeholder="e.g., 1 elder sister (married), 1 younger brother" />
           <InputField label="Family Location" name="familyLocation" value={data.familyLocation} onChange={onChange} placeholder="City, State" icon={<MapPin size={14} />} />
-          <SelectField label="Yearly Income (Package)" name="incomeRange" value={data.incomeRange} onChange={onChange} placeholder="Select Range" options={["5-10 LPA", "10-20 LPA", "20-35 LPA", "35-50 LPA", "50 LPA +"]} icon={<IndianRupee size={14} />} />
-          <SelectField label="Family Values" name="familyValues" value={data.familyValues} onChange={onChange} placeholder="Select" options={["Traditional", "Moderate", "Liberal"]} />
+          <InputField label="Annual Income / Package" name="incomeRange" value={data.incomeRange} onChange={onChange} placeholder="e.g., 25 LPA or Not Applicable" icon={<IndianRupee size={14} />} optional />
+          <InputField label="Family Values" name="familyValues" value={data.familyValues} onChange={onChange} placeholder="e.g., Traditional / Modern / Liberal" optional />
         </div>
+        
+        {/* Section Visibility Toggles */}
+        <SectionVisibilityToggles visible={data.visibleSections} onChange={handleVisibilityToggle} />
+        
         <HelperHint>You can add more family members later.</HelperHint>
       </div>
     );
@@ -585,6 +669,230 @@ function TemplatePreview({ data, templateId }: { data: FormState; templateId: st
         <div className="absolute bottom-4 left-0 w-full text-center text-xs text-text-muted italic px-4">
           Profile created on VivahBio
         </div>
+      </div>
+    </div>
+  );
+}
+
+// New Components for Phase 2
+
+function PhotoUpload({ photos, onChange }: { photos: string[]; onChange: (photos: string[]) => void }) {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    
+    // Convert files to base64 URLs (for demo - in production use proper upload service)
+    Array.from(files).forEach((file) => {
+      if (photos.length >= 2) {
+        alert("Maximum 2 photos allowed");
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        onChange([...photos, result]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removePhoto = (index: number) => {
+    onChange(photos.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="flex flex-col gap-3">
+      <label className="flex flex-col gap-1.5 text-sm font-medium text-text-main">
+        <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-text-muted">
+          Upload Photos
+          <span className="text-[10px] font-semibold text-text-muted">(Maximum 2, Optional)</span>
+        </span>
+        
+        <div className="flex gap-4 flex-wrap">
+          {/* Preview uploaded photos */}
+          {photos.map((photo, index) => (
+            <div key={index} className="relative w-32 h-32 rounded-lg overflow-hidden border-2 border-primary/20 group">
+              <img src={photo} alt={`Upload ${index + 1}`} className="w-full h-full object-cover" />
+              <button
+                onClick={() => removePhoto(index)}
+                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+                type="button"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          ))}
+          
+          {/* Upload button */}
+          {photos.length < 2 && (
+            <label className="w-32 h-32 border-2 border-dashed border-border-strong rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-primary transition text-text-muted hover:text-primary">
+              <Upload size={24} />
+              <span className="text-xs mt-2 font-medium">Upload Photo</span>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+                multiple={photos.length === 0}
+              />
+            </label>
+          )}
+        </div>
+      </label>
+      <p className="text-xs text-text-muted">Passport size photo recommended. Max file size: 5MB</p>
+    </div>
+  );
+}
+
+function ReligiousSymbolSelector({ selected, onChange }: { selected: string; onChange: (symbol: string) => void }) {
+  const symbols = [
+    { symbol: "🕉️", name: "Om" },
+    { symbol: "☪️", name: "Star & Crescent" },
+    { symbol: "✝️", name: "Cross" },
+    { symbol: "☸️", name: "Dharma Wheel" },
+    { symbol: "🪯", name: "Khanda" },
+    { symbol: "✡️", name: "Star of David" },
+    { symbol: "None", name: "No Symbol" },
+  ];
+
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="text-xs font-bold uppercase tracking-wide text-text-muted">
+        Religious Symbol
+        <span className="text-[10px] font-semibold text-text-muted ml-2">Optional</span>
+      </label>
+      <div className="flex gap-2 flex-wrap">
+        {symbols.map((item) => (
+          <button
+            key={item.name}
+            type="button"
+            onClick={() => onChange(item.symbol)}
+            className={cn(
+              "px-4 py-2 rounded-lg border-2 transition flex items-center gap-2 text-sm font-medium",
+              selected === item.symbol
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-border-soft text-text-muted hover:border-primary/50"
+            )}
+          >
+            {item.symbol !== "None" && <span className="text-xl">{item.symbol}</span>}
+            <span>{item.name}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CustomFieldsManager({ fields, onChange }: { fields: Array<{ label: string; value: string }>; onChange: (fields: Array<{ label: string; value: string }>) => void }) {
+  const addField = () => {
+    if (fields.length >= 5) {
+      alert("Maximum 5 custom fields allowed");
+      return;
+    }
+    onChange([...fields, { label: "", value: "" }]);
+  };
+
+  const removeField = (index: number) => {
+    onChange(fields.filter((_, i) => i !== index));
+  };
+
+  const updateField = (index: number, key: "label" | "value", value: string) => {
+    const updated = [...fields];
+    updated[index][key] = value;
+    onChange(updated);
+  };
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <label className="text-xs font-bold uppercase tracking-wide text-text-muted">
+          Custom Fields
+          <span className="text-[10px] font-semibold text-text-muted ml-2">(Max 5, Optional)</span>
+        </label>
+        {fields.length < 5 && (
+          <button
+            type="button"
+            onClick={addField}
+            className="flex items-center gap-1 px-3 py-1 text-xs font-semibold text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition"
+          >
+            <Plus size={14} />
+            Add Field
+          </button>
+        )}
+      </div>
+
+      {fields.length === 0 && (
+        <div className="text-sm text-text-muted italic border border-dashed border-border-soft rounded-lg p-4 text-center">
+          Add custom fields like "Hobbies", "Languages Known", etc.
+        </div>
+      )}
+
+      <div className="space-y-3">
+        {fields.map((field, index) => (
+          <div key={index} className="flex gap-2 items-start">
+            <input
+              type="text"
+              placeholder="Field Label (e.g., Hobbies)"
+              value={field.label}
+              onChange={(e) => updateField(index, "label", e.target.value)}
+              className="flex-1 px-3 py-2 text-sm border border-border-soft rounded-lg bg-background-light focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+            />
+            <input
+              type="text"
+              placeholder="Field Value (e.g., Reading, Music)"
+              value={field.value}
+              onChange={(e) => updateField(index, "value", e.target.value)}
+              className="flex-1 px-3 py-2 text-sm border border-border-soft rounded-lg bg-background-light focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+            />
+            <button
+              type="button"
+              onClick={() => removeField(index)}
+              className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition"
+            >
+              <X size={18} />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SectionVisibilityToggles({ visible, onChange }: { visible: FormState['visibleSections']; onChange: (section: keyof FormState['visibleSections']) => void }) {
+  const sections = [
+    { key: 'horoscope' as const, label: 'Horoscope Details', icon: <Sparkles size={16} /> },
+    { key: 'education' as const, label: 'Education Details', icon: <GraduationCap size={16} /> },
+    { key: 'income' as const, label: 'Income Details', icon: <IndianRupee size={16} /> },
+    { key: 'preferences' as const, label: 'Partner Preferences', icon: <Heart size={16} /> },
+  ];
+
+  return (
+    <div className="flex flex-col gap-3">
+      <label className="text-xs font-bold uppercase tracking-wide text-text-muted">
+        Section Visibility
+        <span className="text-[10px] font-normal text-text-muted ml-2">(Toggle sections to show/hide in biodata)</span>
+      </label>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {sections.map((section) => (
+          <button
+            key={section.key}
+            type="button"
+            onClick={() => onChange(section.key)}
+            className={cn(
+              "flex items-center justify-between px-4 py-3 rounded-lg border-2 transition",
+              visible[section.key]
+                ? "border-primary bg-primary/5 text-primary"
+                : "border-border-soft text-text-muted hover:border-primary/30"
+            )}
+          >
+            <div className="flex items-center gap-2">
+              {section.icon}
+              <span className="text-sm font-medium">{section.label}</span>
+            </div>
+            {visible[section.key] ? <Eye size={18} /> : <EyeOff size={18} />}
+          </button>
+        ))}
       </div>
     </div>
   );

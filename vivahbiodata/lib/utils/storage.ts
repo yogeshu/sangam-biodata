@@ -7,6 +7,7 @@ const STORAGE_KEYS = {
   BIODATA_DRAFT: 'vivahbio_biodata_draft',
   FORM_STEP: 'vivahbio_form_step',
   SELECTED_TEMPLATE: 'vivahbio_selected_template',
+  SELECTED_COLOR_THEME: 'vivahbio_selected_color_theme',
   AUTO_SAVE_TIME: 'vivahbio_auto_save_time',
 } as const;
 
@@ -105,6 +106,7 @@ export function clearBiodataLocal(): void {
     localStorage.removeItem(STORAGE_KEYS.BIODATA_DRAFT);
     localStorage.removeItem(STORAGE_KEYS.FORM_STEP);
     localStorage.removeItem(STORAGE_KEYS.SELECTED_TEMPLATE);
+    localStorage.removeItem(STORAGE_KEYS.SELECTED_COLOR_THEME);
     localStorage.removeItem(STORAGE_KEYS.AUTO_SAVE_TIME);
   } catch (error) {
     console.error('Failed to clear biodata from localStorage:', error);
@@ -136,11 +138,14 @@ export function loadCurrentStep(): number {
 }
 
 /**
- * Save selected template ID
+ * Save selected template ID and optional color theme
  */
-export function saveSelectedTemplate(templateId: string): void {
+export function saveSelectedTemplate(templateId: string, colorTheme?: string): void {
   try {
     localStorage.setItem(STORAGE_KEYS.SELECTED_TEMPLATE, templateId);
+    if (colorTheme) {
+      localStorage.setItem(STORAGE_KEYS.SELECTED_COLOR_THEME, colorTheme);
+    }
   } catch (error) {
     console.error('Failed to save selected template:', error);
   }
@@ -154,6 +159,18 @@ export function loadSelectedTemplate(): string | null {
     return localStorage.getItem(STORAGE_KEYS.SELECTED_TEMPLATE);
   } catch (error) {
     console.error('Failed to load selected template:', error);
+    return null;
+  }
+}
+
+/**
+ * Load selected color theme
+ */
+export function loadSelectedColorTheme(): string | null {
+  try {
+    return localStorage.getItem(STORAGE_KEYS.SELECTED_COLOR_THEME);
+  } catch (error) {
+    console.error('Failed to load selected color theme:', error);
     return null;
   }
 }
