@@ -2,31 +2,35 @@
 
 import { useRouter } from "next/navigation";
 import { templates } from "@/lib/templates";
-import { Eye, Play, Heart } from "lucide-react";
+import { Eye, Play, Heart, ArrowLeft } from "lucide-react";
+import CommonLayout from "@/components/common/CommonLayout";
 
 export default function TemplatesPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-background-light text-text-main font-body">
-      {/* Header */}
-      <header className="border-b border-border-soft bg-white shadow-sm sticky top-0 z-40">
-        <div className="mx-auto max-w-7xl px-4 py-6 md:px-8">
-          <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-primary">Biodata Templates</h1>
-              <p className="text-sm text-text-muted mt-1">Choose from {templates.length}+ beautiful designs</p>
+    <CommonLayout>
+      <div className="min-h-screen bg-background-light text-text-main font-body">
+        {/* Header */}
+        <header className="border-b border-border-soft bg-white shadow-sm">
+          <div className="mx-auto max-w-7xl px-4 py-6 md:px-8">
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={() => router.back()}
+                className="inline-flex items-center gap-2 text-text-muted hover:text-primary transition self-start"
+              >
+                <ArrowLeft size={20} />
+                <span className="text-sm font-medium">Back</span>
+              </button>
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h1 className="text-3xl font-bold text-text-main">Biodata Templates</h1>
+                  <p className="text-sm text-text-muted mt-1">Choose from {templates.length}+ beautiful designs</p>
+                </div>
+              </div>
             </div>
-            <button
-              onClick={() => router.push("/create")}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition w-full md:w-auto justify-center"
-            >
-              <Heart size={18} />
-              Create Biodata
-            </button>
           </div>
-        </div>
-      </header>
+        </header>
 
       {/* Main Content */}
       <main className="mx-auto max-w-7xl px-4 py-12 md:px-8">
@@ -53,6 +57,7 @@ export default function TemplatesPage() {
         </div>
       </main>
     </div>
+    </CommonLayout>
   );
 }
 

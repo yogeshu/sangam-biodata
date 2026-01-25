@@ -4,6 +4,7 @@ import type { ChangeEvent, ReactNode, FC } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { templates, type TemplateMeta } from "@/lib/templates";
+import CommonLayout from "@/components/common/CommonLayout";
 import {
   ArrowLeft,
   ArrowRight,
@@ -173,51 +174,62 @@ export default function CreateBiodata() {
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
 
   return (
-    <div className="min-h-screen bg-background-light text-text-main font-body">
-      <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 pb-16 pt-8 md:px-8 lg:pt-12">
-        <HeaderBar />
+    <CommonLayout showFooter={false}>
+      <div className="min-h-screen bg-background-light text-text-main font-body">
+        <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 pb-16 pt-8 md:px-8 lg:pt-12">
+          <HeaderBar router={router} />
 
-        <div className="rounded-2xl border border-border-soft bg-white shadow-sm">
-          <div className="flex flex-col gap-6 p-6 md:p-8">
-            <StepperHeader progress={progress} currentStep={currentStep} />
-            <StepTabs currentStep={currentStep} onStepChange={setCurrentStep} />
-            <StepCard
-              step={steps[currentStep]}
-              data={data}
-              onChange={handleInputChange}
-              selectedTemplate={selectedTemplate}
-              onTemplateChange={setSelectedTemplate}
-              errors={errors}
-              touched={touched}
-            />
-            <FooterNav
-              onBack={prevStep}
-              onNext={nextStep}
-              isFirst={currentStep === 0}
-              isLast={currentStep === steps.length - 1}
-            />
+          <div className="rounded-2xl border border-border-soft bg-white shadow-sm">
+            <div className="flex flex-col gap-6 p-6 md:p-8">
+              <StepperHeader progress={progress} currentStep={currentStep} />
+              <StepTabs currentStep={currentStep} onStepChange={setCurrentStep} />
+              <StepCard
+                step={steps[currentStep]}
+                data={data}
+                onChange={handleInputChange}
+                selectedTemplate={selectedTemplate}
+                onTemplateChange={setSelectedTemplate}
+                errors={errors}
+                touched={touched}
+              />
+              <FooterNav
+                onBack={prevStep}
+                onNext={nextStep}
+                isFirst={currentStep === 0}
+                isLast={currentStep === steps.length - 1}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </CommonLayout>
   );
 }
 
-function HeaderBar() {
+function HeaderBar({ router }: { router: any }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <div className="flex items-center gap-3 text-primary">
-        <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-          <Heart size={20} />
-        </div>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">VivahBio</p>
-          <p className="text-base font-bold text-text-main">Biodata Builder</p>
+      <div className="flex items-center gap-4">
+        <button
+          onClick={() => router.back()}
+          className="flex items-center gap-2 text-text-muted hover:text-primary transition"
+        >
+          <ArrowLeft size={20} />
+          <span className="text-sm font-medium hidden sm:inline">Back</span>
+        </button>
+        <div className="flex items-center gap-3 text-primary">
+          <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Heart size={20} />
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">VivahBio</p>
+            <p className="text-base font-bold text-text-main">Biodata Builder</p>
+          </div>
         </div>
       </div>
       <button className="flex items-center gap-2 rounded-full border border-primary/30 px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary/10">
         <Save size={14} />
-        Save Draft
+        <span className="hidden sm:inline">Save Draft</span>
       </button>
     </div>
   );
@@ -313,8 +325,8 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
       <div className="space-y-6">
         <Section title="Personal Information" icon={<Heart size={18} />}>Basic details to start your profile.</Section>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <InputField label="Full Name" name="fullName" value={data.fullName} onChange={onChange} placeholder="e.g., Anjali Sharma" icon={<Users size={14} />} error={errors.fullName} touched={touched.fullName} />
-          <SelectField label="Gender" name="gender" value={data.gender} onChange={onChange} placeholder="Select Gender" options={["Male", "Female", "Non-binary"]} error={errors.gender} touched={touched.gender} />
+          <InputField label="Full Name" name="fullName" value={data.fullName} onChange={onChange} placeholder="e.g., Anjali Sharma" icon={<Users size={14} />} error={errors?.fullName} />
+          <SelectField label="Gender" name="gender" value={data.gender} onChange={onChange} placeholder="Select Gender" options={["Male", "Female", "Non-binary"]} error={errors?.gender} />
           <InputField label="Date of Birth" name="dateOfBirth" value={data.dateOfBirth} onChange={onChange} type="date" icon={<Calendar size={14} />} />
           <InputField label="Time of Birth" name="timeOfBirth" value={data.timeOfBirth} onChange={onChange} type="time" icon={<Clock3 size={14} />} optional />
           <SelectField label="Height" name="height" value={data.height} onChange={onChange} placeholder="Select Height" options={["5'0\"", "5'2\"", "5'4\"", "5'6\"", "5'8\"", "5'10\"", "6'0\"+"]} />
@@ -449,7 +461,7 @@ function InputField({ label, name, value, onChange, placeholder, type = "text", 
         {label}
         {optional && <span className="text-[10px] font-semibold text-text-muted">Optional</span>}
       </span>
-      <div className={cn("flex items-center gap-2 rounded-lg border px-3 py-2.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition bg-background-light", error && touched ? "border-red-500 focus-within:ring-red-500 focus-within:border-red-500" : "border-border-soft")}>
+      <div className={cn("flex items-center gap-2 rounded-lg border px-3 py-2.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition bg-background-light", error ? "border-red-500 focus-within:ring-red-500 focus-within:border-red-500" : "border-border-soft")}>
         {icon && <span className="text-text-muted">{icon}</span>}
         <input
           type={type}

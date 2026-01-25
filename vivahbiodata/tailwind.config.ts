@@ -12,14 +12,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "primary": "#d41132",
-        "primary-dark": "#b00e2a",
-        "background-light": "#fcf8f9",
-        "background-dark": "#221013",
-        "text-main": "#1b0d10",
-        "text-muted": "#9a4c59",
-        "border-soft": "#f3e7e9",
-        "border-strong": "#e7cfd3",
+        "primary": "#FAC638",
+        "primary-dark": "#E6B429",
+        "primary-light": "#FDD96A",
+        "background-light": "#FFFEF9",
+        "background-dark": "#1A1A1A",
+        "text-main": "#1F1F1F",
+        "text-muted": "#6B6B6B",
+        "border-soft": "#F0EFE9",
+        "border-strong": "#D4D3CD",
+        "paper-cream": "#F5F1E8",
       },
       fontFamily: {
         "display": ["var(--font-noto-serif)", "serif"],
