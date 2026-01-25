@@ -7,10 +7,13 @@ import TemplateRenderer from "@/components/templates/TemplateRenderer";
 import { loadBiodataFromLocal, loadSelectedTemplate, loadSelectedColorTheme } from "@/lib/utils/storage";
 import { templates } from "@/lib/templates";
 import type { BiodataData, VisibleSections } from "@/components/templates/BaseTemplate";
+import { useAuth } from "@/contexts/AuthContext";
+import { downloadAsPDF, shareOnWhatsApp } from "@/lib/utils/download";
 
 export default function PreviewPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { user, signInWithGoogle } = useAuth();
   const [data, setData] = useState<BiodataData | null>(null);
   const [templateId, setTemplateId] = useState<string>("traditional-red");
   const [colorTheme, setColorTheme] = useState<any>(null);
@@ -20,7 +23,7 @@ export default function PreviewPage() {
     income: true,
     preferences: true,
   });
-  const [isVerified, setIsVerified] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     // Load data from localStorage
@@ -44,6 +47,29 @@ export default function PreviewPage() {
       }
     }
   }, [searchParams]);
+
+  const handleDownloadPDF = async () => {
+    if (!user) {
+      await signInWithGoogle();
+      return;
+    }
+
+    setIsDownloading(true);
+    try {
+      await downloadAsPDF('biodata-preview', {
+        filename: `${data?.fullName || 'biodata'}-vivahbio.pdf`
+      });
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Failed to download PDF. Please try again.');
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const handleShareWhatsApp = () => {
+    shareOnWhatsApp(`Check out my biodata: ${data?.fullName || 'Biodata'} - Created on VivahBio.com`);
+  };
 
   if (!data) {
     return (
@@ -78,7 +104,7 @@ export default function PreviewPage() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Preview */}
           <div className="lg:col-span-2">
-            <div className="rounded-xl border border-border-soft bg-white shadow-lg overflow-hidden">
+            <div id="biodata-preview" className="rounded-xl border border-border-soft bg-white shadow-lg overflow-hidden">
               <TemplateRenderer 
                 templateId={templateId}
                 data={data}
@@ -90,44 +116,41 @@ export default function PreviewPage() {
 
           {/* Actions Panel */}
           <div className="flex flex-col gap-6">
-            {/* Verification Card */}
-            {!isVerified && (
+            {/* Auth Prompt for Non-Logged Users */}
+            {!user && (
               <div className="rounded-xl border border-border-soft bg-white p-6 shadow-md">
                 <div className="flex items-center gap-2 mb-4">
                   <Lock size={20} className="text-primary" />
-                  <h2 className="font-bold text-lg text-text-main">Verify to Download</h2>
+                  <h2 className="font-bold text-lg text-text-main">Sign In to Download</h2>
                 </div>
                 <p className="text-sm text-text-muted mb-4">
-                  Verify your phone number to remove watermark and download the PDF.
+                  Sign in with Google to download your biodata in high-quality PDF format.
                 </p>
                 
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold uppercase text-text-muted mb-1.5">Phone Number</label>
-                    <input
-                      type="tel"
-                      placeholder="+91 98765 00000"
-                      className="w-full px-3 py-2 rounded-lg border border-border-soft bg-background-light text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
-                    />
-                  </div>
-                  <button
-                    onClick={() => setIsVerified(true)}
-                    className="w-full px-4 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition flex items-center justify-center gap-2"
-                  >
-                    <CheckCircle size={16} />
-                    Verify & Unlock
-                  </button>
-                </div>
+                <button
+                  onClick={signInWithGoogle}
+                  className="w-full px-4 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition flex items-center justify-center gap-2"
+                >
+                  <CheckCircle size={16} />
+                  Sign In with Google
+                </button>
               </div>
             )}
 
             {/* Download Actions */}
-            <div className={!isVerified ? "opacity-50 pointer-events-none space-y-3 transition" : "space-y-3 transition"}>
-              <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition">
+            <div className="space-y-3">
+              <button 
+                onClick={handleDownloadPDF}
+                disabled={isDownloading}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 <Download size={18} />
-                Download PDF
+                {isDownloading ? 'Generating PDF...' : 'Download PDF'}
               </button>
-              <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
+              <button 
+                onClick={handleShareWhatsApp}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
+              >
                 <Share2 size={18} />
                 Share on WhatsApp
               </button>

@@ -3,15 +3,18 @@
 
 import React, { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
-import { Heart, Sun, Moon, Menu, X, User } from "lucide-react";
+import { Heart, Sun, Moon, Menu, X, User, LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const { user, signInWithGoogle, signOut, loading } = useAuth();
 
   // Ensure hydration matches (wait for client mount to show theme toggle state)
   useEffect(() => {
@@ -78,10 +81,69 @@ const Header = () => {
               </button>
             )}
 
-            {/* User Profile Placeholder */}
-            <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-text-muted dark:text-gray-100 transition-colors">
-              <User size={20} />
-            </button>
+            {/* User Profile / Auth */}
+            {!loading && (
+              <>
+                {user ? (
+                  <div className="relative">
+                    <button 
+                      onClick={() => setShowUserMenu(!showUserMenu)}
+                      className="flex items-center gap-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      {user.photoURL ? (
+                        <img 
+                          src={user.photoURL} 
+                          alt={user.displayName || 'User'} 
+                          className="w-8 h-8 rounded-full"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                          <User size={18} className="text-primary" />
+                        </div>
+                      )}
+                    </button>
+                    
+                    {showUserMenu && (
+                      <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-border-soft py-2 z-50">
+                        <div className="px-4 py-3 border-b border-border-soft">
+                          <p className="text-sm font-semibold text-text-main dark:text-gray-100">
+                            {user.displayName}
+                          </p>
+                          <p className="text-xs text-text-muted dark:text-gray-400 truncate">
+                            {user.email}
+                          </p>
+                        </div>
+                        <Link
+                          href="/drafts"
+                          className="block px-4 py-2 text-sm text-text-main dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          My Drafts
+                        </Link>
+                        <button
+                          onClick={() => {
+                            signOut();
+                            setShowUserMenu(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                        >
+                          <LogOut size={16} />
+                          Sign Out
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <button 
+                    onClick={signInWithGoogle}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border-soft hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm font-medium"
+                  >
+                    <User size={18} />
+                    Sign In
+                  </button>
+                )}
+              </>
+            )}
 
             <Link 
               href="/templates"
