@@ -1,16 +1,16 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { ArrowLeft, Download, Share2, CheckCircle, Lock } from "lucide-react";
+import { useState, useEffect, Suspense } from "react";
+import { ArrowLeft, Download, Share2, CheckCircle, Lock, RotateCcw } from "lucide-react";
 import TemplateRenderer from "@/components/templates/TemplateRenderer";
-import { loadBiodataFromLocal, loadSelectedTemplate, loadSelectedColorTheme } from "@/lib/utils/storage";
+import { clearBiodataLocal, loadBiodataFromLocal, loadSelectedTemplate, loadSelectedColorTheme, saveBiodataToLocal, saveSelectedTemplate, loadPhotosFromLocal } from "@/lib/utils/storage";
 import { templates } from "@/lib/templates";
 import type { BiodataData, VisibleSections } from "@/components/templates/BaseTemplate";
 import { useAuth } from "@/contexts/AuthContext";
 import { downloadAsPDF, shareOnWhatsApp } from "@/lib/utils/download";
 
-export default function PreviewPage() {
+function PreviewPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, signInWithGoogle } = useAuth();
@@ -24,31 +24,86 @@ export default function PreviewPage() {
     preferences: true,
   });
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasAttemptedLoad, setHasAttemptedLoad] = useState(false);
 
   useEffect(() => {
-    // Load data from localStorage
-    const savedData = loadBiodataFromLocal() as any;
-    const savedTemplate = loadSelectedTemplate() || "traditional-red";
-    const savedColorTheme = loadSelectedColorTheme();
+    // Prevent running effect multiple times
+    if (hasAttemptedLoad) return;
     
-    if (savedData) {
-      setData(savedData as BiodataData);
-      setVisibleSections(savedData.visibleSections || visibleSections);
+    const dataParam = searchParams?.get("data");
+    const templateParam = searchParams?.get("template");
+
+    let hasData = false;
+
+    if (dataParam) {
+      try {
+        const parsed = JSON.parse(decodeURIComponent(dataParam));
+        // Load photos from localStorage
+        const photos = loadPhotosFromLocal();
+        const dataWithPhotos = { ...parsed, photos };
+        setData(dataWithPhotos as BiodataData);
+        setVisibleSections(parsed.visibleSections || {
+          horoscope: true,
+          education: true,
+          income: true,
+          preferences: true,
+        });
+        saveBiodataToLocal(dataWithPhotos as any);
+        hasData = true;
+      } catch (error) {
+        console.error("Failed to parse preview data:", error);
+      }
+    } else {
+      // Load data from localStorage
+      const savedData = loadBiodataFromLocal() as any;
+      if (savedData && Object.keys(savedData).length > 0 && savedData.fullName) {
+        // Load photos from localStorage
+        const photos = loadPhotosFromLocal();
+        const dataWithPhotos = { ...savedData, photos };
+        setData(dataWithPhotos as BiodataData);
+        setVisibleSections(savedData.visibleSections || {
+          horoscope: true,
+          education: true,
+          income: true,
+          preferences: true,
+        });
+        hasData = true;
+      }
     }
-    
+
+    const savedTemplate = templateParam || loadSelectedTemplate() || "modern-minimal";
     setTemplateId(savedTemplate);
-    
-    // Find color theme from templates
+    if (templateParam) {
+      saveSelectedTemplate(savedTemplate);
+    }
+
+    const savedColorTheme = loadSelectedColorTheme();
     if (savedColorTheme) {
-      const template = templates.find(t => t.id === savedTemplate);
-      const theme = template?.colorThemes?.find(ct => ct.name === savedColorTheme);
+      const template = templates.find((t) => t.id === savedTemplate);
+      const theme = template?.colorThemes?.find((ct) => ct.name === savedColorTheme);
       if (theme) {
         setColorTheme(theme);
       }
     }
-  }, [searchParams]);
+
+    // Set loading to false after attempting to load data
+    setIsLoading(false);
+    setHasAttemptedLoad(true);
+
+    // If no data found after load attempt, redirect to create page after a brief delay
+    if (!hasData) {
+      const timer = setTimeout(() => {
+        router.push("/create");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, router, hasAttemptedLoad]);
 
   const handleDownloadPDF = async () => {
+    if (!isConfirmed) return;
+
     if (!user) {
       await signInWithGoogle();
       return;
@@ -56,30 +111,72 @@ export default function PreviewPage() {
 
     setIsDownloading(true);
     try {
-      await downloadAsPDF('biodata-preview', {
-        filename: `${data?.fullName || 'biodata'}-vivahbio.pdf`
+      await downloadAsPDF("biodata-preview", {
+        filename: `${data?.fullName || "biodata"}-vivahbio.pdf`,
       });
     } catch (error) {
-      console.error('Download failed:', error);
-      alert('Failed to download PDF. Please try again.');
+      console.error("Download failed:", error);
+      alert("Failed to download PDF. Please try again.");
     } finally {
       setIsDownloading(false);
     }
   };
 
   const handleShareWhatsApp = () => {
-    shareOnWhatsApp(`Check out my biodata: ${data?.fullName || 'Biodata'} - Created on VivahBio.com`);
+    if (!isConfirmed) return;
+    shareOnWhatsApp(`Check out my biodata: ${data?.fullName || "Biodata"} - Created on VivahBio.com`);
   };
 
-  if (!data) {
+  const handleStartOver = () => {
+    clearBiodataLocal();
+    router.push("/create");
+  };
+
+  if (isLoading || !data) {
     return (
       <div className="min-h-screen bg-background-light flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-text-muted">Loading your biodata...</p>
+        <div className="text-center max-w-md mx-auto px-4">
+          {isLoading ? (
+            <>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-text-muted">Loading your biodata...</p>
+            </>
+          ) : (
+            <>
+              <div className="text-6xl mb-4">📄</div>
+              <h2 className="text-xl font-bold text-text-main mb-2">No Biodata Found</h2>
+              <p className="text-text-muted mb-6">You haven't created a biodata yet. Redirecting you to create one...</p>
+              <button
+                onClick={() => router.push("/create")}
+                className="px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition"
+              >
+                Create Biodata Now
+              </button>
+            </>
+          )}
         </div>
       </div>
     );
   }
+
+  const verificationItems = [
+    {
+      label: "Personal details complete",
+      ok: !!(data.fullName && data.gender && data.dateOfBirth && data.height),
+    },
+    {
+      label: "Family details present",
+      ok: !!(data.fatherName && data.motherName),
+    },
+    {
+      label: "Partner preferences filled",
+      ok: !!(data.partnerAge || data.partnerLocation || data.partnerEducation),
+    },
+    {
+      label: "Contact information added",
+      ok: !!data.contactNumber,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background-light text-text-main font-body">
@@ -87,7 +184,7 @@ export default function PreviewPage() {
       <header className="sticky top-0 z-40 border-b border-border-soft bg-white shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-4 md:px-8 flex items-center justify-between gap-4">
           <button
-            onClick={() => router.push("/create")}
+            onClick={() => router.push("/create?step=4")}
             className="flex items-center gap-2 text-text-muted hover:text-primary transition"
             aria-label="Back to form"
           >
@@ -95,7 +192,13 @@ export default function PreviewPage() {
             <span className="hidden sm:inline text-sm font-semibold">Edit Details</span>
           </button>
           <h1 className="text-xl font-bold text-primary">Preview & Download</h1>
-          <div className="w-20" />
+          <button
+            onClick={handleStartOver}
+            className="flex items-center gap-2 rounded-full border border-border-soft px-3 py-1.5 text-xs font-semibold text-text-muted transition hover:border-red-200 hover:text-red-500"
+          >
+            <RotateCcw size={14} />
+            <span className="hidden sm:inline">Start Over</span>
+          </button>
         </div>
       </header>
 
@@ -110,12 +213,43 @@ export default function PreviewPage() {
                 data={data}
                 colorTheme={colorTheme}
                 visibleSections={visibleSections}
+                layoutStyle={data.layoutStyle || 'compact'}
               />
             </div>
           </div>
 
           {/* Actions Panel */}
           <div className="flex flex-col gap-6">
+            {/* Verification Card */}
+            <div className="rounded-xl border border-border-soft bg-white p-6 shadow-md">
+              <div className="flex items-center gap-2 mb-4">
+                <CheckCircle size={20} className="text-primary" />
+                <h2 className="font-bold text-lg text-text-main">Verify Your Details</h2>
+              </div>
+              <p className="text-sm text-text-muted mb-4">
+                Please confirm your biodata is accurate before downloading or sharing.
+              </p>
+              <div className="space-y-2 mb-4">
+                {verificationItems.map((item) => (
+                  <div key={item.label} className="flex items-center justify-between rounded-lg border border-border-soft px-3 py-2 text-xs font-semibold">
+                    <span className="text-text-main">{item.label}</span>
+                    <span className={item.ok ? "text-emerald-600" : "text-amber-600"}>
+                      {item.ok ? "Checked" : "Needs review"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <label className="flex items-center gap-2 text-xs font-semibold text-text-main">
+                <input
+                  type="checkbox"
+                  checked={isConfirmed}
+                  onChange={(e) => setIsConfirmed(e.target.checked)}
+                  className="size-4 rounded border-border-soft text-primary focus:ring-primary"
+                />
+                I confirm that the details are correct.
+              </label>
+            </div>
+
             {/* Auth Prompt for Non-Logged Users */}
             {!user && (
               <div className="rounded-xl border border-border-soft bg-white p-6 shadow-md">
@@ -141,15 +275,16 @@ export default function PreviewPage() {
             <div className="space-y-3">
               <button 
                 onClick={handleDownloadPDF}
-                disabled={isDownloading}
+                disabled={isDownloading || !isConfirmed}
                 className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Download size={18} />
-                {isDownloading ? 'Generating PDF...' : 'Download PDF'}
+                {isDownloading ? "Generating PDF..." : "Download PDF"}
               </button>
               <button 
                 onClick={handleShareWhatsApp}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
+                disabled={!isConfirmed}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Share2 size={18} />
                 Share on WhatsApp
@@ -167,6 +302,16 @@ export default function PreviewPage() {
     </div>
   );
 }
+
+export default function PreviewPage() {
+  return (
+    <Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><p>Loading preview...</p></div>}>
+      <PreviewPageContent />
+    </Suspense>
+  );
+}
+
+export const dynamic = 'force-dynamic';
 
 function BiodataPreview({ data, templateId }: { data: any; templateId: string }) {
   return (

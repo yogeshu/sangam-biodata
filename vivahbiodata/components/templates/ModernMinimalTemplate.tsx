@@ -3,7 +3,8 @@ import { TemplateProps, defaultVisibleSections } from './BaseTemplate';
 export default function ModernMinimalTemplate({ 
   data, 
   colorTheme,
-  visibleSections = defaultVisibleSections 
+  visibleSections = defaultVisibleSections,
+  layoutStyle = 'compact'
 }: TemplateProps) {
   const theme = colorTheme || {
     primary: '#2C3E50',
@@ -58,30 +59,30 @@ export default function ModernMinimalTemplate({
         <div className="space-y-8">
           {/* Personal */}
           <MinimalSection title="Personal" theme={theme}>
-            <MinimalDetail label="Height" value={data.height} />
-            <MinimalDetail label="Marital Status" value={data.maritalStatus} />
-            {data.bloodGroup && <MinimalDetail label="Blood Group" value={data.bloodGroup} />}
-            <MinimalDetail label="Birth Place" value={data.birthPlace} />
+            <MinimalDetail label="Height" value={data.height} layout={layoutStyle} />
+            <MinimalDetail label="Marital Status" value={data.maritalStatus} layout={layoutStyle} />
+            {data.bloodGroup && <MinimalDetail label="Blood Group" value={data.bloodGroup} layout={layoutStyle} />}
+            <MinimalDetail label="Birth Place" value={data.birthPlace} layout={layoutStyle} />
           </MinimalSection>
 
           {/* Religious */}
           {visibleSections.horoscope && (
             <MinimalSection title="Religious Background" theme={theme}>
-              <MinimalDetail label="Religion" value={data.religion} />
-              {data.caste && <MinimalDetail label="Caste" value={data.caste} />}
-              {data.rashi && <MinimalDetail label="Rashi" value={data.rashi} />}
-              {data.nakshatra && <MinimalDetail label="Nakshatra" value={data.nakshatra} />}
+              <MinimalDetail label="Religion" value={data.religion} layout={layoutStyle} />
+              {data.caste && <MinimalDetail label="Caste" value={data.caste} layout={layoutStyle} />}
+              {data.rashi && <MinimalDetail label="Rashi" value={data.rashi} layout={layoutStyle} />}
+              {data.nakshatra && <MinimalDetail label="Nakshatra" value={data.nakshatra} layout={layoutStyle} />}
             </MinimalSection>
           )}
 
           {/* Education & Career */}
           {visibleSections.education && (
             <MinimalSection title="Professional" theme={theme}>
-              <MinimalDetail label="Education" value={data.education} />
-              <MinimalDetail label="Occupation" value={data.occupation} />
-              {data.company && <MinimalDetail label="Organization" value={data.company} />}
+              <MinimalDetail label="Education" value={data.education} layout={layoutStyle} />
+              <MinimalDetail label="Occupation" value={data.occupation} layout={layoutStyle} />
+              {data.company && <MinimalDetail label="Organization" value={data.company} layout={layoutStyle} />}
               {visibleSections.income && data.income && (
-                <MinimalDetail label="Income" value={data.income} />
+                <MinimalDetail label="Income" value={data.income} layout={layoutStyle} />
               )}
             </MinimalSection>
           )}
@@ -91,27 +92,27 @@ export default function ModernMinimalTemplate({
         <div className="space-y-8">
           {/* Family */}
           <MinimalSection title="Family" theme={theme}>
-            <MinimalDetail label="Father" value={data.fatherName} />
-            {data.fatherOccupation && <MinimalDetail label="Father's Occupation" value={data.fatherOccupation} />}
-            <MinimalDetail label="Mother" value={data.motherName} />
-            {data.motherOccupation && <MinimalDetail label="Mother's Occupation" value={data.motherOccupation} />}
-            {data.siblings && <MinimalDetail label="Siblings" value={data.siblings} />}
+            <MinimalDetail label="Father" value={data.fatherName} layout={layoutStyle} />
+            {data.fatherOccupation && <MinimalDetail label="Father's Occupation" value={data.fatherOccupation} layout={layoutStyle} />}
+            <MinimalDetail label="Mother" value={data.motherName} layout={layoutStyle} />
+            {data.motherOccupation && <MinimalDetail label="Mother's Occupation" value={data.motherOccupation} layout={layoutStyle} />}
+            {data.siblings && <MinimalDetail label="Siblings" value={data.siblings} layout={layoutStyle} />}
           </MinimalSection>
 
           {/* Contact */}
           <MinimalSection title="Contact" theme={theme}>
-            <MinimalDetail label="Phone" value={data.contactNumber} />
-            {data.email && <MinimalDetail label="Email" value={data.email} />}
-            <MinimalDetail label="Address" value={`${data.address}, ${data.city}`} />
+            <MinimalDetail label="Phone" value={data.contactNumber} layout={layoutStyle} />
+            {data.email && <MinimalDetail label="Email" value={data.email} layout={layoutStyle} />}
+            <MinimalDetail label="Address" value={`${data.address}, ${data.city}`} layout={layoutStyle} />
           </MinimalSection>
 
           {/* Partner Preferences */}
           {visibleSections.preferences && (
             <MinimalSection title="Preferences" theme={theme}>
-              {data.partnerAge && <MinimalDetail label="Age" value={data.partnerAge} />}
-              {data.partnerHeight && <MinimalDetail label="Height" value={data.partnerHeight} />}
-              {data.partnerEducation && <MinimalDetail label="Education" value={data.partnerEducation} />}
-              {data.partnerLocation && <MinimalDetail label="Location" value={data.partnerLocation} />}
+              {data.partnerAge && <MinimalDetail label="Age" value={data.partnerAge} layout={layoutStyle} />}
+              {data.partnerHeight && <MinimalDetail label="Height" value={data.partnerHeight} layout={layoutStyle} />}
+              {data.partnerEducation && <MinimalDetail label="Education" value={data.partnerEducation} layout={layoutStyle} />}
+              {data.partnerLocation && <MinimalDetail label="Location" value={data.partnerLocation} layout={layoutStyle} />}
             </MinimalSection>
           )}
         </div>
@@ -167,13 +168,33 @@ function MinimalSection({
   );
 }
 
-function MinimalDetail({ label, value }: { label: string; value: string }) {
+function MinimalDetail({ label, value, layout = 'compact' }: { label: string; value: string; layout?: 'spread' | 'compact' | 'inline' }) {
   if (!value) return null;
   
+  if (layout === 'spread') {
+    return (
+      <div className="text-sm flex justify-between items-center">
+        <span className="text-gray-500">{label}</span>
+        <p className="text-gray-900 font-medium">{value}</p>
+      </div>
+    );
+  }
+  
+  if (layout === 'inline') {
+    return (
+      <span className="inline text-sm">
+        <span className="text-gray-500">{label}:</span>{' '}
+        <span className="text-gray-900 font-medium">{value}</span>
+        <span className="text-gray-400 mx-2">•</span>
+      </span>
+    );
+  }
+  
+  // compact (default)
   return (
     <div className="text-sm">
-      <span className="text-gray-500">{label}</span>
-      <p className="text-gray-900 mt-1 font-medium">{value}</p>
+      <span className="text-gray-500">{label}:</span>
+      <p className="text-gray-900 mt-0.5 font-medium">{value}</p>
     </div>
   );
 }

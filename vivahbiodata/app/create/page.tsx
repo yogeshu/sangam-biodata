@@ -1,7 +1,7 @@
 "use client";
 
 import type { ChangeEvent, ReactNode, FC } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { templates, type TemplateMeta } from "@/lib/templates";
 import CommonLayout from "@/components/common/CommonLayout";
@@ -77,6 +77,7 @@ type FormState = {
     income: boolean;
     preferences: boolean;
   };
+  layoutStyle: 'spread' | 'compact' | 'inline';
 };
 
 type Step = {
@@ -98,15 +99,69 @@ function cn(...classes: (string | undefined | false)[]): string {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function CreateBiodata() {
+function CreateBiodataContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const allowSkipValidation = searchParams?.get("skipValidation") === "1";
+  const isTestMode = searchParams?.get("test") === "1";
+
+  // Sample data for testing
+  const getSampleData = (): FormState => ({
+    fullName: "Priya Sharma",
+    gender: "Female",
+    dateOfBirth: "1998-05-15",
+    timeOfBirth: "10:30",
+    height: "5'4\"",
+    maritalStatus: "Never Married",
+    religion: "Hindu",
+    caste: "Brahmin",
+    gothra: "Bharadwaj",
+    education: "MBA in Finance",
+    occupation: "Senior Financial Analyst",
+    fatherName: "Mr. Rajesh Sharma",
+    fatherOccupation: "Retired Government Officer",
+    motherName: "Mrs. Sunita Sharma",
+    motherOccupation: "Homemaker",
+    siblings: "One younger brother",
+    familyLocation: "Mumbai, Maharashtra",
+    incomeRange: "₹12-15 Lakhs per annum",
+    familyValues: "Traditional with modern outlook",
+    birthPlace: "Mumbai, Maharashtra",
+    rashi: "Taurus",
+    nakshatra: "Rohini",
+    manglik: "No",
+    bloodGroup: "O+",
+    partnerAge: "28-32 years",
+    partnerHeight: "5'8\" and above",
+    partnerLocation: "Mumbai, Pune, or nearby cities",
+    partnerEducation: "Graduate or Post-Graduate",
+    partnerOccupation: "Well-settled professional",
+    partnerManglik: "No preference",
+    contactNumbers: [
+      { type: "Self", number: "+91 98765 43210" },
+      { type: "Parent", number: "+91 99876 54321" },
+    ],
+    state: "Maharashtra",
+    photos: [],
+    religiousSymbol: "🕉️",
+    customFields: [
+      { label: "Hobbies", value: "Reading, Yoga, Traveling" },
+      { label: "Languages Known", value: "Hindi, English, Marathi" }
+    ],
+    visibleSections: {
+      horoscope: true,
+      education: true,
+      income: true,
+      preferences: true,
+    },
+    layoutStyle: 'compact',
+  });
+
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [selectedTemplate, setSelectedTemplate] = useState<string>("classic");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const [data, setData] = useState<FormState>({
+  const [data, setData] = useState<FormState>(isTestMode ? getSampleData() : {
     fullName: "",
     gender: "",
     dateOfBirth: "",
@@ -149,6 +204,7 @@ export default function CreateBiodata() {
       income: true,
       preferences: true,
     },
+    layoutStyle: 'compact',
   });
 
   const progress = useMemo(() => Math.round(((currentStep + 1) / steps.length) * 100), [currentStep]);
@@ -253,8 +309,13 @@ export default function CreateBiodata() {
   const nextStep = () => {
     if (validateStep()) {
       if (currentStep === steps.length - 1) {
-        // Navigate to preview with data
-        router.push(`/preview?data=${encodeURIComponent(JSON.stringify(data))}&template=${selectedTemplate}`);
+        // Save photos separately to avoid URL length issues
+        const { photos, ...dataWithoutPhotos } = data;
+        import('@/lib/utils/storage').then(({ savePhotosToLocal }) => {
+          savePhotosToLocal(photos);
+        });
+        // Navigate to preview with data (without photos in URL)
+        router.push(`/preview?data=${encodeURIComponent(JSON.stringify(dataWithoutPhotos))}&template=${selectedTemplate}`);
       } else {
         setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
       }
@@ -280,6 +341,7 @@ export default function CreateBiodata() {
                 onTemplateChange={setSelectedTemplate}
                 errors={errors}
                 touched={touched}
+                onErrorChange={setErrors}
               />
               <FooterNav
                 onBack={prevStep}
@@ -298,6 +360,17 @@ export default function CreateBiodata() {
 }
 
 function HeaderBar({ router }: { router: any }) {
+  const handleApplyTestData = () => {
+    router.push('/create?test=1');
+  };
+
+  const handleClearTestData = () => {
+    router.push('/create');
+  };
+
+  const searchParams = useSearchParams();
+  const isTestMode = searchParams?.get("test") === "1";
+
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex items-center gap-4">
@@ -318,10 +391,28 @@ function HeaderBar({ router }: { router: any }) {
           </div>
         </div>
       </div>
-      <button className="flex items-center gap-2 rounded-full border border-primary/30 px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary/10">
-        <Save size={14} />
-        <span className="hidden sm:inline">Save Draft</span>
-      </button>
+      <div className="flex items-center gap-2">
+        {isTestMode && (
+          <button 
+            onClick={handleClearTestData}
+            className="flex items-center gap-2 rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-100"
+          >
+            ✕ Clear Test Data
+          </button>
+        )}
+        {!isTestMode && (
+          <button 
+            onClick={handleApplyTestData}
+            className="flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-700 transition hover:bg-amber-100"
+          >
+            ⚡ Test Mode
+          </button>
+        )}
+        <button className="flex items-center gap-2 rounded-full border border-primary/30 px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary/10">
+          <Save size={14} />
+          <span className="hidden sm:inline">Save Draft</span>
+        </button>
+      </div>
     </div>
   );
 }
@@ -426,7 +517,17 @@ function FooterNav({ onBack, onNext, isFirst, isLast, errors, allowSkipValidatio
   );
 }
 
-function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, errors, touched }: { step: Step; errors?: Record<string, string>; touched?: Record<string, boolean>; data: FormState; onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void; selectedTemplate?: string; onTemplateChange?: (template: string) => void; }) {
+export default function CreateBiodata() {
+  return (
+    <Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><p>Loading...</p></div>}>
+      <CreateBiodataContent />
+    </Suspense>
+  );
+}
+
+export const dynamic = 'force-dynamic';
+
+function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, errors, touched, onErrorChange }: { step: Step; errors?: Record<string, string>; touched?: Record<string, boolean>; data: FormState; onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void; selectedTemplate?: string; onTemplateChange?: (template: string) => void; onErrorChange?: (errors: Record<string, string>) => void; }) {
   const [localData, setLocalData] = useState(data);
 
   useEffect(() => {
@@ -543,12 +644,21 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
       if (field === "type") {
         updated[index].type = value as "Self" | "Parent" | "Relative";
       } else {
-        updated[index].number = value;
+        // Allow only digits and common phone number separators
+        const cleanedValue = value.replace(/[^\d\s\-+()]/g, "");
+        updated[index].number = cleanedValue;
       }
       const syntheticEvent = {
         target: { name: 'contactNumbers', value: updated }
       } as any;
       onChange(syntheticEvent);
+
+      // Clear error for this specific contact number when user starts typing
+      if (field === "number" && onErrorChange && errors?.[`contactNumber_${index}`]) {
+        const newErrors = { ...errors };
+        delete newErrors[`contactNumber_${index}`];
+        onErrorChange(newErrors);
+      }
     };
 
     const addContactNumber = () => {
@@ -672,19 +782,36 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
               key={template.id}
               onClick={() => onTemplateChange?.(template.id)}
               className={cn(
-                "relative flex flex-col gap-2 rounded-lg border-2 p-3 transition",
+                "relative flex flex-col gap-2 rounded-lg border-2 p-3 transition overflow-hidden",
                 selectedTemplate === template.id
                   ? "border-primary bg-primary/5 shadow-md"
                   : "border-border-soft hover:border-primary/50"
               )}
             >
-              <div className="aspect-[3/4] w-full rounded-md border border-border-soft bg-gradient-to-br from-background-light to-border-soft flex items-center justify-center text-xs text-text-muted font-semibold">
-                {template.name}
+              <div className="aspect-[3/4] w-full rounded-md border border-border-soft bg-gradient-to-br from-background-light to-border-soft flex items-center justify-center text-xs text-text-muted font-semibold overflow-hidden">
+                {template.image ? (
+                  <img 
+                    src={template.image} 
+                    alt={template.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span>{template.name}</span>
+                )}
               </div>
-              <span className="text-sm font-semibold text-text-main">{template.name}</span>
-              <span className="text-xs text-text-muted">{template.description}</span>
+              <div className="space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-semibold text-text-main">{template.name}</span>
+                  {template.isPremium && (
+                    <span className="px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-800 text-xs font-bold">
+                      Premium
+                    </span>
+                  )}
+                </div>
+                <span className="text-xs text-text-muted">{template.description}</span>
+              </div>
               {selectedTemplate === template.id && (
-                <div className="absolute top-2 right-2 flex size-5 items-center justify-center rounded-full bg-primary text-white">
+                <div className="absolute top-2 right-2 flex size-5 items-center justify-center rounded-full bg-primary text-white shadow-lg">
                   <CheckCircle2 size={14} />
                 </div>
               )}
@@ -692,14 +819,20 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
           ))}
         </div>
 
-        <div className="mt-8">
-          <h3 className="mb-4 text-lg font-bold text-text-main">Preview</h3>
-          <div className="flex justify-center">
-            <TemplatePreview data={data} templateId={selectedTemplate || "classic"} />
+        <div className="rounded-lg border-2 border-primary/30 bg-primary/5 p-4">
+          <div className="flex items-start gap-3">
+            <div className="flex size-6 items-center justify-center rounded-full bg-primary text-white flex-shrink-0 mt-0.5">
+              <CheckCircle2 size={16} />
+            </div>
+            <div className="space-y-1.5">
+              <h4 className="font-bold text-text-main">Template Selection Complete!</h4>
+              <p className="text-sm text-text-muted">You've selected <span className="font-semibold text-primary">{templates.find(t => t.id === selectedTemplate)?.name || 'a template'}</span>.</p>
+              <p className="text-sm text-text-muted">The biodata preview and download options will be available on your dashboard after completion.</p>
+            </div>
           </div>
         </div>
 
-        <HelperHint>Review your biodata before download. You can edit anytime.</HelperHint>
+        <HelperHint>All set! Review your information and proceed to complete your biodata.</HelperHint>
       </div>
     );
   }
@@ -783,80 +916,6 @@ function HelperHint({ children }: { children: React.ReactNode }) {
     <div className="flex items-center gap-2 rounded-lg border border-dashed border-border-soft bg-background-light px-4 py-3 text-sm text-text-muted">
       <CheckCircle2 size={14} className="text-primary" />
       <span>{children}</span>
-    </div>
-  );
-}
-
-function TemplatePreview({ data, templateId }: { data: FormState; templateId: string }) {
-  return (
-    <div className="relative h-[500px] w-full max-w-sm overflow-auto rounded-lg border border-border-soft bg-white shadow-lg">
-      <div className="h-full w-full p-8 font-display text-text-main">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary mx-auto">
-            <Heart size={24} />
-          </div>
-          <h2 className="text-2xl font-bold text-primary uppercase">Marriage Biodata</h2>
-          <p className="text-xs text-text-muted mt-1">Template: {templates.find(t => t.id === templateId)?.name}</p>
-        </div>
-
-        {/* Content */}
-        <div className="space-y-4 text-sm">
-          {data.fullName && (
-            <div className="grid grid-cols-[100px_1fr] gap-2 border-b border-border-soft pb-2">
-              <span className="font-bold text-text-muted">Name</span>
-              <span className="font-semibold text-primary">{data.fullName}</span>
-            </div>
-          )}
-          {data.gender && (
-            <div className="grid grid-cols-[100px_1fr] gap-2 border-b border-border-soft pb-2">
-              <span className="font-bold text-text-muted">Gender</span>
-              <span>{data.gender}</span>
-            </div>
-          )}
-          {data.height && (
-            <div className="grid grid-cols-[100px_1fr] gap-2 border-b border-border-soft pb-2">
-              <span className="font-bold text-text-muted">Height</span>
-              <span>{data.height}</span>
-            </div>
-          )}
-          {data.education && (
-            <div className="grid grid-cols-[100px_1fr] gap-2 border-b border-border-soft pb-2">
-              <span className="font-bold text-text-muted">Education</span>
-              <span>{data.education}</span>
-            </div>
-          )}
-          {data.religion && (
-            <div className="grid grid-cols-[100px_1fr] gap-2 border-b border-border-soft pb-2">
-              <span className="font-bold text-text-muted">Religion</span>
-              <span>{data.religion}</span>
-            </div>
-          )}
-          {data.fatherName && (
-            <div className="grid grid-cols-[100px_1fr] gap-2 border-b border-border-soft pb-2">
-              <span className="font-bold text-text-muted">Father</span>
-              <span>{data.fatherName}</span>
-            </div>
-          )}
-          {data.contactNumbers && data.contactNumbers.length > 0 && (
-            <div className="grid grid-cols-[100px_1fr] gap-2 border-t border-border-soft pt-4 mt-4">
-              <span className="font-bold text-text-muted">Contact</span>
-              <div className="space-y-1">
-                {data.contactNumbers.map((contact, idx) => (
-                  <div key={idx} className="text-sm">
-                    {contact.type}: {contact.number}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <div className="absolute bottom-4 left-0 w-full text-center text-xs text-text-muted italic px-4">
-          Profile created on VivahBio
-        </div>
-      </div>
     </div>
   );
 }

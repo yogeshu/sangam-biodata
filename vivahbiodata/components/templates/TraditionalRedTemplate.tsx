@@ -3,7 +3,8 @@ import { TemplateProps, defaultVisibleSections } from './BaseTemplate';
 export default function TraditionalRedTemplate({ 
   data, 
   colorTheme,
-  visibleSections = defaultVisibleSections 
+  visibleSections = defaultVisibleSections,
+  layoutStyle = 'compact'
 }: TemplateProps) {
   const theme = colorTheme || {
     primary: '#d41132',
@@ -83,68 +84,68 @@ export default function TraditionalRedTemplate({
       <div className="px-8 py-8 space-y-8">
         {/* Personal Details */}
         <Section title="Personal Details" theme={theme}>
-          <DetailRow label="Date of Birth" value={data.dateOfBirth} />
-          {data.timeOfBirth && <DetailRow label="Time of Birth" value={data.timeOfBirth} />}
-          <DetailRow label="Birth Place" value={data.birthPlace} />
-          <DetailRow label="Height" value={data.height} />
-          {data.complexion && <DetailRow label="Complexion" value={data.complexion} />}
-          <DetailRow label="Marital Status" value={data.maritalStatus} />
-          {data.bloodGroup && <DetailRow label="Blood Group" value={data.bloodGroup} />}
+          <DetailRow label="Date of Birth" value={data.dateOfBirth} layout={layoutStyle} />
+          {data.timeOfBirth && <DetailRow label="Time of Birth" value={data.timeOfBirth} layout={layoutStyle} />}
+          <DetailRow label="Birth Place" value={data.birthPlace} layout={layoutStyle} />
+          <DetailRow label="Height" value={data.height} layout={layoutStyle} />
+          {data.complexion && <DetailRow label="Complexion" value={data.complexion} layout={layoutStyle} />}
+          <DetailRow label="Marital Status" value={data.maritalStatus} layout={layoutStyle} />
+          {data.bloodGroup && <DetailRow label="Blood Group" value={data.bloodGroup} layout={layoutStyle} />}
         </Section>
 
         {/* Religious Details (Horoscope) */}
         {visibleSections.horoscope && (
           <Section title="Religious Details" theme={theme}>
-            <DetailRow label="Religion" value={data.religion} />
-            {data.caste && <DetailRow label="Caste" value={data.caste} />}
-            {data.gotra && <DetailRow label="Gotra" value={data.gotra} />}
-            {data.rashi && <DetailRow label="Rashi" value={data.rashi} />}
-            {data.nakshatra && <DetailRow label="Nakshatra" value={data.nakshatra} />}
-            {data.manglik && <DetailRow label="Manglik" value={data.manglik} />}
+            <DetailRow label="Religion" value={data.religion} layout={layoutStyle} />
+            {data.caste && <DetailRow label="Caste" value={data.caste} layout={layoutStyle} />}
+            {data.gotra && <DetailRow label="Gotra" value={data.gotra} layout={layoutStyle} />}
+            {data.rashi && <DetailRow label="Rashi" value={data.rashi} layout={layoutStyle} />}
+            {data.nakshatra && <DetailRow label="Nakshatra" value={data.nakshatra} layout={layoutStyle} />}
+            {data.manglik && <DetailRow label="Manglik" value={data.manglik} layout={layoutStyle} />}
           </Section>
         )}
 
         {/* Education & Career */}
         {visibleSections.education && (
           <Section title="Education & Career" theme={theme}>
-            <DetailRow label="Education" value={data.education} />
-            <DetailRow label="Occupation" value={data.occupation} />
-            {data.company && <DetailRow label="Company" value={data.company} />}
+            <DetailRow label="Education" value={data.education} layout={layoutStyle} />
+            <DetailRow label="Occupation" value={data.occupation} layout={layoutStyle} />
+            {data.company && <DetailRow label="Company" value={data.company} layout={layoutStyle} />}
             {visibleSections.income && data.income && (
-              <DetailRow label="Income" value={data.income} />
+              <DetailRow label="Income" value={data.income} layout={layoutStyle} />
             )}
           </Section>
         )}
 
         {/* Family Details */}
         <Section title="Family Details" theme={theme}>
-          <DetailRow label="Father's Name" value={data.fatherName} />
-          {data.fatherOccupation && <DetailRow label="Father's Occupation" value={data.fatherOccupation} />}
-          <DetailRow label="Mother's Name" value={data.motherName} />
-          {data.motherOccupation && <DetailRow label="Mother's Occupation" value={data.motherOccupation} />}
-          {data.siblings && <DetailRow label="Siblings" value={data.siblings} />}
-          {data.familyLocation && <DetailRow label="Family Location" value={data.familyLocation} />}
-          {data.familyValues && <DetailRow label="Family Values" value={data.familyValues} />}
+          <DetailRow label="Father's Name" value={data.fatherName} layout={layoutStyle} />
+          {data.fatherOccupation && <DetailRow label="Father's Occupation" value={data.fatherOccupation} layout={layoutStyle} />}
+          <DetailRow label="Mother's Name" value={data.motherName} layout={layoutStyle} />
+          {data.motherOccupation && <DetailRow label="Mother's Occupation" value={data.motherOccupation} layout={layoutStyle} />}
+          {data.siblings && <DetailRow label="Siblings" value={data.siblings} layout={layoutStyle} />}
+          {data.familyLocation && <DetailRow label="Family Location" value={data.familyLocation} layout={layoutStyle} />}
+          {data.familyValues && <DetailRow label="Family Values" value={data.familyValues} layout={layoutStyle} />}
         </Section>
 
         {/* Contact Details */}
         <Section title="Contact Details" theme={theme}>
-          <DetailRow label="Contact Number" value={data.contactNumber} />
-          {data.email && <DetailRow label="Email" value={data.email} />}
-          <DetailRow label="Address" value={data.address} />
-          <DetailRow label="City" value={data.city} />
-          <DetailRow label="State" value={data.state} />
+          <DetailRow label="Contact Number" value={data.contactNumber} layout={layoutStyle} />
+          {data.email && <DetailRow label="Email" value={data.email} layout={layoutStyle} />}
+          <DetailRow label="Address" value={data.address} layout={layoutStyle} />
+          <DetailRow label="City" value={data.city} layout={layoutStyle} />
+          <DetailRow label="State" value={data.state} layout={layoutStyle} />
         </Section>
 
         {/* Partner Preferences */}
         {visibleSections.preferences && (
           <Section title="Partner Preferences" theme={theme}>
-            {data.partnerAge && <DetailRow label="Age" value={data.partnerAge} />}
-            {data.partnerHeight && <DetailRow label="Height" value={data.partnerHeight} />}
-            {data.partnerLocation && <DetailRow label="Location" value={data.partnerLocation} />}
-            {data.partnerEducation && <DetailRow label="Education" value={data.partnerEducation} />}
-            {data.partnerOccupation && <DetailRow label="Occupation" value={data.partnerOccupation} />}
-            {data.partnerManglik && <DetailRow label="Manglik Preference" value={data.partnerManglik} />}
+            {data.partnerAge && <DetailRow label="Age" value={data.partnerAge} layout={layoutStyle} />}
+            {data.partnerHeight && <DetailRow label="Height" value={data.partnerHeight} layout={layoutStyle} />}
+            {data.partnerLocation && <DetailRow label="Location" value={data.partnerLocation} layout={layoutStyle} />}
+            {data.partnerEducation && <DetailRow label="Education" value={data.partnerEducation} layout={layoutStyle} />}
+            {data.partnerOccupation && <DetailRow label="Occupation" value={data.partnerOccupation} layout={layoutStyle} />}
+            {data.partnerManglik && <DetailRow label="Manglik Preference" value={data.partnerManglik} layout={layoutStyle} />}
           </Section>
         )}
 
@@ -195,12 +196,31 @@ function Section({
   );
 }
 
-function DetailRow({ label, value }: { label: string; value: string }) {
+function DetailRow({ label, value, layout = 'compact' }: { label: string; value: string; layout?: 'spread' | 'compact' | 'inline' }) {
   if (!value) return null;
   
+  if (layout === 'spread') {
+    return (
+      <div className="flex justify-between py-2 border-b border-gray-100">
+        <span className="font-semibold text-gray-700">{label}:</span>
+        <span className="text-gray-900">{value}</span>
+      </div>
+    );
+  }
+  
+  if (layout === 'inline') {
+    return (
+      <span className="inline text-sm text-gray-900">
+        <span className="font-semibold text-gray-700">{label}:</span> {value}
+        <span className="text-gray-400 mx-2">•</span>
+      </span>
+    );
+  }
+  
+  // compact (default)
   return (
-    <div className="flex justify-between py-2 border-b border-gray-100">
-      <span className="font-semibold text-gray-700">{label}:</span>
+    <div className="py-1.5 text-sm">
+      <span className="font-semibold text-gray-700">{label}:</span>{' '}
       <span className="text-gray-900">{value}</span>
     </div>
   );

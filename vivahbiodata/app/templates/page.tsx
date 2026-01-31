@@ -162,8 +162,8 @@ function TemplateCard({ template, onPreview, onUse }: {
 
         {/* Stats */}
         <div className="mt-4 pt-4 border-t border-border-soft flex justify-between text-xs text-text-muted">
-          <span>⭐ {template.rating || "4.8"}</span>
-          <span>👥 {template.downloads || "1.2K"} used</span>
+          <span>✨ {template.category}</span>
+          {template.isPremium && <span className="text-amber-600 font-semibold">Premium</span>}
         </div>
       </div>
     </div>

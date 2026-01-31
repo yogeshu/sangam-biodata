@@ -7,6 +7,7 @@ export interface TemplateProps {
   data: BiodataData;
   colorTheme?: ColorTheme;
   visibleSections?: VisibleSections;
+  layoutStyle?: 'spread' | 'compact' | 'inline';
 }
 
 export interface BiodataData {
@@ -68,6 +69,9 @@ export interface BiodataData {
     label: string;
     value: string;
   }>;
+  
+  // Layout preference
+  layoutStyle?: 'spread' | 'compact' | 'inline';
 }
 
 export interface ColorTheme {

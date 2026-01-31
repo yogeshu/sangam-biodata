@@ -15,7 +15,8 @@ export default function TemplateRenderer({
   templateId, 
   data, 
   colorTheme,
-  visibleSections 
+  visibleSections,
+  layoutStyle
 }: TemplateRendererProps) {
   
   // Map template IDs to their components
@@ -38,6 +39,7 @@ export default function TemplateRenderer({
       data={data}
       colorTheme={colorTheme}
       visibleSections={visibleSections}
+      layoutStyle={layoutStyle}
     />
   );
 }

@@ -5,6 +5,7 @@
 
 const STORAGE_KEYS = {
   BIODATA_DRAFT: 'vivahbio_biodata_draft',
+  BIODATA_PHOTOS: 'vivahbio_biodata_photos',
   FORM_STEP: 'vivahbio_form_step',
   SELECTED_TEMPLATE: 'vivahbio_selected_template',
   SELECTED_COLOR_THEME: 'vivahbio_selected_color_theme',
@@ -104,12 +105,37 @@ export function loadBiodataFromLocal(): Partial<BiodataFormData> {
 export function clearBiodataLocal(): void {
   try {
     localStorage.removeItem(STORAGE_KEYS.BIODATA_DRAFT);
+    localStorage.removeItem(STORAGE_KEYS.BIODATA_PHOTOS);
     localStorage.removeItem(STORAGE_KEYS.FORM_STEP);
     localStorage.removeItem(STORAGE_KEYS.SELECTED_TEMPLATE);
     localStorage.removeItem(STORAGE_KEYS.SELECTED_COLOR_THEME);
     localStorage.removeItem(STORAGE_KEYS.AUTO_SAVE_TIME);
   } catch (error) {
     console.error('Failed to clear biodata from localStorage:', error);
+  }
+}
+
+/**
+ * Save photos separately to avoid URL length issues
+ */
+export function savePhotosToLocal(photos: string[]): void {
+  try {
+    localStorage.setItem(STORAGE_KEYS.BIODATA_PHOTOS, JSON.stringify(photos));
+  } catch (error) {
+    console.error('Failed to save photos to localStorage:', error);
+  }
+}
+
+/**
+ * Load photos from localStorage
+ */
+export function loadPhotosFromLocal(): string[] {
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.BIODATA_PHOTOS);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Failed to load photos from localStorage:', error);
+    return [];
   }
 }
 
