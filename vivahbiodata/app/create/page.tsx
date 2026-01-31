@@ -28,6 +28,7 @@ import {
   X,
   Eye,
   EyeOff,
+  AlertCircle,
 } from "lucide-react";
 
 type StepKey = "personal" | "family" | "horoscope" | "preferences" | "template";
@@ -43,6 +44,7 @@ type FormState = {
   caste: string;
   gothra: string;
   education: string;
+  occupation: string;
   fatherName: string;
   fatherOccupation: string;
   motherName: string;
@@ -62,7 +64,8 @@ type FormState = {
   partnerEducation: string;
   partnerOccupation: string;
   partnerManglik: string;
-  contactNumber: string;
+  // Contact numbers (self, parent, relative) - min 1, max 3
+  contactNumbers: Array<{ type: "Self" | "Parent" | "Relative"; number: string }>;
   state: string;
   // New fields for Phase 2
   photos: string[]; // URLs of uploaded photos (max 2)
@@ -97,12 +100,14 @@ function cn(...classes: (string | undefined | false)[]): string {
 
 export default function CreateBiodata() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const allowSkipValidation = searchParams?.get("skipValidation") === "1";
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [selectedTemplate, setSelectedTemplate] = useState<string>("classic");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [data, setData] = useState<FormState>({
-    fullName: "Anjali Sharma",
+    fullName: "",
     gender: "",
     dateOfBirth: "",
     timeOfBirth: "",
@@ -112,6 +117,7 @@ export default function CreateBiodata() {
     caste: "",
     gothra: "",
     education: "",
+    occupation: "",
     fatherName: "",
     fatherOccupation: "",
     motherName: "",
@@ -131,7 +137,7 @@ export default function CreateBiodata() {
     partnerEducation: "",
     partnerOccupation: "",
     partnerManglik: "",
-    contactNumber: "",
+    contactNumbers: [{ type: "Self", number: "" }],
     state: "",
     // New fields
     photos: [],
@@ -147,24 +153,77 @@ export default function CreateBiodata() {
 
   const progress = useMemo(() => Math.round(((currentStep + 1) / steps.length) * 100), [currentStep]);
 
+  useEffect(() => {
+    if (allowSkipValidation) {
+      setErrors({});
+    }
+  }, [allowSkipValidation]);
+
   const validateStep = (): boolean => {
+    if (allowSkipValidation) {
+      setErrors({});
+      return true;
+    }
     const newErrors: Record<string, string> = {};
-    
+
     if (currentStep === 0) {
+      // Personal Information
       if (!data.fullName.trim()) newErrors.fullName = "Full name is required";
       if (!data.gender) newErrors.gender = "Gender is required";
+      if (!data.dateOfBirth) newErrors.dateOfBirth = "Date of birth is required";
+      if (!data.timeOfBirth) newErrors.timeOfBirth = "Time of birth is required";
+      if (!data.birthPlace.trim()) newErrors.birthPlace = "Birth place is required";
+      if (!data.height) newErrors.height = "Height is required";
+      if (!data.bloodGroup) newErrors.bloodGroup = "Blood group is required";
+      if (!data.maritalStatus) newErrors.maritalStatus = "Marital status is required";
+      if (!data.caste.trim()) newErrors.caste = "Caste is required";
+      if (!data.gothra.trim()) newErrors.gothra = "Gothra is required";
+      if (!data.education.trim()) newErrors.education = "Education is required";
+      if (!data.occupation.trim()) newErrors.occupation = "Occupation/Job is required";
     }
+
     if (currentStep === 1) {
+      // Family Information
       if (!data.fatherName.trim()) newErrors.fatherName = "Father's name is required";
       if (!data.motherName.trim()) newErrors.motherName = "Mother's name is required";
+      if (!data.familyLocation.trim()) newErrors.familyLocation = "Address/Family location is required";
+      if (!data.incomeRange || data.incomeRange === "") newErrors.incomeRange = "Annual income/package is required (select N/A if not applicable)";
+      if (!data.siblings.trim()) newErrors.siblings = "Please specify sibling details (even if none)";
     }
+
     if (currentStep === 2) {
-      if (data.birthPlace && !data.rashi) newErrors.rashi = "Rashi is recommended if you provided birthplace";
+      // Horoscope Details
+      if (!data.rashi) newErrors.rashi = "Rashi/Sign is required";
+      if (!data.nakshatra.trim()) newErrors.nakshatra = "Nakshatra is required";
     }
+
     if (currentStep === 3) {
-      if (!data.contactNumber.trim()) newErrors.contactNumber = "Contact number is required";
+      // Preferences & Contact
+      if (!data.partnerAge.trim()) newErrors.partnerAge = "Partner age expectations are required (N/A can be added)";
+      if (!data.partnerHeight.trim()) newErrors.partnerHeight = "Partner height expectations are required";
+      if (!data.partnerLocation.trim()) newErrors.partnerLocation = "Partner location expectations are required";
+      if (!data.partnerEducation.trim()) newErrors.partnerEducation = "Partner education expectations are required";
+      if (!data.partnerOccupation.trim()) newErrors.partnerOccupation = "Partner occupation expectations are required";
       if (!data.state) newErrors.state = "State is required";
+
+      // Validate contact numbers - min 1, max 3
+      const validNumbers = data.contactNumbers.filter(c => c.number.trim());
+      if (validNumbers.length === 0) {
+        newErrors.contactNumbers = "At least one contact number is required";
+      } else if (validNumbers.length > 3) {
+        newErrors.contactNumbers = "Maximum 3 contact numbers are allowed";
+      } else {
+        // Validate phone number format (10 digits)
+        const phoneRegex = /^[0-9]{10}$/;
+        validNumbers.forEach((contact, idx) => {
+          const cleanNumber = contact.number.replace(/[^\d]/g, "");
+          if (!phoneRegex.test(cleanNumber)) {
+            newErrors[`contactNumber_${idx}`] = "Invalid phone number (10 digits required)";
+          }
+        });
+      }
     }
+
     if (currentStep === 4) {
       if (!selectedTemplate) newErrors.template = "Please select a template";
     }
@@ -212,7 +271,7 @@ export default function CreateBiodata() {
           <div className="rounded-2xl border border-border-soft bg-white shadow-sm">
             <div className="flex flex-col gap-6 p-6 md:p-8">
               <StepperHeader progress={progress} currentStep={currentStep} />
-              <StepTabs currentStep={currentStep} onStepChange={setCurrentStep} />
+              <StepTabs currentStep={currentStep} onStepChange={setCurrentStep} allowSkipValidation={allowSkipValidation} />
               <StepCard
                 step={steps[currentStep]}
                 data={data}
@@ -227,6 +286,8 @@ export default function CreateBiodata() {
                 onNext={nextStep}
                 isFirst={currentStep === 0}
                 isLast={currentStep === steps.length - 1}
+                errors={errors}
+                allowSkipValidation={allowSkipValidation}
               />
             </div>
           </div>
@@ -283,7 +344,7 @@ function StepperHeader({ progress, currentStep }: { progress: number; currentSte
   );
 }
 
-function StepTabs({ currentStep, onStepChange }: { currentStep: number; onStepChange: (idx: number) => void }) {
+function StepTabs({ currentStep, onStepChange, allowSkipValidation }: { currentStep: number; onStepChange: (idx: number) => void; allowSkipValidation?: boolean }) {
   return (
     <div className="flex gap-3 overflow-x-auto pb-1">
       {steps.map((step, idx) => {
@@ -293,16 +354,16 @@ function StepTabs({ currentStep, onStepChange }: { currentStep: number; onStepCh
         return (
           <button
             key={step.key}
-            onClick={() => idx <= currentStep && onStepChange(idx)}
-            disabled={idx > currentStep}
+            onClick={() => (allowSkipValidation || idx <= currentStep) && onStepChange(idx)}
+            disabled={!allowSkipValidation && idx > currentStep}
             className={cn(
-              "flex min-w-[180px] items-center gap-3 rounded-xl border px-4 py-3 text-left transition disabled:cursor-not-allowed", 
-              active ? "border-primary bg-primary/5 text-primary shadow-sm" : 
-              completed ? "border-primary bg-primary/10 text-primary" :
-              "border-border-soft text-text-muted opacity-50"
+              "flex min-w-[180px] items-center gap-3 rounded-xl border px-4 py-3 text-left transition disabled:cursor-not-allowed",
+              active ? "border-primary bg-primary/5 text-primary shadow-sm" :
+                completed ? "border-primary bg-primary/10 text-primary" :
+                  "border-border-soft text-text-muted opacity-50"
             )}
           >
-            <span className={cn("flex size-9 items-center justify-center rounded-lg", active ? "bg-primary/10 text-primary" : completed ? "bg-primary/20 text-primary" : "bg-border-soft text-text-muted")}> 
+            <span className={cn("flex size-9 items-center justify-center rounded-lg", active ? "bg-primary/10 text-primary" : completed ? "bg-primary/20 text-primary" : "bg-border-soft text-text-muted")}>
               {completed ? <CheckCircle2 size={18} /> : <Icon size={18} />}
             </span>
             <span className="flex flex-col">
@@ -316,7 +377,9 @@ function StepTabs({ currentStep, onStepChange }: { currentStep: number; onStepCh
   );
 }
 
-function FooterNav({ onBack, onNext, isFirst, isLast }: { onBack: () => void; onNext: () => void; isFirst: boolean; isLast: boolean }) {
+function FooterNav({ onBack, onNext, isFirst, isLast, errors, allowSkipValidation }: { onBack: () => void; onNext: () => void; isFirst: boolean; isLast: boolean; errors: Record<string, string>; allowSkipValidation?: boolean }) {
+  const hasErrors = !allowSkipValidation && Object.keys(errors).length > 0;
+
   return (
     <div className="flex flex-col gap-3 border-t border-border-soft pt-4 sm:flex-row sm:items-center sm:justify-between">
       <button
@@ -332,13 +395,27 @@ function FooterNav({ onBack, onNext, isFirst, isLast }: { onBack: () => void; on
         Back
       </button>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-        <span className="flex items-center gap-2 text-xs text-text-muted">
-          <CheckCircle2 size={14} className="text-primary" />
-          You can edit later before download
-        </span>
+        {hasErrors && (
+          <div className="flex items-center gap-2 rounded-lg bg-red-50 px-3 py-2 text-xs font-semibold text-red-600 border border-red-200">
+            <AlertCircle size={14} />
+            <span>Please fill all required fields</span>
+          </div>
+        )}
+        {!hasErrors && (
+          <span className="flex items-center gap-2 text-xs text-text-muted">
+            <CheckCircle2 size={14} className="text-primary" />
+            You can edit later before download
+          </span>
+        )}
         <button
           onClick={onNext}
-          className="flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition hover:bg-primary-dark active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={hasErrors}
+          className={cn(
+            "flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition active:scale-95",
+            hasErrors
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primary-dark"
+          )}
           aria-label={isLast ? "Complete and go to preview" : "Go to next step"}
         >
           {isLast ? "Review & Continue" : "Next"}
@@ -351,7 +428,7 @@ function FooterNav({ onBack, onNext, isFirst, isLast }: { onBack: () => void; on
 
 function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, errors, touched }: { step: Step; errors?: Record<string, string>; touched?: Record<string, boolean>; data: FormState; onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void; selectedTemplate?: string; onTemplateChange?: (template: string) => void; }) {
   const [localData, setLocalData] = useState(data);
-  
+
   useEffect(() => {
     setLocalData(data);
   }, [data]);
@@ -393,29 +470,31 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
     return (
       <div className="space-y-6">
         <Section title="Personal Information" icon={<Heart size={18} />}>Basic details to start your profile.</Section>
-        
+
         {/* Photo Upload */}
         <PhotoUpload photos={data.photos} onChange={handlePhotoChange} />
-        
+
         {/* Religious Symbol */}
         <ReligiousSymbolSelector selected={data.religiousSymbol} onChange={handleReligiousSymbolChange} />
-        
+
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <InputField label="Full Name" name="fullName" value={data.fullName} onChange={onChange} placeholder="e.g., Anjali Sharma" icon={<Users size={14} />} error={errors?.fullName} />
           <SelectField label="Gender" name="gender" value={data.gender} onChange={onChange} placeholder="Select Gender" options={["Male", "Female", "Non-binary"]} error={errors?.gender} />
-          <InputField label="Date of Birth" name="dateOfBirth" value={data.dateOfBirth} onChange={onChange} type="date" icon={<Calendar size={14} />} />
-          <InputField label="Time of Birth" name="timeOfBirth" value={data.timeOfBirth} onChange={onChange} type="time" icon={<Clock3 size={14} />} optional />
-          <SelectField label="Height" name="height" value={data.height} onChange={onChange} placeholder="Select Height" options={["5'0\"", "5'2\"", "5'4\"", "5'6\"", "5'8\"", "5'10\"", "6'0\"+"]} />
-          <SelectField label="Marital Status" name="maritalStatus" value={data.maritalStatus} onChange={onChange} placeholder="Select Status" options={["Never Married", "Divorced", "Widowed"]} />
+          <InputField label="Date of Birth" name="dateOfBirth" value={data.dateOfBirth} onChange={onChange} type="date" icon={<Calendar size={14} />} error={errors?.dateOfBirth} />
+          <InputField label="Time of Birth" name="timeOfBirth" value={data.timeOfBirth} onChange={onChange} type="time" icon={<Clock3 size={14} />} error={errors?.timeOfBirth} />
+          <InputField label="Birth Place" name="birthPlace" value={data.birthPlace} onChange={onChange} placeholder="City, State" icon={<MapPin size={14} />} error={errors?.birthPlace} />
+          <SelectField label="Height" name="height" value={data.height} onChange={onChange} placeholder="Select Height" options={["4'0\"", "4'1\"", "4'2\"", "4'3\"", "4'4\"", "4'5\"", "4'6\"", "4'7\"", "4'8\"", "4'9\"", "4'10\"", "4'11\"", "5'0\"", "5'1\"", "5'2\"", "5'3\"", "5'4\"", "5'5\"", "5'6\"", "5'7\"", "5'8\"", "5'9\"", "5'10\"", "5'11\"", "6'0\"", "6'1\"", "6'2\"", "6'3\"", "6'4\"", "6'5\"", "6'6\"", "6'7\"", "6'8\""]} error={errors?.height} />          <SelectField label="Blood Group" name="bloodGroup" value={data.bloodGroup} onChange={onChange} placeholder="Select Blood Group" options={["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]} error={errors?.bloodGroup} />
+          <SelectField label="Marital Status" name="maritalStatus" value={data.maritalStatus} onChange={onChange} placeholder="Select Status" options={["Never Married", "Divorced", "Widowed"]} error={errors?.maritalStatus} />
           <SelectField label="Religion" name="religion" value={data.religion} onChange={onChange} placeholder="e.g., Hindu" options={["Hindu", "Muslim", "Christian", "Sikh", "Jain", "Buddhist", "Other"]} />
-          <InputField label="Caste / Community" name="caste" value={data.caste} onChange={onChange} placeholder="e.g., Brahmin" />
-          <InputField label="Gothra" name="gothra" value={data.gothra} onChange={onChange} placeholder="e.g., Kashyapa" optional />
-          <InputField label="Education" name="education" value={data.education} onChange={onChange} placeholder="e.g., MBA, B.Tech" icon={<GraduationCap size={14} />} />
+          <InputField label="Caste / Community" name="caste" value={data.caste} onChange={onChange} placeholder="e.g., Brahmin" error={errors?.caste} />
+          <InputField label="Gothra" name="gothra" value={data.gothra} onChange={onChange} placeholder="e.g., Kashyapa" error={errors?.gothra} />
+          <InputField label="Education" name="education" value={data.education} onChange={onChange} placeholder="e.g., MBA, B.Tech" icon={<GraduationCap size={14} />} error={errors?.education} />
+          <InputField label="Occupation / Job" name="occupation" value={data.occupation} onChange={onChange} placeholder="e.g., Software Engineer, Doctor" icon={<Briefcase size={14} />} error={errors?.occupation} />
         </div>
-        
+
         {/* Custom Fields */}
         <CustomFieldsManager fields={data.customFields} onChange={handleCustomFieldsChange} />
-        
+
         <HelperHint>Next step: Family details</HelperHint>
       </div>
     );
@@ -426,19 +505,19 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
       <div className="space-y-6">
         <Section title="Family Background" icon={<Users size={18} />}>Share immediate family information to build trust.</Section>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <InputField label="Father's Name" name="fatherName" value={data.fatherName} onChange={onChange} placeholder="e.g., Rajesh Sharma" />
+          <InputField label="Father's Name" name="fatherName" value={data.fatherName} onChange={onChange} placeholder="e.g., Rajesh Sharma" error={errors?.fatherName} />
           <InputField label="Father's Occupation" name="fatherOccupation" value={data.fatherOccupation} onChange={onChange} placeholder="e.g., Business / Govt Service" icon={<Briefcase size={14} />} />
-          <InputField label="Mother's Name" name="motherName" value={data.motherName} onChange={onChange} placeholder="e.g., Sunita Sharma" />
+          <InputField label="Mother's Name" name="motherName" value={data.motherName} onChange={onChange} placeholder="e.g., Sunita Sharma" error={errors?.motherName} />
           <InputField label="Mother's Occupation" name="motherOccupation" value={data.motherOccupation} onChange={onChange} placeholder="e.g., Homemaker" icon={<Home size={14} />} />
-          <InputField label="Siblings Details" name="siblings" value={data.siblings} onChange={onChange} placeholder="e.g., 1 elder sister (married), 1 younger brother" />
-          <InputField label="Family Location" name="familyLocation" value={data.familyLocation} onChange={onChange} placeholder="City, State" icon={<MapPin size={14} />} />
-          <InputField label="Annual Income / Package" name="incomeRange" value={data.incomeRange} onChange={onChange} placeholder="e.g., 25 LPA or Not Applicable" icon={<IndianRupee size={14} />} optional />
+          <InputField label="Siblings Details" name="siblings" value={data.siblings} onChange={onChange} placeholder="e.g., 1 elder sister (married), 1 younger brother" error={errors?.siblings} />
+          <InputField label="Address / Family Location" name="familyLocation" value={data.familyLocation} onChange={onChange} placeholder="City, State" icon={<MapPin size={14} />} error={errors?.familyLocation} />
+          <SelectField label="Annual Income / Package" name="incomeRange" value={data.incomeRange} onChange={onChange} placeholder="Select income range" options={["Not Applicable", "Below 20 LPA", "20-30 LPA", "30-50 LPA", "50-75 LPA", "75+ LPA"]} error={errors?.incomeRange} />
           <InputField label="Family Values" name="familyValues" value={data.familyValues} onChange={onChange} placeholder="e.g., Traditional / Modern / Liberal" optional />
         </div>
-        
+
         {/* Section Visibility Toggles */}
         <SectionVisibilityToggles visible={data.visibleSections} onChange={handleVisibilityToggle} />
-        
+
         <HelperHint>You can add more family members later.</HelperHint>
       </div>
     );
@@ -447,14 +526,11 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
   if (step.key === "horoscope") {
     return (
       <div className="space-y-6">
-        <Section title="Astro & Personal Details" icon={<Sparkles size={18} />}>Optional horoscope and personal attributes.</Section>
+        <Section title="Astro & Personal Details" icon={<Sparkles size={18} />}>Horoscope and astrological details.</Section>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <InputField label="Birth Place" name="birthPlace" value={data.birthPlace} onChange={onChange} placeholder="City, State" icon={<MapPin size={14} />} />
-          <SelectField label="Raas (Rashi)" name="rashi" value={data.rashi} onChange={onChange} placeholder="Select" options={["Mesh", "Vrish", "Mithun", "Kark", "Singh", "Kanya", "Tula", "Vrishchik", "Dhanu", "Makar", "Kumbh", "Meen"]} />
-          <InputField label="Nakshatra" name="nakshatra" value={data.nakshatra} onChange={onChange} placeholder="e.g., Rohini" />
-          <SelectField label="Manglik Status" name="manglik" value={data.manglik} onChange={onChange} placeholder="Select" options={["Non-Manglik", "Manglik", "Anshik Manglik"]} />
-          <SelectField label="Blood Group" name="bloodGroup" value={data.bloodGroup} onChange={onChange} placeholder="Select" options={["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]} />
-          <InputField label="Time of Birth" name="timeOfBirth" value={data.timeOfBirth} onChange={onChange} type="time" icon={<Clock3 size={14} />} optional />
+          <SelectField label="Rashi / Sign" name="rashi" value={data.rashi} onChange={onChange} placeholder="Select Rashi" options={["Mesh", "Vrish", "Mithun", "Kark", "Singh", "Kanya", "Tula", "Vrishchik", "Dhanu", "Makar", "Kumbh", "Meen"]} error={errors?.rashi} />
+          <InputField label="Nakshatra" name="nakshatra" value={data.nakshatra} onChange={onChange} placeholder="e.g., Rohini" error={errors?.nakshatra} />
+          <SelectField label="Manglik Status" name="manglik" value={data.manglik} onChange={onChange} placeholder="Select Manglik Status" options={["Non-Manglik", "Manglik", "Anshik Manglik"]} />
         </div>
         <HelperHint>These details help families who consider horoscope matching.</HelperHint>
       </div>
@@ -462,20 +538,125 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
   }
 
   if (step.key === "preferences") {
+    const handleContactNumberChange = (index: number, field: "type" | "number", value: string) => {
+      const updated = [...data.contactNumbers];
+      if (field === "type") {
+        updated[index].type = value as "Self" | "Parent" | "Relative";
+      } else {
+        updated[index].number = value;
+      }
+      const syntheticEvent = {
+        target: { name: 'contactNumbers', value: updated }
+      } as any;
+      onChange(syntheticEvent);
+    };
+
+    const addContactNumber = () => {
+      if (data.contactNumbers.length < 3) {
+        const syntheticEvent = {
+          target: { name: 'contactNumbers', value: [...data.contactNumbers, { type: "Parent" as const, number: "" }] }
+        } as any;
+        onChange(syntheticEvent);
+      }
+    };
+
+    const removeContactNumber = (index: number) => {
+      const updated = data.contactNumbers.filter((_, i) => i !== index);
+      const syntheticEvent = {
+        target: { name: 'contactNumbers', value: updated }
+      } as any;
+      onChange(syntheticEvent);
+    };
+
     return (
       <div className="space-y-6">
         <Section title="Preferences & Contact" icon={<Star size={18} />}>Describe your partner preferences and share how to reach you.</Section>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <InputField label="Preferred Age Range" name="partnerAge" value={data.partnerAge} onChange={onChange} placeholder="e.g., 24 - 28" />
-          <InputField label="Preferred Height" name="partnerHeight" value={data.partnerHeight} onChange={onChange} placeholder={` 5'2" - 5'8" `} />
-          <InputField label="Preferred Location" name="partnerLocation" value={data.partnerLocation} onChange={onChange} placeholder="City / State" icon={<MapPin size={14} />} />
-          <InputField label="Preferred Education" name="partnerEducation" value={data.partnerEducation} onChange={onChange} placeholder="e.g., MBA, Engineer" icon={<GraduationCap size={14} />} />
-          <InputField label="Preferred Occupation" name="partnerOccupation" value={data.partnerOccupation} onChange={onChange} placeholder="e.g., IT, Govt Service" />
-          <SelectField label="Manglik Preference" name="partnerManglik" value={data.partnerManglik} onChange={onChange} placeholder="Select" options={["No Preference", "Manglik", "Non-Manglik", "Anshik Manglik"]} />
-          <InputField label="Contact Number" name="contactNumber" value={data.contactNumber} onChange={onChange} placeholder="e.g., +91 98765 43210" icon={<Phone size={14} />} />
-          <SelectField label="State" name="state" value={data.state} onChange={onChange} placeholder="Select State" options={["Maharashtra", "Karnataka", "Delhi", "Rajasthan", "Gujarat", "Tamil Nadu", "Uttar Pradesh", "Telangana", "West Bengal", "Other"]} />
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-text-main">Partner Expectations</h3>
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <InputField label="Preferred Age Range" name="partnerAge" value={data.partnerAge} onChange={onChange} placeholder="e.g., 24-28 or N/A" error={errors?.partnerAge} />
+            <InputField label="Preferred Height" name="partnerHeight" value={data.partnerHeight} onChange={onChange} placeholder="e.g., 5'2 - 5'8" error={errors?.partnerHeight} />
+            <InputField label="Preferred Location" name="partnerLocation" value={data.partnerLocation} onChange={onChange} placeholder="City / State or N/A" icon={<MapPin size={14} />} error={errors?.partnerLocation} />
+            <InputField label="Preferred Education" name="partnerEducation" value={data.partnerEducation} onChange={onChange} placeholder="e.g., MBA, Engineer or N/A" icon={<GraduationCap size={14} />} error={errors?.partnerEducation} />
+            <InputField label="Preferred Occupation" name="partnerOccupation" value={data.partnerOccupation} onChange={onChange} placeholder="e.g., IT, Govt Service or N/A" error={errors?.partnerOccupation} />
+            <SelectField label="Manglik Preference" name="partnerManglik" value={data.partnerManglik} onChange={onChange} placeholder="Select" options={["No Preference", "Manglik", "Non-Manglik", "Anshik Manglik"]} />
+          </div>
         </div>
-        <HelperHint>Provide a reachable contact for serious inquiries.</HelperHint>
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-bold text-text-main">Contact Numbers</h3>
+              <p className="text-xs text-text-muted">Minimum 1, Maximum 3 numbers required</p>
+            </div>
+            {data.contactNumbers.length < 3 && (
+              <button
+                type="button"
+                onClick={addContactNumber}
+                className="flex items-center gap-1 px-3 py-1 text-xs font-semibold text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition"
+              >
+                <Plus size={14} />
+                Add Number
+              </button>
+            )}
+          </div>
+
+          {errors?.contactNumbers && (
+            <div className="rounded-lg bg-red-50 px-3 py-2 text-xs font-semibold text-red-600 border border-red-200 flex items-center gap-2">
+              <AlertCircle size={14} />
+              {errors.contactNumbers}
+            </div>
+          )}
+
+          <div className="space-y-3">
+            {data.contactNumbers.map((contact, index) => (
+              <div key={index} className="flex gap-2 items-end">
+                <div className="flex-1 space-y-1">
+                  <label className="text-xs font-bold uppercase tracking-wide text-text-muted block">Contact {index + 1}</label>
+                  <div className="flex gap-2">
+                    <select
+                      value={contact.type}
+                      onChange={(e) => handleContactNumberChange(index, "type", e.target.value)}
+                      className="rounded-lg border border-border-soft px-3 py-2.5 text-sm bg-background-light text-text-main outline-none focus:border-primary focus:ring-1 focus:ring-primary transition w-32"
+                    >
+                      <option>Self</option>
+                      <option>Parent</option>
+                      <option>Relative</option>
+                    </select>
+                    <input
+                      type="tel"
+                      value={contact.number}
+                      onChange={(e) => handleContactNumberChange(index, "number", e.target.value)}
+                      placeholder="10-digit number"
+                      className="flex-1 rounded-lg border border-border-soft px-3 py-2.5 text-sm bg-background-light text-text-main outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
+                    />
+                    {data.contactNumbers.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeContactNumber(index)}
+                        className="flex items-center justify-center size-10 text-text-muted hover:text-red-500 transition rounded-lg border border-border-soft hover:border-red-300"
+                      >
+                        <X size={18} />
+                      </button>
+                    )}
+                  </div>
+                  {errors?.[`contactNumber_${index}`] && (
+                    <span className="text-xs text-red-500 font-semibold">{errors[`contactNumber_${index}`]}</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <SelectField label="State" name="state" value={data.state} onChange={onChange} placeholder="Select State" options={["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Delhi", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Other"]} error={errors?.state} />
+        </div>
+
+        <HelperHint>Provide reachable contact number(s) for serious inquiries. You can include self, parent, or relative numbers.</HelperHint>
       </div>
     );
   }
@@ -484,7 +665,7 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
     return (
       <div className="space-y-6">
         <Section title="Select Template & Preview" icon={<LayoutTemplate size={18} />}>Choose a design and review your biodata</Section>
-        
+
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
           {templates.map((template) => (
             <button
@@ -657,10 +838,16 @@ function TemplatePreview({ data, templateId }: { data: FormState; templateId: st
               <span>{data.fatherName}</span>
             </div>
           )}
-          {data.contactNumber && (
+          {data.contactNumbers && data.contactNumbers.length > 0 && (
             <div className="grid grid-cols-[100px_1fr] gap-2 border-t border-border-soft pt-4 mt-4">
               <span className="font-bold text-text-muted">Contact</span>
-              <span>{data.contactNumber}</span>
+              <div className="space-y-1">
+                {data.contactNumbers.map((contact, idx) => (
+                  <div key={idx} className="text-sm">
+                    {contact.type}: {contact.number}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -680,14 +867,14 @@ function PhotoUpload({ photos, onChange }: { photos: string[]; onChange: (photos
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-    
+
     // Convert files to base64 URLs (for demo - in production use proper upload service)
     Array.from(files).forEach((file) => {
       if (photos.length >= 2) {
         alert("Maximum 2 photos allowed");
         return;
       }
-      
+
       const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result as string;
@@ -708,7 +895,7 @@ function PhotoUpload({ photos, onChange }: { photos: string[]; onChange: (photos
           Upload Photos
           <span className="text-[10px] font-semibold text-text-muted">(Maximum 2, Optional)</span>
         </span>
-        
+
         <div className="flex gap-4 flex-wrap">
           {/* Preview uploaded photos */}
           {photos.map((photo, index) => (
@@ -723,7 +910,7 @@ function PhotoUpload({ photos, onChange }: { photos: string[]; onChange: (photos
               </button>
             </div>
           ))}
-          
+
           {/* Upload button */}
           {photos.length < 2 && (
             <label className="w-32 h-32 border-2 border-dashed border-border-strong rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-primary transition text-text-muted hover:text-primary">
