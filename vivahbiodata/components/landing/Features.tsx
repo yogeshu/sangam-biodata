@@ -9,24 +9,24 @@ const Features = () => {
   ];
 
   return (
-    <div className="w-full bg-white dark:bg-background-dark border-y border-border-soft dark:border-white/10 transition-colors">
+    <div className="w-full bg-white dark:bg-background-dark border-y border-border-soft dark:border-border-soft/30 transition-colors">
       <div className="max-w-[960px] mx-auto px-4 md:px-10 py-12">
         <div className="flex flex-col md:flex-row gap-8 items-start md:items-center justify-between">
           <div className="flex flex-col gap-2 max-w-[300px]">
-            <h3 className="text-2xl font-bold text-text-main">Why families trust us</h3>
-            <p className="text-text-muted text-sm font-body">We understand that privacy is paramount when looking for a life partner.</p>
+            <h3 className="text-2xl font-bold text-text-main dark:text-background-light">Why families trust us</h3>
+            <p className="text-text-muted dark:text-gray-300 text-sm font-body">We understand that privacy is paramount when looking for a life partner.</p>
           </div>
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
             {features.map((feature, idx) => {
               const IconComponent = feature.icon;
               return (
-              <div key={idx} className="flex flex-col gap-3 p-4 rounded-lg bg-background-light border border-border-soft">
+              <div key={idx} className="flex flex-col gap-3 p-4 rounded-lg bg-background-light dark:bg-midnight-accent border border-border-soft dark:border-border-soft/30">
                 <div className="text-primary">
                   <IconComponent size={32} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-text-main text-base">{feature.title}</h4>
-                  <p className="text-text-muted text-sm mt-1 font-body">{feature.desc}</p>
+                  <h4 className="font-bold text-text-main dark:text-background-light text-base">{feature.title}</h4>
+                  <p className="text-text-muted dark:text-gray-300 text-sm mt-1 font-body">{feature.desc}</p>
                 </div>
               </div>
             );

@@ -1,18 +1,18 @@
 @import "tailwindcss";
 /* disabled es */
 @theme global {
-  /* 1. Your Custom Colors from the HTML */
-  --color-primary: #d41132;
-  --color-primary-dark: #b00e2a;
+  /* 1. Your Custom Colors - Royal Midnight Theme */
+  --color-primary: #EAB308;
+  --color-primary-dark: #CA8A04;
   
-  --color-background-light: #fcf8f9;
-  --color-background-dark: #221013;
+  --color-background-light: #F8FAFC;
+  --color-background-dark: #0F172A;
   
-  --color-text-main: #1b0d10;
-  --color-text-muted: #9a4c59;
+  --color-text-main: #0F172A;
+  --color-text-muted: #1E293B;
   
-  --color-border-soft: #f3e7e9;
-  --color-border-strong: #e7cfd3;
+  --color-border-soft: #334155;
+  --color-border-strong: #1E293B;
 
   /* 2. Your Fonts */
   --font-display: "Noto Serif", serif;
@@ -24,4 +24,9 @@ body {
   background-color: var(--color-background-light);
   color: var(--color-text-main);
   font-family: var(--font-display);
+}
+
+.dark body {
+  background-color: var(--color-background-dark);
+  color: var(--color-background-light);
 }

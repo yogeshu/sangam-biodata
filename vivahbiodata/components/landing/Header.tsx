@@ -80,7 +80,7 @@ const Header = () => {
 
             <Link 
               href="/templates"
-              className="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary hover:bg-primary-dark transition-all text-white text-sm font-bold leading-normal shadow-md hover:shadow-lg"
+              className="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary hover:bg-primary-dark transition-all text-background-dark dark:text-background-dark text-sm font-bold leading-normal shadow-md hover:shadow-lg"
             >
               Create Biodata
             </Link>
@@ -129,7 +129,7 @@ const Header = () => {
           <Link 
             href="/templates"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="w-full mt-2 cursor-pointer flex items-center justify-center rounded-lg h-12 px-6 bg-primary hover:bg-primary-dark text-white text-base font-bold transition-all"
+            className="w-full mt-2 cursor-pointer flex items-center justify-center rounded-lg h-12 px-6 bg-primary hover:bg-primary-dark text-background-dark dark:text-background-dark text-base font-bold transition-all"
           >
             Create Biodata
           </Link>

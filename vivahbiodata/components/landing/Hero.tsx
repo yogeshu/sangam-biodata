@@ -14,22 +14,22 @@ const Hero = () => {
               <span className="text-primary font-bold tracking-wider text-xs uppercase bg-primary/10 w-fit px-3 py-1 rounded-full mx-auto md:mx-0">
                 Trusted by 50,000+ Families
               </span>
-              <h1 className="text-text-main text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-[-0.033em]">
+              <h1 className="text-text-main dark:text-background-light text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-[-0.033em]">
                 Create your Marriage Biodata in <span className="text-primary italic">3 minutes</span>
               </h1>
-              <h2 className="text-text-muted text-lg font-medium leading-relaxed max-w-[600px] mx-auto md:mx-0 font-body">
+              <h2 className="text-text-muted dark:text-gray-300 text-lg font-medium leading-relaxed max-w-[600px] mx-auto md:mx-0 font-body">
                 Professional PDF formats designed for WhatsApp sharing. No public profile required—your data stays private and secure.
               </h2>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <a href='/templates' className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-primary hover:bg-primary-dark transition-all shadow-lg shadow-primary/20 text-white text-base font-bold">
+              <a href='/templates' className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-primary hover:bg-primary-dark transition-all shadow-lg shadow-primary/20 text-background-dark dark:text-background-dark text-base font-bold">
                 Create Biodata
               </a>
-              <a href='/samples' className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-white border border-border-strong text-text-main hover:bg-gray-50 transition-all text-base font-bold">
+              <a href='/samples' className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-white dark:bg-background-dark border border-border-strong dark:border-border-soft text-text-main dark:text-background-light hover:bg-gray-50 dark:hover:bg-gray-800 transition-all text-base font-bold">
                 View Samples
               </a>
             </div>
-            <div className="flex items-center justify-center md:justify-start gap-2 text-text-muted text-sm mt-2">
+            <div className="flex items-center justify-center md:justify-start gap-2 text-text-muted dark:text-gray-300 text-sm mt-2">
               <CheckCircle size={18} />
               <span>No sign-up required for preview</span>
             </div>
