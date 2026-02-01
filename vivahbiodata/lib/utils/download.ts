@@ -7,6 +7,65 @@ export interface DownloadOptions {
   quality?: number;
 }
 
+const PREVIEW_SCALE_ATTR = 'data-preview-scale';
+
+function normalizeColor(value: string): string {
+  if (!value) return value;
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return value;
+  const sentinel = 'rgba(1, 2, 3, 0.5)';
+  ctx.fillStyle = sentinel;
+  ctx.fillStyle = value;
+  const normalized = ctx.fillStyle;
+  return normalized || value;
+}
+
+function sanitizeCloneStyles(clone: Document): void {
+  const elements = clone.querySelectorAll<HTMLElement>('*');
+  elements.forEach((el) => {
+    const style = clone.defaultView?.getComputedStyle(el);
+    if (!style) return;
+
+    const color = normalizeColor(style.color);
+    const backgroundColor = normalizeColor(style.backgroundColor);
+    const borderTopColor = normalizeColor(style.borderTopColor);
+    const borderRightColor = normalizeColor(style.borderRightColor);
+    const borderBottomColor = normalizeColor(style.borderBottomColor);
+    const borderLeftColor = normalizeColor(style.borderLeftColor);
+    const outlineColor = normalizeColor(style.outlineColor);
+
+    el.style.color = color;
+    el.style.backgroundColor = backgroundColor;
+    el.style.borderTopColor = borderTopColor;
+    el.style.borderRightColor = borderRightColor;
+    el.style.borderBottomColor = borderBottomColor;
+    el.style.borderLeftColor = borderLeftColor;
+    el.style.outlineColor = outlineColor;
+
+    // Avoid unsupported color parsing in shadows
+    if (style.boxShadow && style.boxShadow !== 'none') {
+      el.style.boxShadow = 'none';
+    }
+  });
+}
+
+function temporarilyDisablePreviewScale(element: HTMLElement): () => void {
+  const scaleWrapper = element.closest<HTMLElement>(`[${PREVIEW_SCALE_ATTR}]`);
+  if (!scaleWrapper) return () => undefined;
+
+  const previousTransform = scaleWrapper.style.transform;
+  const previousOrigin = scaleWrapper.style.transformOrigin;
+
+  scaleWrapper.style.transform = 'none';
+  scaleWrapper.style.transformOrigin = 'top left';
+
+  return () => {
+    scaleWrapper.style.transform = previousTransform;
+    scaleWrapper.style.transformOrigin = previousOrigin;
+  };
+}
+
 /**
  * Download biodata as PDF
  */
@@ -25,13 +84,23 @@ export async function downloadAsPDF(
       throw new Error('Element not found');
     }
 
-    // Capture the element as canvas
-    const canvas = await html2canvas(element, {
-      scale: 2, // Higher quality
-      useCORS: true,
-      logging: false,
-      backgroundColor: '#ffffff',
-    });
+    const restoreScale = temporarilyDisablePreviewScale(element);
+
+    let canvas: HTMLCanvasElement;
+    try {
+      // Capture the element as canvas
+      canvas = await html2canvas(element, {
+        scale: 2, // Higher quality
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        onclone: (clone) => {
+          sanitizeCloneStyles(clone);
+        },
+      });
+    } finally {
+      restoreScale();
+    }
 
     // Convert canvas to PDF
     const imgData = canvas.toDataURL('image/jpeg', quality);
@@ -71,13 +140,23 @@ export async function downloadAsImage(
       throw new Error('Element not found');
     }
 
-    // Capture the element as canvas
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      logging: false,
-      backgroundColor: '#ffffff',
-    });
+    const restoreScale = temporarilyDisablePreviewScale(element);
+
+    let canvas: HTMLCanvasElement;
+    try {
+      // Capture the element as canvas
+      canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        onclone: (clone) => {
+          sanitizeCloneStyles(clone);
+        },
+      });
+    } finally {
+      restoreScale();
+    }
 
     // Convert to blob and download
     canvas.toBlob((blob) => {

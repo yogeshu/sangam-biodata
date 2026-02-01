@@ -108,6 +108,8 @@ function PreviewPageContent() {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [hasAttemptedLoad, setHasAttemptedLoad] = useState(false);
+  const [previewScale, setPreviewScale] = useState(1);
+  const [previewHeight, setPreviewHeight] = useState<number | null>(null);
 
   useEffect(() => {
     // Prevent running effect multiple times
@@ -181,6 +183,27 @@ function PreviewPageContent() {
       return () => clearTimeout(timer);
     }
   }, [searchParams, router, hasAttemptedLoad]);
+
+  useEffect(() => {
+    if (!data) return;
+
+    const updateScale = () => {
+      const container = document.getElementById("biodata-preview-container");
+      const preview = document.getElementById("biodata-preview");
+      const baseWidth = 794; // A4 width in px at 96 DPI
+      const availableWidth = container?.clientWidth || window.innerWidth - 32;
+      const nextScale = Math.min(1, availableWidth / baseWidth);
+      setPreviewScale(Number(nextScale.toFixed(3)));
+
+      if (preview) {
+        setPreviewHeight(preview.scrollHeight);
+      }
+    };
+
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
+  }, [data, templateId, colorTheme]);
 
   const handleDownloadPDF = async () => {
     if (!isConfirmed) return;
@@ -300,14 +323,29 @@ function PreviewPageContent() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Preview */}
           <div className="lg:col-span-2">
-            <div id="biodata-preview" className="rounded-xl border border-border-soft bg-white shadow-lg overflow-hidden">
-              <TemplateRenderer 
-                templateId={templateId}
-                data={data}
-                colorTheme={colorTheme}
-                visibleSections={visibleSections}
-                layoutStyle={data.layoutStyle || 'compact'}
-              />
+            <div id="biodata-preview-container" className="overflow-x-auto">
+              <div className="flex justify-center">
+                <div
+                  data-preview-scale
+                  className="transition-transform duration-200 ease-out"
+                  style={{
+                    transform: previewScale < 1 ? `scale(${previewScale})` : undefined,
+                    transformOrigin: 'top center',
+                    width: previewScale < 1 ? '794px' : '100%',
+                    height: previewScale < 1 && previewHeight ? `${previewHeight * previewScale}px` : undefined,
+                  }}
+                >
+                  <div id="biodata-preview" className="rounded-xl border border-border-soft bg-white shadow-lg overflow-hidden">
+                    <TemplateRenderer 
+                      templateId={templateId}
+                      data={data}
+                      colorTheme={colorTheme}
+                      visibleSections={visibleSections}
+                      layoutStyle={data.layoutStyle || 'compact'}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
