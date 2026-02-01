@@ -6,7 +6,7 @@ import { templates, type TemplateMeta } from "@/lib/templates";
 import { Eye, Play, Heart, ArrowLeft } from "lucide-react";
 import CommonLayout from "@/components/common/CommonLayout";
 import TemplatePreviewModal from "@/components/ui/TemplatePreviewModal";
-import { saveSelectedTemplate } from "@/lib/utils/storage";
+import { saveSelectedTemplate, saveCurrentStep } from "@/lib/utils/storage";
 import TemplateRenderer from "@/components/templates/TemplateRenderer";
 import type { BiodataData } from "@/components/templates/BaseTemplate";
 
@@ -17,12 +17,15 @@ export default function TemplatesPage() {
 
   const handleSelectTemplate = (templateId: string, colorTheme?: string) => {
     saveSelectedTemplate(templateId, colorTheme);
-    router.push(`/create?template=${templateId}${colorTheme ? `&theme=${colorTheme}` : ''}`);
+    saveCurrentStep(0);
+    router.push(`/create?step=0&template=${templateId}${colorTheme ? `&theme=${colorTheme}` : ''}`);
   };
 
   const filteredTemplates = activeCategory === "all" 
     ? templates 
     : templates.filter(t => t.category === activeCategory.toLowerCase());
+  const premiumTemplates = templates.filter((t) => t.isPremium);
+  const regularTemplates = templates.filter((t) => !t.isPremium);
 
   return (
     <CommonLayout>
@@ -62,7 +65,7 @@ export default function TemplatesPage() {
           >
             All Templates
           </button>
-          {["Traditional", "Modern", "Elegant", "Minimal"].map((cat) => (
+          {["Premium", "Traditional", "Modern", "Elegant", "Minimal"].map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat.toLowerCase())}
@@ -78,8 +81,30 @@ export default function TemplatesPage() {
         </div>
 
         {/* Templates Grid */}
+        {activeCategory === "all" && premiumTemplates.length > 0 && (
+          <div className="mb-12">
+            <div className="mb-6 flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-text-main">Premium Templates</h2>
+                <p className="text-sm text-text-muted">Exclusive designs with luxury styling</p>
+              </div>
+              <span className="text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full">Premium</span>
+            </div>
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {premiumTemplates.map((template) => (
+                <TemplateCard 
+                  key={template.id} 
+                  template={template} 
+                  onPreview={() => setPreviewTemplate(template)}
+                  onUse={() => handleSelectTemplate(template.id)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredTemplates.map((template) => (
+          {(activeCategory === "all" ? regularTemplates : filteredTemplates).map((template) => (
             <TemplateCard 
               key={template.id} 
               template={template} 

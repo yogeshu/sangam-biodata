@@ -2,18 +2,98 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
-import { ArrowLeft, Download, Share2, CheckCircle, Lock, RotateCcw } from "lucide-react";
+import { ArrowLeft, Download, Share2, CheckCircle, RotateCcw, Image } from "lucide-react";
 import TemplateRenderer from "@/components/templates/TemplateRenderer";
 import { clearBiodataLocal, loadBiodataFromLocal, loadSelectedTemplate, loadSelectedColorTheme, saveBiodataToLocal, saveSelectedTemplate, loadPhotosFromLocal } from "@/lib/utils/storage";
 import { templates } from "@/lib/templates";
 import type { BiodataData, VisibleSections } from "@/components/templates/BaseTemplate";
-import { useAuth } from "@/contexts/AuthContext";
-import { downloadAsPDF, shareOnWhatsApp } from "@/lib/utils/download";
+import { downloadAsPDF, downloadAsImage, shareOnWhatsApp } from "@/lib/utils/download";
+
+function buildExpectations(data: any): string {
+  if (data?.partnerExpectationsMode === 'simple' && data?.partnerExpectationsText) {
+    return data.partnerExpectationsText;
+  }
+
+  const parts = [
+    data?.partnerAge ? `Age: ${data.partnerAge}` : "",
+    data?.partnerHeight ? `Height: ${data.partnerHeight}` : "",
+    data?.partnerLocation ? `Location: ${data.partnerLocation}` : "",
+    data?.partnerEducation ? `Education: ${data.partnerEducation}` : "",
+    data?.partnerOccupation ? `Occupation: ${data.partnerOccupation}` : "",
+    data?.partnerManglik ? `Manglik: ${data.partnerManglik}` : "",
+  ].filter(Boolean);
+
+  return parts.join(" | ");
+}
+
+function normalizeBiodata(raw: any): BiodataData {
+  const contactFromArray = Array.isArray(raw?.contactNumbers)
+    ? raw.contactNumbers
+        .map((c: any) => ({ type: c?.type || "", number: c?.number || "" }))
+        .filter((c: any) => c.number && c.number.trim())
+        .map((c: any) => `${c.type ? `${c.type}: ` : ""}${c.number}`)
+    : [];
+  const contactNumber = contactFromArray[0] || raw?.contactNumber || "";
+
+  return {
+    fullName: raw?.fullName || "",
+    birthName: raw?.birthName || "",
+    gender: raw?.gender || "",
+    dateOfBirth: raw?.dateOfBirth || "",
+    timeOfBirth: raw?.timeOfBirth || "",
+    birthPlace: raw?.birthPlace || "",
+    height: raw?.height || "",
+    complexion: raw?.complexion || "",
+    maritalStatus: raw?.maritalStatus || "",
+    bloodGroup: raw?.bloodGroup || "",
+    religion: raw?.religion || "",
+    caste: raw?.caste || "",
+    gotra: raw?.gothra || raw?.gotra || "",
+    nadi: raw?.nadi || "",
+    mamekul: raw?.mamekul || "",
+    kul: raw?.kul || "",
+    rashi: raw?.rashi || "",
+    ras: raw?.ras || "",
+    nakshatra: raw?.nakshatra || "",
+    charan: raw?.charan || "",
+    manglik: raw?.manglik || "",
+    religiousSymbol: raw?.religiousSymbol || "",
+    education: raw?.education || "",
+    occupation: raw?.occupation || "",
+    jobCity: raw?.jobCity || "",
+    company: raw?.company || "",
+    income: raw?.incomeRange || raw?.income || "",
+    yearlyIncome: raw?.yearlyIncome || raw?.incomeRange || "",
+    fatherName: raw?.fatherName || "",
+    fatherOccupation: raw?.fatherOccupation || "",
+    motherName: raw?.motherName || "",
+    motherOccupation: raw?.motherOccupation || "",
+    siblings: raw?.siblings || "",
+    familyLocation: raw?.familyLocation || "",
+    familyValues: raw?.familyValues || "",
+    contactNumber,
+    contactDetails: contactFromArray.join(", ") || contactNumber,
+    email: raw?.email || "",
+    address: raw?.familyLocation || raw?.address || "",
+    city: raw?.city || "",
+    state: raw?.state || "",
+    partnerAge: raw?.partnerAge || "",
+    partnerHeight: raw?.partnerHeight || "",
+    partnerLocation: raw?.partnerLocation || "",
+    partnerEducation: raw?.partnerEducation || "",
+    partnerOccupation: raw?.partnerOccupation || "",
+    partnerManglik: raw?.partnerManglik || "",
+    expectations: raw?.expectations || buildExpectations(raw),
+    watermarkText: raw?.watermarkText || "VivahBio.com",
+    photos: raw?.photos || [],
+    customFields: raw?.customFields || [],
+    layoutStyle: raw?.layoutStyle || 'compact',
+  } as BiodataData;
+}
 
 function PreviewPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, signInWithGoogle } = useAuth();
   const [data, setData] = useState<BiodataData | null>(null);
   const [templateId, setTemplateId] = useState<string>("traditional-red");
   const [colorTheme, setColorTheme] = useState<any>(null);
@@ -24,6 +104,7 @@ function PreviewPageContent() {
     preferences: true,
   });
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isImageDownloading, setIsImageDownloading] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [hasAttemptedLoad, setHasAttemptedLoad] = useState(false);
@@ -43,7 +124,7 @@ function PreviewPageContent() {
         // Load photos from localStorage
         const photos = loadPhotosFromLocal();
         const dataWithPhotos = { ...parsed, photos };
-        setData(dataWithPhotos as BiodataData);
+        setData(normalizeBiodata(dataWithPhotos));
         setVisibleSections(parsed.visibleSections || {
           horoscope: true,
           education: true,
@@ -62,7 +143,7 @@ function PreviewPageContent() {
         // Load photos from localStorage
         const photos = loadPhotosFromLocal();
         const dataWithPhotos = { ...savedData, photos };
-        setData(dataWithPhotos as BiodataData);
+        setData(normalizeBiodata(dataWithPhotos));
         setVisibleSections(savedData.visibleSections || {
           horoscope: true,
           education: true,
@@ -104,11 +185,6 @@ function PreviewPageContent() {
   const handleDownloadPDF = async () => {
     if (!isConfirmed) return;
 
-    if (!user) {
-      await signInWithGoogle();
-      return;
-    }
-
     setIsDownloading(true);
     try {
       await downloadAsPDF("biodata-preview", {
@@ -119,6 +195,23 @@ function PreviewPageContent() {
       alert("Failed to download PDF. Please try again.");
     } finally {
       setIsDownloading(false);
+    }
+  };
+
+  const handleDownloadImage = async () => {
+    if (!isConfirmed) return;
+
+    setIsImageDownloading(true);
+    try {
+      await downloadAsImage("biodata-preview", {
+        filename: `${data?.fullName || "biodata"}-vivahbio.png`,
+        format: 'png',
+      });
+    } catch (error) {
+      console.error("Image download failed:", error);
+      alert("Failed to download image. Please try again.");
+    } finally {
+      setIsImageDownloading(false);
     }
   };
 
@@ -184,7 +277,7 @@ function PreviewPageContent() {
       <header className="sticky top-0 z-40 border-b border-border-soft bg-white shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-4 md:px-8 flex items-center justify-between gap-4">
           <button
-            onClick={() => router.push("/create?step=4")}
+            onClick={() => router.push("/create?step=3")}
             className="flex items-center gap-2 text-text-muted hover:text-primary transition"
             aria-label="Back to form"
           >
@@ -250,27 +343,6 @@ function PreviewPageContent() {
               </label>
             </div>
 
-            {/* Auth Prompt for Non-Logged Users */}
-            {!user && (
-              <div className="rounded-xl border border-border-soft bg-white p-6 shadow-md">
-                <div className="flex items-center gap-2 mb-4">
-                  <Lock size={20} className="text-primary" />
-                  <h2 className="font-bold text-lg text-text-main">Sign In to Download</h2>
-                </div>
-                <p className="text-sm text-text-muted mb-4">
-                  Sign in with Google to download your biodata in high-quality PDF format.
-                </p>
-                
-                <button
-                  onClick={signInWithGoogle}
-                  className="w-full px-4 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition flex items-center justify-center gap-2"
-                >
-                  <CheckCircle size={16} />
-                  Sign In with Google
-                </button>
-              </div>
-            )}
-
             {/* Download Actions */}
             <div className="space-y-3">
               <button 
@@ -280,6 +352,14 @@ function PreviewPageContent() {
               >
                 <Download size={18} />
                 {isDownloading ? "Generating PDF..." : "Download PDF"}
+              </button>
+              <button 
+                onClick={handleDownloadImage}
+                disabled={isImageDownloading || !isConfirmed}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-slate-900 text-white font-semibold rounded-lg hover:bg-slate-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Image size={18} />
+                {isImageDownloading ? "Generating Image..." : "Download Image"}
               </button>
               <button 
                 onClick={handleShareWhatsApp}

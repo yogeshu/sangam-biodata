@@ -15,6 +15,7 @@ const STORAGE_KEYS = {
 export interface BiodataFormData {
   // Personal Details
   fullName: string;
+  birthName?: string;
   gender: string;
   dateOfBirth: string;
   timeOfBirth: string;
@@ -28,15 +29,22 @@ export interface BiodataFormData {
   religion: string;
   caste: string;
   gotra: string;
+  nadi?: string;
+  mamekul?: string;
+  kul?: string;
   rashi: string;
+  ras?: string;
   nakshatra: string;
+  charan?: string;
   manglik: string;
   
   // Education & Career
   education: string;
   occupation: string;
+  jobCity?: string;
   company: string;
   incomeRange: string;
+  yearlyIncome?: string;
   
   // Family Details
   fatherName: string;
@@ -49,6 +57,7 @@ export interface BiodataFormData {
   
   // Contact Details
   contactNumber: string;
+  contactNumbers?: Array<{ type: "Self" | "Parent" | "Relative"; number: string }>;
   email: string;
   address: string;
   city: string;
@@ -61,6 +70,10 @@ export interface BiodataFormData {
   partnerEducation: string;
   partnerOccupation: string;
   partnerManglik: string;
+  partnerExpectationsMode?: 'simple' | 'detailed';
+  partnerExpectationsText?: string;
+  expectations?: string;
+  watermarkText?: string;
   
   // Custom Fields (max 5)
   customFields: Array<{

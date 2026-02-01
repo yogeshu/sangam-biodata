@@ -82,81 +82,36 @@ export default function TraditionalRedTemplate({
 
       {/* Main Content */}
       <div className="px-8 py-8 space-y-8">
-        {/* Personal Details */}
-        <Section title="Personal Details" theme={theme}>
-          <DetailRow label="Date of Birth" value={data.dateOfBirth} layout={layoutStyle} />
-          {data.timeOfBirth && <DetailRow label="Time of Birth" value={data.timeOfBirth} layout={layoutStyle} />}
+        <Section title="Biodata Details" theme={theme}>
+          <DetailRow label="Name" value={data.fullName} layout={layoutStyle} />
+          <DetailRow label="Birth Name" value={data.birthName || ""} layout={layoutStyle} />
+          <DetailRow label="Birth Time" value={data.timeOfBirth || ""} layout={layoutStyle} />
+          <DetailRow label="Birth Date" value={data.dateOfBirth} layout={layoutStyle} />
           <DetailRow label="Birth Place" value={data.birthPlace} layout={layoutStyle} />
           <DetailRow label="Height" value={data.height} layout={layoutStyle} />
-          {data.complexion && <DetailRow label="Complexion" value={data.complexion} layout={layoutStyle} />}
-          <DetailRow label="Marital Status" value={data.maritalStatus} layout={layoutStyle} />
-          {data.bloodGroup && <DetailRow label="Blood Group" value={data.bloodGroup} layout={layoutStyle} />}
-        </Section>
-
-        {/* Religious Details (Horoscope) */}
-        {visibleSections.horoscope && (
-          <Section title="Religious Details" theme={theme}>
-            <DetailRow label="Religion" value={data.religion} layout={layoutStyle} />
-            {data.caste && <DetailRow label="Caste" value={data.caste} layout={layoutStyle} />}
-            {data.gotra && <DetailRow label="Gotra" value={data.gotra} layout={layoutStyle} />}
-            {data.rashi && <DetailRow label="Rashi" value={data.rashi} layout={layoutStyle} />}
-            {data.nakshatra && <DetailRow label="Nakshatra" value={data.nakshatra} layout={layoutStyle} />}
-            {data.manglik && <DetailRow label="Manglik" value={data.manglik} layout={layoutStyle} />}
-          </Section>
-        )}
-
-        {/* Education & Career */}
-        {visibleSections.education && (
-          <Section title="Education & Career" theme={theme}>
-            <DetailRow label="Education" value={data.education} layout={layoutStyle} />
-            <DetailRow label="Occupation" value={data.occupation} layout={layoutStyle} />
-            {data.company && <DetailRow label="Company" value={data.company} layout={layoutStyle} />}
-            {visibleSections.income && data.income && (
-              <DetailRow label="Income" value={data.income} layout={layoutStyle} />
-            )}
-          </Section>
-        )}
-
-        {/* Family Details */}
-        <Section title="Family Details" theme={theme}>
+          <DetailRow label="Gotra" value={data.gotra || ""} layout={layoutStyle} />
+          <DetailRow label="Nadi" value={data.nadi || ""} layout={layoutStyle} />
+          <DetailRow label="Mamekul" value={data.mamekul || ""} layout={layoutStyle} />
+          <DetailRow label="Kul" value={data.kul || ""} layout={layoutStyle} />
+          <DetailRow label="Bloodgroup" value={data.bloodGroup || ""} layout={layoutStyle} />
+          <DetailRow label="Nakshtra" value={data.nakshatra || ""} layout={layoutStyle} />
+          <DetailRow label="Charan" value={data.charan || ""} layout={layoutStyle} />
+          <DetailRow label="Ras" value={data.ras || data.rashi || ""} layout={layoutStyle} />
+          <DetailRow label="Cast" value={data.caste || ""} layout={layoutStyle} />
+          <DetailRow label="Education" value={data.education} layout={layoutStyle} />
+          <DetailRow label="Job" value={data.occupation} layout={layoutStyle} />
+          <DetailRow label="Job City" value={data.jobCity || ""} layout={layoutStyle} />
+          <DetailRow label="Yearly Income" value={data.yearlyIncome || data.income || ""} layout={layoutStyle} />
           <DetailRow label="Father's Name" value={data.fatherName} layout={layoutStyle} />
-          {data.fatherOccupation && <DetailRow label="Father's Occupation" value={data.fatherOccupation} layout={layoutStyle} />}
+          <DetailRow label="Occupation" value={data.fatherOccupation || ""} layout={layoutStyle} />
           <DetailRow label="Mother's Name" value={data.motherName} layout={layoutStyle} />
-          {data.motherOccupation && <DetailRow label="Mother's Occupation" value={data.motherOccupation} layout={layoutStyle} />}
-          {data.siblings && <DetailRow label="Siblings" value={data.siblings} layout={layoutStyle} />}
-          {data.familyLocation && <DetailRow label="Family Location" value={data.familyLocation} layout={layoutStyle} />}
-          {data.familyValues && <DetailRow label="Family Values" value={data.familyValues} layout={layoutStyle} />}
+          <DetailRow label="Occupation" value={data.motherOccupation || ""} layout={layoutStyle} />
+          <DetailRow label="Siblings" value={data.siblings || ""} layout={layoutStyle} />
+          <DetailRow label="Address" value={data.address || data.familyLocation || ""} layout={layoutStyle} />
+          <DetailRow label="State" value={data.state || ""} layout={layoutStyle} />
+          <DetailRow label="Contact Details" value={data.contactDetails || data.contactNumber || ""} layout={layoutStyle} />
+          <DetailRow label="EXPECtations" value={data.expectations || ""} layout={layoutStyle} />
         </Section>
-
-        {/* Contact Details */}
-        <Section title="Contact Details" theme={theme}>
-          <DetailRow label="Contact Number" value={data.contactNumber} layout={layoutStyle} />
-          {data.email && <DetailRow label="Email" value={data.email} layout={layoutStyle} />}
-          <DetailRow label="Address" value={data.address} layout={layoutStyle} />
-          <DetailRow label="City" value={data.city} layout={layoutStyle} />
-          <DetailRow label="State" value={data.state} layout={layoutStyle} />
-        </Section>
-
-        {/* Partner Preferences */}
-        {visibleSections.preferences && (
-          <Section title="Partner Preferences" theme={theme}>
-            {data.partnerAge && <DetailRow label="Age" value={data.partnerAge} layout={layoutStyle} />}
-            {data.partnerHeight && <DetailRow label="Height" value={data.partnerHeight} layout={layoutStyle} />}
-            {data.partnerLocation && <DetailRow label="Location" value={data.partnerLocation} layout={layoutStyle} />}
-            {data.partnerEducation && <DetailRow label="Education" value={data.partnerEducation} layout={layoutStyle} />}
-            {data.partnerOccupation && <DetailRow label="Occupation" value={data.partnerOccupation} layout={layoutStyle} />}
-            {data.partnerManglik && <DetailRow label="Manglik Preference" value={data.partnerManglik} layout={layoutStyle} />}
-          </Section>
-        )}
-
-        {/* Custom Fields */}
-        {data.customFields && data.customFields.length > 0 && (
-          <Section title="Additional Information" theme={theme}>
-            {data.customFields.map((field, index) => (
-              <DetailRow key={index} label={field.label} value={field.value} />
-            ))}
-          </Section>
-        )}
       </div>
 
       {/* Footer */}
@@ -164,7 +119,7 @@ export default function TraditionalRedTemplate({
         className="px-8 py-6 text-center text-white text-sm"
         style={{ backgroundColor: theme.primary }}
       >
-        <p>Created with ❤️ at VivahBio.com</p>
+        <p>{data.watermarkText || "VivahBio.com"}</p>
         <p className="opacity-75 mt-1">Making Matrimony Beautiful</p>
       </div>
     </div>
@@ -197,13 +152,13 @@ function Section({
 }
 
 function DetailRow({ label, value, layout = 'compact' }: { label: string; value: string; layout?: 'spread' | 'compact' | 'inline' }) {
-  if (!value) return null;
+  const safeValue = value || "—";
   
   if (layout === 'spread') {
     return (
       <div className="flex justify-between py-2 border-b border-gray-100">
         <span className="font-semibold text-gray-700">{label}:</span>
-        <span className="text-gray-900">{value}</span>
+        <span className="text-gray-900">{safeValue}</span>
       </div>
     );
   }
@@ -211,7 +166,7 @@ function DetailRow({ label, value, layout = 'compact' }: { label: string; value:
   if (layout === 'inline') {
     return (
       <span className="inline text-sm text-gray-900">
-        <span className="font-semibold text-gray-700">{label}:</span> {value}
+        <span className="font-semibold text-gray-700">{label}:</span> {safeValue}
         <span className="text-gray-400 mx-2">•</span>
       </span>
     );
@@ -221,7 +176,7 @@ function DetailRow({ label, value, layout = 'compact' }: { label: string; value:
   return (
     <div className="py-1.5 text-sm">
       <span className="font-semibold text-gray-700">{label}:</span>{' '}
-      <span className="text-gray-900">{value}</span>
+      <span className="text-gray-900">{safeValue}</span>
     </div>
   );
 }

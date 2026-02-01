@@ -3,8 +3,8 @@
 import type { ChangeEvent, ReactNode, FC } from "react";
 import { useEffect, useMemo, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { templates, type TemplateMeta } from "@/lib/templates";
 import CommonLayout from "@/components/common/CommonLayout";
+import { loadBiodataFromLocal, saveBiodataToLocal, saveCurrentStep, loadCurrentStep, savePhotosToLocal, loadSelectedTemplate, saveSelectedTemplate } from "@/lib/utils/storage";
 import {
   ArrowLeft,
   ArrowRight,
@@ -15,26 +15,25 @@ import {
   GraduationCap,
   Heart,
   Home,
-  IndianRupee,
   MapPin,
-  Phone,
   Save,
   Sparkles,
   Star,
   Users,
-  LayoutTemplate,
   Upload,
   Plus,
   X,
   Eye,
   EyeOff,
   AlertCircle,
+  DollarSign,
 } from "lucide-react";
 
-type StepKey = "personal" | "family" | "horoscope" | "preferences" | "template";
+type StepKey = "personal" | "family" | "horoscope" | "preferences";
 
 type FormState = {
   fullName: string;
+  birthName: string;
   gender: string;
   dateOfBirth: string;
   timeOfBirth: string;
@@ -43,8 +42,12 @@ type FormState = {
   religion: string;
   caste: string;
   gothra: string;
+  nadi: string;
+  mamekul: string;
+  kul: string;
   education: string;
   occupation: string;
+  jobCity: string;
   fatherName: string;
   fatherOccupation: string;
   motherName: string;
@@ -52,18 +55,24 @@ type FormState = {
   siblings: string;
   familyLocation: string;
   incomeRange: string;
+  yearlyIncome: string;
   familyValues: string;
   birthPlace: string;
   rashi: string;
+  ras: string;
   nakshatra: string;
+  charan: string;
   manglik: string;
   bloodGroup: string;
+  partnerExpectationsMode: 'simple' | 'detailed'; // Mode for partner expectations input
+  partnerExpectationsText: string; // Simple one-line partner expectations
   partnerAge: string;
   partnerHeight: string;
   partnerLocation: string;
   partnerEducation: string;
   partnerOccupation: string;
   partnerManglik: string;
+  watermarkText: string;
   // Contact numbers (self, parent, relative) - min 1, max 3
   contactNumbers: Array<{ type: "Self" | "Parent" | "Relative"; number: string }>;
   state: string;
@@ -92,7 +101,6 @@ const steps: Step[] = [
   { key: "family", label: "Family", description: "Immediate family information", icon: Users },
   { key: "horoscope", label: "Horoscope", description: "Astro & cultural details", icon: Sparkles },
   { key: "preferences", label: "Preferences", description: "Partner expectations & contact", icon: Star },
-  { key: "template", label: "Template & Preview", description: "Pick a design and review", icon: LayoutTemplate },
 ];
 
 function cn(...classes: (string | undefined | false)[]): string {
@@ -104,10 +112,13 @@ function CreateBiodataContent() {
   const searchParams = useSearchParams();
   const allowSkipValidation = searchParams?.get("skipValidation") === "1";
   const isTestMode = searchParams?.get("test") === "1";
+  const stepParam = searchParams?.get("step");
+  const templateParam = searchParams?.get("template");
 
   // Sample data for testing
   const getSampleData = (): FormState => ({
     fullName: "Priya Sharma",
+    birthName: "Priya",
     gender: "Female",
     dateOfBirth: "1998-05-15",
     timeOfBirth: "10:30",
@@ -116,8 +127,12 @@ function CreateBiodataContent() {
     religion: "Hindu",
     caste: "Brahmin",
     gothra: "Bharadwaj",
+    nadi: "Antya",
+    mamekul: "Sharma",
+    kul: "Kashyapa",
     education: "MBA in Finance",
     occupation: "Senior Financial Analyst",
+    jobCity: "Mumbai",
     fatherName: "Mr. Rajesh Sharma",
     fatherOccupation: "Retired Government Officer",
     motherName: "Mrs. Sunita Sharma",
@@ -125,21 +140,27 @@ function CreateBiodataContent() {
     siblings: "One younger brother",
     familyLocation: "Mumbai, Maharashtra",
     incomeRange: "₹12-15 Lakhs per annum",
+    yearlyIncome: "₹12-15 Lakhs per annum",
     familyValues: "Traditional with modern outlook",
     birthPlace: "Mumbai, Maharashtra",
     rashi: "Taurus",
+    ras: "Vrishabh",
     nakshatra: "Rohini",
+    charan: "2nd",
     manglik: "No",
     bloodGroup: "O+",
+    partnerExpectationsMode: 'detailed',
+    partnerExpectationsText: "",
     partnerAge: "28-32 years",
     partnerHeight: "5'8\" and above",
     partnerLocation: "Mumbai, Pune, or nearby cities",
     partnerEducation: "Graduate or Post-Graduate",
     partnerOccupation: "Well-settled professional",
     partnerManglik: "No preference",
+    watermarkText: "VivahBio.com",
     contactNumbers: [
-      { type: "Self", number: "+91 98765 43210" },
-      { type: "Parent", number: "+91 99876 54321" },
+      { type: "Self", number: "98765 43210" },
+      { type: "Parent", number: "99876 54321" },
     ],
     state: "Maharashtra",
     photos: [],
@@ -158,11 +179,12 @@ function CreateBiodataContent() {
   });
 
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [selectedTemplate, setSelectedTemplate] = useState<string>("classic");
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("premium-golden");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [data, setData] = useState<FormState>(isTestMode ? getSampleData() : {
     fullName: "",
+    birthName: "",
     gender: "",
     dateOfBirth: "",
     timeOfBirth: "",
@@ -171,8 +193,12 @@ function CreateBiodataContent() {
     religion: "",
     caste: "",
     gothra: "",
+    nadi: "",
+    mamekul: "",
+    kul: "",
     education: "",
     occupation: "",
+    jobCity: "",
     fatherName: "",
     fatherOccupation: "",
     motherName: "",
@@ -180,18 +206,24 @@ function CreateBiodataContent() {
     siblings: "",
     familyLocation: "",
     incomeRange: "",
+    yearlyIncome: "",
     familyValues: "",
     birthPlace: "",
     rashi: "",
+    ras: "",
     nakshatra: "",
+    charan: "",
     manglik: "",
     bloodGroup: "",
+    partnerExpectationsMode: 'detailed',
+    partnerExpectationsText: "",
     partnerAge: "",
     partnerHeight: "",
     partnerLocation: "",
     partnerEducation: "",
     partnerOccupation: "",
     partnerManglik: "",
+    watermarkText: "VivahBio.com",
     contactNumbers: [{ type: "Self", number: "" }],
     state: "",
     // New fields
@@ -214,6 +246,48 @@ function CreateBiodataContent() {
       setErrors({});
     }
   }, [allowSkipValidation]);
+
+  useEffect(() => {
+    if (isTestMode) return;
+
+    const savedData = loadBiodataFromLocal() as Partial<FormState>;
+    const hasSavedData = savedData && Object.keys(savedData).length > 0 && !!savedData.fullName;
+    if (hasSavedData) {
+      setData((prev) => ({ ...prev, ...savedData }));
+    }
+
+    const savedStep = loadCurrentStep();
+    const parsedStep = stepParam ? parseInt(stepParam, 10) : NaN;
+    if (!Number.isNaN(parsedStep)) {
+      setCurrentStep(Math.min(parsedStep, steps.length - 1));
+    } else if (hasSavedData && savedStep) {
+      setCurrentStep(Math.min(savedStep, steps.length - 1));
+    } else {
+      setCurrentStep(0);
+      saveCurrentStep(0);
+    }
+
+    const storedTemplate = templateParam || loadSelectedTemplate();
+    if (storedTemplate) {
+      setSelectedTemplate(storedTemplate);
+    }
+  }, [isTestMode, stepParam, templateParam]);
+
+  useEffect(() => {
+    if (!isTestMode) {
+      saveBiodataToLocal(data);
+    }
+  }, [data, isTestMode]);
+
+  useEffect(() => {
+    saveCurrentStep(currentStep);
+  }, [currentStep]);
+
+  useEffect(() => {
+    if (selectedTemplate) {
+      saveSelectedTemplate(selectedTemplate);
+    }
+  }, [selectedTemplate]);
 
   const validateStep = (): boolean => {
     if (allowSkipValidation) {
@@ -254,12 +328,20 @@ function CreateBiodataContent() {
     }
 
     if (currentStep === 3) {
-      // Preferences & Contact
-      if (!data.partnerAge.trim()) newErrors.partnerAge = "Partner age expectations are required (N/A can be added)";
-      if (!data.partnerHeight.trim()) newErrors.partnerHeight = "Partner height expectations are required";
-      if (!data.partnerLocation.trim()) newErrors.partnerLocation = "Partner location expectations are required";
-      if (!data.partnerEducation.trim()) newErrors.partnerEducation = "Partner education expectations are required";
-      if (!data.partnerOccupation.trim()) newErrors.partnerOccupation = "Partner occupation expectations are required";
+      // Preferences & Contact - partner expectations optional but need at least one mode filled
+      if (data.partnerExpectationsMode === 'detailed') {
+        // For detailed mode, at least one field should be filled OR all can be empty (optional)
+        const hasAnyDetailField = data.partnerAge.trim() || data.partnerHeight.trim() || data.partnerLocation.trim() || data.partnerEducation.trim() || data.partnerOccupation.trim();
+        if (hasAnyDetailField) {
+          // If any field is filled, validate that at least the basic ones are present
+          if (!data.partnerAge.trim()) newErrors.partnerAge = "Age range is required (or leave all blank)";
+          if (!data.partnerHeight.trim()) newErrors.partnerHeight = "Height preference is required (or leave all blank)";
+          if (!data.partnerLocation.trim()) newErrors.partnerLocation = "Location preference is required (or leave all blank)";
+        }
+      } else if (data.partnerExpectationsMode === 'simple') {
+        // For simple mode, the text field is required
+        if (!data.partnerExpectationsText.trim()) newErrors.partnerExpectationsText = "Please describe your partner expectations";
+      }
       if (!data.state) newErrors.state = "State is required";
 
       // Validate contact numbers - min 1, max 3
@@ -269,6 +351,11 @@ function CreateBiodataContent() {
       } else if (validNumbers.length > 3) {
         newErrors.contactNumbers = "Maximum 3 contact numbers are allowed";
       } else {
+        const cleanedNumbers = validNumbers.map(c => c.number.replace(/[^\d]/g, ""));
+        const uniqueNumbers = new Set(cleanedNumbers);
+        if (uniqueNumbers.size !== cleanedNumbers.length) {
+          newErrors.contactNumbers = "Duplicate contact numbers are not allowed";
+        }
         // Validate phone number format (10 digits)
         const phoneRegex = /^[0-9]{10}$/;
         validNumbers.forEach((contact, idx) => {
@@ -278,10 +365,6 @@ function CreateBiodataContent() {
           }
         });
       }
-    }
-
-    if (currentStep === 4) {
-      if (!selectedTemplate) newErrors.template = "Please select a template";
     }
 
     setErrors(newErrors);
@@ -303,6 +386,9 @@ function CreateBiodataContent() {
       handleChange(name as keyof FormState, value);
     } else {
       handleChange(name as keyof FormState, value);
+      if (name === 'incomeRange') {
+        handleChange('yearlyIncome', value);
+      }
     }
   };
 
@@ -540,6 +626,7 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
       target: { name: 'photos', value: photos }
     } as any;
     onChange(syntheticEvent);
+    savePhotosToLocal(photos);
   };
 
   const handleReligiousSymbolChange = (symbol: string) => {
@@ -580,6 +667,7 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <InputField label="Full Name" name="fullName" value={data.fullName} onChange={onChange} placeholder="e.g., Anjali Sharma" icon={<Users size={14} />} error={errors?.fullName} />
+          <InputField label="Birth Name" name="birthName" value={data.birthName} onChange={onChange} placeholder="e.g., Anjali" optional />
           <SelectField label="Gender" name="gender" value={data.gender} onChange={onChange} placeholder="Select Gender" options={["Male", "Female", "Non-binary"]} error={errors?.gender} />
           <InputField label="Date of Birth" name="dateOfBirth" value={data.dateOfBirth} onChange={onChange} type="date" icon={<Calendar size={14} />} error={errors?.dateOfBirth} />
           <InputField label="Time of Birth" name="timeOfBirth" value={data.timeOfBirth} onChange={onChange} type="time" icon={<Clock3 size={14} />} error={errors?.timeOfBirth} />
@@ -588,9 +676,10 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
           <SelectField label="Marital Status" name="maritalStatus" value={data.maritalStatus} onChange={onChange} placeholder="Select Status" options={["Never Married", "Divorced", "Widowed"]} error={errors?.maritalStatus} />
           <SelectField label="Religion" name="religion" value={data.religion} onChange={onChange} placeholder="e.g., Hindu" options={["Hindu", "Muslim", "Christian", "Sikh", "Jain", "Buddhist", "Other"]} />
           <InputField label="Caste / Community" name="caste" value={data.caste} onChange={onChange} placeholder="e.g., Brahmin" error={errors?.caste} />
-          <InputField label="Gothra" name="gothra" value={data.gothra} onChange={onChange} placeholder="e.g., Kashyapa" error={errors?.gothra} />
+          <InputField label="Gotra" name="gothra" value={data.gothra} onChange={onChange} placeholder="e.g., Kashyapa" error={errors?.gothra} />
           <InputField label="Education" name="education" value={data.education} onChange={onChange} placeholder="e.g., MBA, B.Tech" icon={<GraduationCap size={14} />} error={errors?.education} />
           <InputField label="Occupation / Job" name="occupation" value={data.occupation} onChange={onChange} placeholder="e.g., Software Engineer, Doctor" icon={<Briefcase size={14} />} error={errors?.occupation} />
+          <InputField label="Job City" name="jobCity" value={data.jobCity} onChange={onChange} placeholder="e.g., Mumbai" icon={<MapPin size={14} />} optional />
         </div>
 
         {/* Custom Fields */}
@@ -612,7 +701,9 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
           <InputField label="Mother's Occupation" name="motherOccupation" value={data.motherOccupation} onChange={onChange} placeholder="e.g., Homemaker" icon={<Home size={14} />} />
           <InputField label="Siblings Details" name="siblings" value={data.siblings} onChange={onChange} placeholder="e.g., 1 elder sister (married), 1 younger brother" error={errors?.siblings} />
           <InputField label="Address / Family Location" name="familyLocation" value={data.familyLocation} onChange={onChange} placeholder="City, State" icon={<MapPin size={14} />} error={errors?.familyLocation} />
-          <SelectField label="Annual Income / Package" name="incomeRange" value={data.incomeRange} onChange={onChange} placeholder="Select income range" options={["Not Applicable", "Below 20 LPA", "20-30 LPA", "30-50 LPA", "50-75 LPA", "75+ LPA"]} error={errors?.incomeRange} />
+          <SelectField label="Yearly Income" name="incomeRange" value={data.incomeRange} onChange={onChange} placeholder="Select income range" options={["Not Applicable", "Below 20 LPA", "20-30 LPA", "30-50 LPA", "50-75 LPA", "75+ LPA"]} error={errors?.incomeRange} />
+          <InputField label="Mamekul" name="mamekul" value={data.mamekul} onChange={onChange} placeholder="e.g., Sharma" optional />
+          <InputField label="Kul" name="kul" value={data.kul} onChange={onChange} placeholder="e.g., Kashyapa" optional />
           <InputField label="Family Values" name="familyValues" value={data.familyValues} onChange={onChange} placeholder="e.g., Traditional / Modern / Liberal" optional />
         </div>
 
@@ -630,7 +721,10 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
         <Section title="Astro & Personal Details" icon={<Sparkles size={18} />}>Horoscope and astrological details.</Section>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <SelectField label="Rashi / Sign" name="rashi" value={data.rashi} onChange={onChange} placeholder="Select Rashi" options={["Mesh", "Vrish", "Mithun", "Kark", "Singh", "Kanya", "Tula", "Vrishchik", "Dhanu", "Makar", "Kumbh", "Meen"]} error={errors?.rashi} />
+          <InputField label="Ras" name="ras" value={data.ras} onChange={onChange} placeholder="e.g., Vrishabh" optional />
           <InputField label="Nakshatra" name="nakshatra" value={data.nakshatra} onChange={onChange} placeholder="e.g., Rohini" error={errors?.nakshatra} />
+          <InputField label="Charan" name="charan" value={data.charan} onChange={onChange} placeholder="e.g., 2nd" optional />
+          <InputField label="Nadi" name="nadi" value={data.nadi} onChange={onChange} placeholder="e.g., Adi / Madhya / Antya" optional />
           <SelectField label="Manglik Status" name="manglik" value={data.manglik} onChange={onChange} placeholder="Select Manglik Status" options={["Non-Manglik", "Manglik", "Anshik Manglik"]} />
         </div>
         <HelperHint>These details help families who consider horoscope matching.</HelperHint>
@@ -685,15 +779,96 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-text-main">Partner Expectations</h3>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  const syntheticEvent = {
+                    target: { name: 'partnerExpectationsMode', value: 'detailed' }
+                  } as any;
+                  onChange(syntheticEvent);
+                  // Clear simple text when switching to detailed
+                  const clearEvent = {
+                    target: { name: 'partnerExpectationsText', value: '' }
+                  } as any;
+                  onChange(clearEvent);
+                }}
+                className={cn(
+                  "text-xs font-semibold px-3 py-1.5 rounded-lg border transition",
+                  data.partnerExpectationsMode === 'detailed'
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border-soft text-text-muted hover:border-primary/30"
+                )}
+              >
+                Criteria-wise
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const syntheticEvent = {
+                    target: { name: 'partnerExpectationsMode', value: 'simple' }
+                  } as any;
+                  onChange(syntheticEvent);
+                  // Clear detailed fields when switching to simple
+                  const clearAge = { target: { name: 'partnerAge', value: '' } } as any;
+                  const clearHeight = { target: { name: 'partnerHeight', value: '' } } as any;
+                  const clearLocation = { target: { name: 'partnerLocation', value: '' } } as any;
+                  const clearEducation = { target: { name: 'partnerEducation', value: '' } } as any;
+                  const clearOccupation = { target: { name: 'partnerOccupation', value: '' } } as any;
+                  onChange(clearAge);
+                  onChange(clearHeight);
+                  onChange(clearLocation);
+                  onChange(clearEducation);
+                  onChange(clearOccupation);
+                }}
+                className={cn(
+                  "text-xs font-semibold px-3 py-1.5 rounded-lg border transition",
+                  data.partnerExpectationsMode === 'simple'
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border-soft text-text-muted hover:border-primary/30"
+                )}
+              >
+                Single Line
+              </button>
+            </div>
           </div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <InputField label="Preferred Age Range" name="partnerAge" value={data.partnerAge} onChange={onChange} placeholder="e.g., 24-28 or N/A" error={errors?.partnerAge} />
-            <InputField label="Preferred Height" name="partnerHeight" value={data.partnerHeight} onChange={onChange} placeholder="e.g., 5'2 - 5'8" error={errors?.partnerHeight} />
-            <InputField label="Preferred Location" name="partnerLocation" value={data.partnerLocation} onChange={onChange} placeholder="City / State or N/A" icon={<MapPin size={14} />} error={errors?.partnerLocation} />
-            <InputField label="Preferred Education" name="partnerEducation" value={data.partnerEducation} onChange={onChange} placeholder="e.g., MBA, Engineer or N/A" icon={<GraduationCap size={14} />} error={errors?.partnerEducation} />
-            <InputField label="Preferred Occupation" name="partnerOccupation" value={data.partnerOccupation} onChange={onChange} placeholder="e.g., IT, Govt Service or N/A" error={errors?.partnerOccupation} />
-            <SelectField label="Manglik Preference" name="partnerManglik" value={data.partnerManglik} onChange={onChange} placeholder="Select" options={["No Preference", "Manglik", "Non-Manglik", "Anshik Manglik"]} />
-          </div>
+
+          {data.partnerExpectationsMode === 'detailed' ? (
+            <div className="space-y-4">
+              <p className="text-xs text-text-muted">Specify your preferences (all optional). Leave blank if not applicable.</p>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <InputField label="Preferred Age Range" name="partnerAge" value={data.partnerAge} onChange={onChange} placeholder="e.g., 24-28" error={errors?.partnerAge} />
+                <InputField label="Preferred Height" name="partnerHeight" value={data.partnerHeight} onChange={onChange} placeholder="e.g., 5'2 - 5'8" error={errors?.partnerHeight} />
+                <InputField label="Preferred Location" name="partnerLocation" value={data.partnerLocation} onChange={onChange} placeholder="City / State" icon={<MapPin size={14} />} error={errors?.partnerLocation} />
+                <InputField label="Preferred Education" name="partnerEducation" value={data.partnerEducation} onChange={onChange} placeholder="e.g., MBA, Engineer" icon={<GraduationCap size={14} />} error={errors?.partnerEducation} />
+                <InputField label="Preferred Occupation" name="partnerOccupation" value={data.partnerOccupation} onChange={onChange} placeholder="e.g., IT, Govt Service" error={errors?.partnerOccupation} />
+                <SelectField label="Manglik Preference" name="partnerManglik" value={data.partnerManglik} onChange={onChange} placeholder="Select" options={["No Preference", "Manglik", "Non-Manglik", "Anshik Manglik"]} />
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-text-main block">Describe Your Preferences</label>
+              <textarea
+                name="partnerExpectationsText"
+                value={data.partnerExpectationsText}
+                onChange={(e) => {
+                  const syntheticEvent = {
+                    target: { name: 'partnerExpectationsText', value: e.target.value }
+                  } as any;
+                  onChange(syntheticEvent);
+                }}
+                placeholder="e.g., Looking for a well-educated, independent woman from Mumbai or nearby areas. Prefer someone with interest in travel and reading. Open to all castes and religions."
+                className={cn(
+                  "w-full rounded-lg border px-3 py-2.5 text-sm bg-background-light text-text-main outline-none focus:border-primary focus:ring-1 focus:ring-primary transition resize-none",
+                  errors?.partnerExpectationsText ? "border-red-500" : "border-border-soft"
+                )}
+                rows={4}
+              />
+              {errors?.partnerExpectationsText && (
+                <span className="text-xs text-red-500 font-semibold">{errors.partnerExpectationsText}</span>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="space-y-4">
@@ -766,73 +941,11 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
           <SelectField label="State" name="state" value={data.state} onChange={onChange} placeholder="Select State" options={["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Delhi", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Other"]} error={errors?.state} />
         </div>
 
+        <div>
+          <InputField label="Watermark / Site Name" name="watermarkText" value={data.watermarkText} onChange={onChange} placeholder="e.g., VivahBio.com" optional />
+        </div>
+
         <HelperHint>Provide reachable contact number(s) for serious inquiries. You can include self, parent, or relative numbers.</HelperHint>
-      </div>
-    );
-  }
-
-  if (step.key === "template") {
-    return (
-      <div className="space-y-6">
-        <Section title="Select Template & Preview" icon={<LayoutTemplate size={18} />}>Choose a design and review your biodata</Section>
-
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {templates.map((template) => (
-            <button
-              key={template.id}
-              onClick={() => onTemplateChange?.(template.id)}
-              className={cn(
-                "relative flex flex-col gap-2 rounded-lg border-2 p-3 transition overflow-hidden",
-                selectedTemplate === template.id
-                  ? "border-primary bg-primary/5 shadow-md"
-                  : "border-border-soft hover:border-primary/50"
-              )}
-            >
-              <div className="aspect-[3/4] w-full rounded-md border border-border-soft bg-gradient-to-br from-background-light to-border-soft flex items-center justify-center text-xs text-text-muted font-semibold overflow-hidden">
-                {template.image ? (
-                  <img 
-                    src={template.image} 
-                    alt={template.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span>{template.name}</span>
-                )}
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-sm font-semibold text-text-main">{template.name}</span>
-                  {template.isPremium && (
-                    <span className="px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-800 text-xs font-bold">
-                      Premium
-                    </span>
-                  )}
-                </div>
-                <span className="text-xs text-text-muted">{template.description}</span>
-              </div>
-              {selectedTemplate === template.id && (
-                <div className="absolute top-2 right-2 flex size-5 items-center justify-center rounded-full bg-primary text-white shadow-lg">
-                  <CheckCircle2 size={14} />
-                </div>
-              )}
-            </button>
-          ))}
-        </div>
-
-        <div className="rounded-lg border-2 border-primary/30 bg-primary/5 p-4">
-          <div className="flex items-start gap-3">
-            <div className="flex size-6 items-center justify-center rounded-full bg-primary text-white flex-shrink-0 mt-0.5">
-              <CheckCircle2 size={16} />
-            </div>
-            <div className="space-y-1.5">
-              <h4 className="font-bold text-text-main">Template Selection Complete!</h4>
-              <p className="text-sm text-text-muted">You've selected <span className="font-semibold text-primary">{templates.find(t => t.id === selectedTemplate)?.name || 'a template'}</span>.</p>
-              <p className="text-sm text-text-muted">The biodata preview and download options will be available on your dashboard after completion.</p>
-            </div>
-          </div>
-        </div>
-
-        <HelperHint>All set! Review your information and proceed to complete your biodata.</HelperHint>
       </div>
     );
   }
@@ -1109,7 +1222,7 @@ function SectionVisibilityToggles({ visible, onChange }: { visible: FormState['v
   const sections = [
     { key: 'horoscope' as const, label: 'Horoscope Details', icon: <Sparkles size={16} /> },
     { key: 'education' as const, label: 'Education Details', icon: <GraduationCap size={16} /> },
-    { key: 'income' as const, label: 'Income Details', icon: <IndianRupee size={16} /> },
+    { key: 'income' as const, label: 'Income Details', icon: <DollarSign size={16} /> },
     { key: 'preferences' as const, label: 'Partner Preferences', icon: <Heart size={16} /> },
   ];
 

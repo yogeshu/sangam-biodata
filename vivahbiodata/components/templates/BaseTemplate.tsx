@@ -13,6 +13,7 @@ export interface TemplateProps {
 export interface BiodataData {
   // Personal Details
   fullName: string;
+  birthName?: string;
   gender: string;
   dateOfBirth: string;
   timeOfBirth?: string;
@@ -26,16 +27,23 @@ export interface BiodataData {
   religion: string;
   caste?: string;
   gotra?: string;
+  nadi?: string;
+  mamekul?: string;
+  kul?: string;
   rashi?: string;
+  ras?: string;
   nakshatra?: string;
+  charan?: string;
   manglik?: string;
   religiousSymbol?: string;
   
   // Education & Career
   education: string;
   occupation: string;
+  jobCity?: string;
   company?: string;
   income?: string;
+  yearlyIncome?: string;
   
   // Family Details
   fatherName: string;
@@ -48,6 +56,7 @@ export interface BiodataData {
   
   // Contact Details
   contactNumber: string;
+  contactDetails?: string;
   email?: string;
   address: string;
   city: string;
@@ -60,6 +69,10 @@ export interface BiodataData {
   partnerEducation?: string;
   partnerOccupation?: string;
   partnerManglik?: string;
+  expectations?: string;
+
+  // Watermark / site name
+  watermarkText?: string;
   
   // Photos (0-2)
   photos: string[];
