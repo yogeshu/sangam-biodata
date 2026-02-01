@@ -1,7 +1,9 @@
-import React from 'react';
+
+
 import { Heart, User, CheckCircle } from 'lucide-react';
 
 const Hero = () => {
+
   return (
     <div className="w-full max-w-[960px] px-4 md:px-10 py-12 md:py-20">
       <div className="@container">
@@ -20,25 +22,25 @@ const Hero = () => {
               </h2>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <button className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-primary hover:bg-primary-dark transition-all shadow-lg shadow-primary/20 text-white text-base font-bold">
+              <a href='/templates' className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-primary hover:bg-primary-dark transition-all shadow-lg shadow-primary/20 text-white text-base font-bold">
                 Create Biodata
-              </button>
-              <button className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-white border border-border-strong text-text-main hover:bg-gray-50 transition-all text-base font-bold">
+              </a>
+              <a href='/samples' className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-white border border-border-strong text-text-main hover:bg-gray-50 transition-all text-base font-bold">
                 View Samples
-              </button>
+              </a>
             </div>
             <div className="flex items-center justify-center md:justify-start gap-2 text-text-muted text-sm mt-2">
               <CheckCircle size={18} />
               <span>No sign-up required for preview</span>
             </div>
           </div>
-          
+
           {/* Right Image */}
           <div className="w-full md:w-5/12 flex justify-center relative group">
             <div className="absolute inset-0 bg-primary/20 rounded-xl blur-2xl transform rotate-3 scale-90 group-hover:rotate-6 transition-transform duration-500"></div>
-            <div 
-              className="relative w-full aspect-[3/4] md:aspect-[4/5] bg-cover bg-center rounded-xl shadow-2xl overflow-hidden border-4 border-white" 
-              data-alt="Indian bride in traditional red saree holding a document" 
+            <div
+              className="relative w-full aspect-[3/4] md:aspect-[4/5] bg-cover bg-center rounded-xl shadow-2xl overflow-hidden border-4 border-white"
+              data-alt="Indian bride in traditional red saree holding a document"
               style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuC-qWpm9gV-Nt1fp25e1xzuzZMZb_vBUen4O0n5XtKf0Y4F44zGry7eNHqwUaQm4kmLjr8M6VNehj4mySeTblLzn0Kg478c_uwyJBMCFARRbUzIaFkundvusyNSlTx3TZK9I31YqKYtrjAezg_I7Sq7xYcqKv9OhvjQ8ZOxmCaru3mUncUdJh3IqvCesWAO3DJCvUenCOEorfCiq0EqwJlL8Bnpgw2KkB55kiMCql397Du8zmmemMKyZnZshU1NHUFl9I1n4NanHwlE")' }}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">

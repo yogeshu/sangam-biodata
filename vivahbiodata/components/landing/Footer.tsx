@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Heart, Mail, Github, Twitter, Linkedin } from 'lucide-react';
+import { Heart, Mail, Github, Linkedin, ExternalLink } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -18,7 +18,7 @@ const Footer = () => {
               <h3 className="text-text-main dark:text-gray-100 text-2xl font-bold">VivahBio</h3>
             </div>
             <p className="text-sm text-text-muted dark:text-gray-400 max-w-sm leading-relaxed mb-4">
-              Create beautiful marriage biodata in minutes. Professional PDF formats designed for WhatsApp sharing and printing.
+              Create beautiful marriage biodata in minutes. Professional PDF and Image formats designed for WhatsApp sharing and printing.
             </p>
             <p className="text-xs text-text-muted dark:text-gray-500">
               Made with <Heart size={12} className="inline text-primary fill-primary" /> for families finding their perfect match.
@@ -35,7 +35,7 @@ const Footer = () => {
                 { label: 'Templates', href: '/templates' },
                 { label: 'Samples', href: '/samples' },
                 { label: 'Create Biodata', href: '/templates' },
-                { label: 'About Us', href: '/#about' },
+                { label: 'About Us', href: '/about' },
               ].map((link) => (
                 <li key={link.label}>
                   <Link
@@ -82,14 +82,16 @@ const Footer = () => {
           
           <div className="flex items-center gap-4">
             {[
-              { icon: Twitter, href: '#', label: 'Twitter' },
-              { icon: Linkedin, href: '#', label: 'LinkedIn' },
-              { icon: Github, href: '#', label: 'Github' },
-              { icon: Mail, href: 'mailto:contact@vivahbio.com', label: 'Email' },
+              { icon: Github, href: 'https://github.com/yogeshu', label: 'GitHub' },
+              { icon: Linkedin, href: 'https://linkedin.com/in/yogeshbhavsarui', label: 'LinkedIn' },
+              { icon: ExternalLink, href: 'https://consult.yogeshbhavsar.com/#contact', label: 'Portfolio' },
+              { icon: Mail, href: 'mailto:connect@yogeshbhavsar.com', label: 'Email' },
             ].map(({ icon: Icon, href, label }) => (
               <a
                 key={label}
                 href={href}
+                target={href.startsWith('http') && !href.startsWith('mailto') ? '_blank' : undefined}
+                rel={href.startsWith('http') && !href.startsWith('mailto') ? 'noopener noreferrer' : undefined}
                 aria-label={label}
                 className="p-2 rounded-full text-text-muted dark:text-gray-400 hover:text-primary dark:hover:text-primary hover:bg-primary/10 transition-all"
               >
