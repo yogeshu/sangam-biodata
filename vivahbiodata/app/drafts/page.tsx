@@ -2,14 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
-import { getUserDrafts, deleteDraftFromFirestore, type BiodataDraft } from "@/lib/utils/firestore";
 import { FileText, Trash2, Edit, Plus, ArrowLeft } from "lucide-react";
 import CommonLayout from "@/components/common/CommonLayout";
 
 export default function DraftsPage() {
   const router = useRouter();
-  const { user, loading } = useAuth();
   const [drafts, setDrafts] = useState<BiodataDraft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 

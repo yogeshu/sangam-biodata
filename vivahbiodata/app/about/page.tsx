@@ -186,7 +186,6 @@ export default function AboutPage() {
               { name: 'Next.js', desc: 'React Framework' },
               { name: 'TypeScript', desc: 'Type Safety' },
               { name: 'Tailwind CSS', desc: 'Styling' },
-              { name: 'Firebase', desc: 'Backend' },
               { name: 'Vercel', desc: 'Hosting' },
               { name: 'html2canvas', desc: 'PDF/Image Export' },
               { name: 'Google Analytics', desc: 'Analytics' },

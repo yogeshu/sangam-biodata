@@ -95,10 +95,6 @@ export default function FAQPage() {
           q: 'Can I delete my biodata and data?',
           a: 'Yes! You can delete your saved biodatas and account data anytime. If you\'re not using an account, you can clear your browser data. Contact us if you need assistance with data deletion.',
         },
-        {
-          q: 'Where is my data stored?',
-          a: 'Data is stored securely using Firebase (Google Cloud) servers with enterprise-level security. Some data may be temporarily cached in your browser for convenience.',
-        },
       ],
     },
     {

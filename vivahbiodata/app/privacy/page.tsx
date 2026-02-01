@@ -64,9 +64,6 @@ export default function PrivacyPolicyPage() {
             <p className="text-text-muted mt-4 mb-4">
               <strong>Biodata Information:</strong>
             </p>
-            <p className="text-text-muted mb-4">
-              All biodata information you enter (personal details, family info, photos, etc.) is stored <strong>locally in your browser</strong> or in <strong>your private Firebase account</strong> if you're signed in. We don't analyze, process, or access this information. It's yours and yours alone.
-            </p>
             <p className="text-text-muted mt-4 mb-4">
               <strong>Anonymous Usage Analytics:</strong>
             </p>
@@ -112,7 +109,6 @@ export default function PrivacyPolicyPage() {
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
               <li><strong>Browser Storage:</strong> Without an account, your biodata is stored only in your browser's local storage on your device</li>
-              <li><strong>Firebase Storage:</strong> With an account, your drafts are stored in your private Firebase (Google Cloud) account with enterprise-grade security</li>
               <li><strong>No Server-Side Processing:</strong> We don't process or analyze your biodata information on our servers</li>
               <li><strong>You Control Access:</strong> Only you can access your account and data</li>
             </ul>
@@ -145,7 +141,6 @@ export default function PrivacyPolicyPage() {
               We use minimal cookies necessary for the service:
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
-              <li><strong>Essential:</strong> Firebase authentication cookies (to keep you logged in)</li>
               <li><strong>Storage:</strong> Browser local storage (to save your drafts locally)</li>
               <li><strong>Analytics:</strong> Google Analytics/GTM cookies to understand anonymous usage patterns (page views, feature usage)</li>
             </ul>
@@ -166,7 +161,6 @@ export default function PrivacyPolicyPage() {
               We use trusted third-party services:
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
-              <li><strong>Firebase (Google):</strong> Authentication and secure data storage</li>
               <li><strong>Vercel:</strong> Website hosting and content delivery</li>
               <li><strong>Google Analytics / Google Tag Manager:</strong> Anonymous usage analytics to improve the service</li>
             </ul>
