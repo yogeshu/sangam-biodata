@@ -147,7 +147,7 @@ export default function AboutPage() {
               {
                 icon: <Heart size={32} />,
                 title: 'Privacy First',
-                description: 'Your biodata information is private. We only collect email for authentication and never track your personal data.',
+                description: 'Your biodata information is private. Drafts are stored locally in your browser and we never track your personal data.',
               },
               {
                 icon: <Code size={32} />,
@@ -186,7 +186,7 @@ export default function AboutPage() {
               { name: 'Next.js', desc: 'React Framework' },
               { name: 'TypeScript', desc: 'Type Safety' },
               { name: 'Tailwind CSS', desc: 'Styling' },
-              { name: 'Firebase', desc: 'Backend' },
+              { name: 'Local Storage', desc: 'Draft Storage' },
               { name: 'Vercel', desc: 'Hosting' },
               { name: 'html2canvas', desc: 'PDF/Image Export' },
               { name: 'Google Analytics', desc: 'Analytics' },

@@ -23,7 +23,7 @@ export default function FAQPage() {
         },
         {
           q: 'Do I need to create an account?',
-          a: 'No account is required for basic biodata creation. However, creating an account (optional) allows you to save drafts, edit later, and access your biodatas from any device.',
+          a: 'No account is required. Your biodata drafts are saved locally in your browser so you can edit and download anytime on this device.',
         },
         {
           q: 'Is VivahBio free to use?',
@@ -71,7 +71,7 @@ export default function FAQPage() {
         },
         {
           q: 'Can I edit my biodata after downloading?',
-          a: 'Yes! Your biodata data is saved (in browser or account), so you can return anytime to make changes and download an updated version. Previously downloaded versions won\'t automatically update.',
+          a: 'Yes! Your biodata draft is saved locally in your browser, so you can return anytime to make changes and download an updated version. Previously downloaded versions won\'t automatically update.',
         },
         {
           q: 'Is there a watermark on the downloaded biodata?',
@@ -97,7 +97,7 @@ export default function FAQPage() {
         },
         {
           q: 'Where is my data stored?',
-          a: 'Data is stored securely using Firebase (Google Cloud) servers with enterprise-level security. Some data may be temporarily cached in your browser for convenience.',
+          a: 'Your biodata drafts are stored locally in your browser for convenience. We do not upload your biodata to our servers.',
         },
       ],
     },
@@ -151,7 +151,7 @@ export default function FAQPage() {
       questions: [
         {
           q: 'What\'s the difference between saved and downloaded biodatas?',
-          a: 'Saved biodatas are drafts stored in your browser or account that you can edit anytime. Downloaded biodatas are final PDF/image files saved to your device.',
+          a: 'Saved biodatas are drafts stored locally in your browser that you can edit anytime. Downloaded biodatas are final PDF/image files saved to your device.',
         },
         {
           q: 'How many biodatas can I create?',

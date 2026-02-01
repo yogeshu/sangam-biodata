@@ -55,17 +55,16 @@ export default function PrivacyPolicyPage() {
               </p>
             </div>
             <p className="text-text-muted mb-4">
-              <strong>Account Information (Optional):</strong>
+              <strong>No Account Required:</strong>
             </p>
-            <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
-              <li>Email address (if you create an account via email)</li>
-              <li>Google account information (name, email) if you sign in with Google</li>
-            </ul>
+            <p className="text-text-muted">
+              VivahBio works without accounts. We do not collect login or authentication details.
+            </p>
             <p className="text-text-muted mt-4 mb-4">
               <strong>Biodata Information:</strong>
             </p>
             <p className="text-text-muted mb-4">
-              All biodata information you enter (personal details, family info, photos, etc.) is stored <strong>locally in your browser</strong> or in <strong>your private Firebase account</strong> if you're signed in. We don't analyze, process, or access this information. It's yours and yours alone.
+              All biodata information you enter (personal details, family info, photos, etc.) is stored <strong>locally in your browser</strong>. We don't analyze, process, or access this information. It's yours and yours alone.
             </p>
             <p className="text-text-muted mt-4 mb-4">
               <strong>Anonymous Usage Analytics:</strong>
@@ -74,7 +73,7 @@ export default function PrivacyPolicyPage() {
               We use Google Analytics / Google Tag Manager to understand how users interact with our service (page views, button clicks, feature usage). This data is completely anonymous and doesn't include any personal information from your biodata.
             </p>
             <p className="text-text-muted">
-              <strong>We do NOT track or collect:</strong> Your biodata content, personal information, names, phone numbers, or any identifiable data beyond basic email for authentication.
+              <strong>We do NOT track or collect:</strong> Your biodata content, personal information, names, phone numbers, or any identifiable data.
             </p>
           </Section>
 
@@ -86,8 +85,7 @@ export default function PrivacyPolicyPage() {
               Your information is used <strong>only</strong> for:
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
-              <li><strong>Authentication:</strong> Your email/Google account is used solely to create and secure your account</li>
-              <li><strong>Storage:</strong> Your biodata drafts are stored in your private account space</li>
+              <li><strong>Storage:</strong> Your biodata drafts are stored locally in your browser</li>
               <li><strong>Analytics:</strong> Anonymous usage data (page views, clicks) to improve our service - no personal biodata information is tracked</li>
             </ul>
             <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg space-y-2">
@@ -111,13 +109,12 @@ export default function PrivacyPolicyPage() {
               Your data security matters:
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
-              <li><strong>Browser Storage:</strong> Without an account, your biodata is stored only in your browser's local storage on your device</li>
-              <li><strong>Firebase Storage:</strong> With an account, your drafts are stored in your private Firebase (Google Cloud) account with enterprise-grade security</li>
+              <li><strong>Browser Storage:</strong> Your biodata is stored only in your browser's local storage on your device</li>
               <li><strong>No Server-Side Processing:</strong> We don't process or analyze your biodata information on our servers</li>
-              <li><strong>You Control Access:</strong> Only you can access your account and data</li>
+              <li><strong>You Control Access:</strong> Only you can access your device and data</li>
             </ul>
             <p className="text-text-muted mt-4">
-              <strong>Important:</strong> You can clear your browser storage anytime, or delete your account to remove all stored data permanently.
+              <strong>Important:</strong> You can clear your browser storage anytime to remove all stored data.
             </p>
           </Section>
 
@@ -145,7 +142,6 @@ export default function PrivacyPolicyPage() {
               We use minimal cookies necessary for the service:
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
-              <li><strong>Essential:</strong> Firebase authentication cookies (to keep you logged in)</li>
               <li><strong>Storage:</strong> Browser local storage (to save your drafts locally)</li>
               <li><strong>Analytics:</strong> Google Analytics/GTM cookies to understand anonymous usage patterns (page views, feature usage)</li>
             </ul>
@@ -166,7 +162,6 @@ export default function PrivacyPolicyPage() {
               We use trusted third-party services:
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
-              <li><strong>Firebase (Google):</strong> Authentication and secure data storage</li>
               <li><strong>Vercel:</strong> Website hosting and content delivery</li>
               <li><strong>Google Analytics / Google Tag Manager:</strong> Anonymous usage analytics to improve the service</li>
             </ul>
