@@ -394,7 +394,7 @@ function PreviewPageContent() {
               <button 
                 onClick={handleDownloadImage}
                 disabled={isImageDownloading || !isConfirmed}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-slate-900 text-white font-semibold rounded-lg hover:bg-slate-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-midnight-accent text-white font-semibold rounded-lg hover:bg-midnight-accent/80 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Image size={18} />
                 {isImageDownloading ? "Generating Image..." : "Download Image"}

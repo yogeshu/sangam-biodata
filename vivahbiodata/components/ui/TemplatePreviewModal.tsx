@@ -34,7 +34,7 @@ export default function TemplatePreviewModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="relative w-full max-w-6xl max-h-[90vh] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border-soft bg-background-light">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border-soft bg-white dark:bg-midnight-accent">
           <div>
             <h2 className="text-2xl font-bold text-text-main flex items-center gap-3">
               {template.name}
@@ -123,7 +123,7 @@ export default function TemplatePreviewModal({
               )}
 
               {/* Template Details */}
-              <div className="bg-background-light rounded-lg p-4 space-y-3">
+              <div className="bg-white dark:bg-midnight-accent rounded-lg p-4 space-y-3 shadow-sm border border-border-soft">
                 <h3 className="font-semibold text-text-main">Template Features</h3>
                 <ul className="space-y-2 text-sm text-text-muted">
                   <li className="flex items-start gap-2">

@@ -5,28 +5,28 @@ import { useRouter } from "next/navigation";
 import { FileText, Trash2, Edit, Plus, ArrowLeft } from "lucide-react";
 import CommonLayout from "@/components/common/CommonLayout";
 
+interface BiodataDraft {
+  id: string;
+  name: string;
+  lastModified: Date;
+  updatedAt?: Date;
+  template?: string;
+}
+
 export default function DraftsPage() {
   const router = useRouter();
   const [drafts, setDrafts] = useState<BiodataDraft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/');
-      return;
-    }
-
-    if (user) {
-      loadDrafts();
-    }
-  }, [user, loading, router]);
+    // Load drafts from localStorage on mount
+    loadDrafts();
+  }, []);
 
   const loadDrafts = async () => {
-    if (!user) return;
-
     try {
-      const draftsData = await getUserDrafts(user.uid);
-      setDrafts(draftsData);
+      // TODO: Implement draft loading from localStorage or Firebase
+      setDrafts([]);
     } catch (error) {
       console.error('Error loading drafts:', error);
     } finally {
@@ -36,10 +36,9 @@ export default function DraftsPage() {
 
   const handleDelete = async (draftId: string) => {
     if (!confirm('Are you sure you want to delete this draft?')) return;
-    if (!user) return;
 
     try {
-      await deleteDraftFromFirestore(user.uid, draftId);
+      // TODO: Implement draft deletion
       setDrafts(drafts.filter(d => d.id !== draftId));
     } catch (error) {
       console.error('Error deleting draft:', error);
@@ -51,7 +50,7 @@ export default function DraftsPage() {
     router.push(`/create?draft=${draftId}`);
   };
 
-  if (loading || isLoading) {
+  if (isLoading) {
     return (
       <CommonLayout>
         <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center">
@@ -131,7 +130,7 @@ export default function DraftsPage() {
                       <div>
                         <h3 className="font-bold text-text-main">{draft.name}</h3>
                         <p className="text-sm text-text-muted">
-                          Updated {new Date(draft.updatedAt).toLocaleDateString()}
+                          Updated {draft.updatedAt ? new Date(draft.updatedAt).toLocaleDateString() : 'Recently'}
                         </p>
                       </div>
                     </div>

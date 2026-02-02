@@ -8,7 +8,7 @@ const TemplateGallery = () => {
   ];
 
   return (
-    <div className="w-full bg-slate-900 dark:bg-slate-800 py-16 transition-colors">
+    <div className="w-full bg-midnight-accent dark:bg-background-dark py-16 transition-colors">
       <div className="max-w-[960px] mx-auto px-4 md:px-10">
         <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-6">
           <div className="flex flex-col gap-4 max-w-[600px]">
@@ -19,7 +19,7 @@ const TemplateGallery = () => {
               Choose a design that reflects your personality and tradition. From classic auspicious reds to modern minimal styles.
             </p>
           </div>
-          <button className="flex items-center justify-center rounded-lg h-10 px-5 border border-gray-400 text-gray-300 hover:bg-white hover:text-slate-900 transition-colors text-sm font-bold w-fit whitespace-nowrap">
+          <button className="flex items-center justify-center rounded-lg h-10 px-5 border border-gray-400 text-gray-300 hover:bg-white hover:text-text-main transition-colors text-sm font-bold w-fit whitespace-nowrap">
             View all templates
           </button>
         </div>

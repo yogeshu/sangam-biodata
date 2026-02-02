@@ -1,40 +1,64 @@
 @import "tailwindcss";
 /* disabled es */
 @theme global {
-  /* 1. Your Custom Colors - Royal Midnight Theme */
+  /* 1. Your Custom Colors - Warm Sky & Deep Night Theme */
   --color-primary: #EAB308;
   --color-primary-dark: #CA8A04;
   
-  --color-background-light: #F8FAFC;
-  --color-background-dark: #0F172A;
+  /* Light theme: Warm sky blue with subtle gradient */
+  --color-background-light: #F0F9FF;
+  --color-background-light-alt: #FFFBEB;
+  --color-background-dark: #0A1628;
+  --color-background-dark-alt: #0F1D35;
   
-  --color-text-main: #0F172A;
+  --color-text-main: #020617;
   --color-text-muted: #475569;
   
-  --color-border-soft: #E2E8F0;
-  --color-border-strong: #CBD5E1;
+  --color-border-soft: #DBEAFE;
+  --color-border-strong: #93C5FD;
 
   /* 2. Your Fonts */
   --font-display: "Noto Serif", serif;
   --font-body: "Noto Sans", sans-serif;
 }
 
-/* 3. Global Reset */
+/* 3. Global Reset with Gradient Background */
 body {
-  background-color: var(--color-background-light);
+  background: linear-gradient(135deg, var(--color-background-light) 0%, #E0F2FE 50%, var(--color-background-light-alt) 100%);
+  background-attachment: fixed;
   color: var(--color-text-main);
   font-family: var(--font-display);
+  min-height: 100vh;
 }
 
-/* 4. Dark Mode Overrides */
+/* 4. Dark Mode Overrides - Rich Dark Blue with Premium Feel */
 .dark {
-  --color-text-main: #F8FAFC;
+  --color-text-main: #FFFFFF;
   --color-text-muted: #CBD5E1;
-  --color-border-soft: #334155;
-  --color-border-strong: #475569;
+  --color-border-soft: #1E3A5F;
+  --color-border-strong: #2E5A8F;
+  --color-background-light: #0F1D35;
 }
 
 .dark body {
-  background-color: var(--color-background-dark);
-  color: var(--color-text-main);
+  background: linear-gradient(135deg, #0A1628 0%, #0F1D35 50%, #1A2942 100%);
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(234, 179, 8, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px);
+  background-attachment: fixed;
+  color: #FFFFFF;
+}
+
+/* Override text colors in dark mode */
+.dark .text-text-main {
+  color: #FFFFFF !important;
+}
+
+.dark .text-text-muted {
+  color: #CBD5E1 !important;
+}
+
+.dark .text-primary {
+  color: #EAB308 !important;
 }

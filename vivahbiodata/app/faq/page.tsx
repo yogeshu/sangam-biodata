@@ -161,6 +161,7 @@ export default function FAQPage() {
           q: 'Can I use sangam-biodata for commercial purposes?',
           a: 'sangam-biodata is designed for personal use. If you\'re a matchmaker or business interested in using our service commercially, please contact us for partnership opportunities.',
         },
+      ],
     },
   ];
 
@@ -261,7 +262,7 @@ export default function FAQPage() {
                       >
                         <button
                           onClick={() => toggleQuestion(currentIndex)}
-                          className="w-full flex items-center justify-between gap-4 p-4 text-left hover:bg-background-light transition"
+                          className="w-full flex items-center justify-between gap-4 p-4 text-left hover:bg-white/50 dark:hover:bg-midnight-accent/50 transition"
                         >
                           <span className="font-semibold text-text-main text-sm md:text-base">
                             {faq.q}
@@ -273,7 +274,7 @@ export default function FAQPage() {
                           )}
                         </button>
                         {isOpen && (
-                          <div className="px-4 pb-4 text-sm md:text-base text-text-muted leading-relaxed border-t border-border-soft bg-background-light/50 pt-4">
+                          <div className="px-4 pb-4 text-sm md:text-base text-text-muted leading-relaxed border-t border-border-soft bg-white/50 dark:bg-midnight-accent/30 pt-4">
                             {faq.a}
                           </div>
                         )}

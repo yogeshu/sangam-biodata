@@ -25,7 +25,7 @@ const Hero = () => {
               <a href='/templates' className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-primary hover:bg-primary-dark transition-all shadow-lg shadow-primary/20 text-background-dark dark:text-background-dark text-base font-bold">
                 Create Biodata
               </a>
-              <a href='/samples' className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-base font-bold">
+              <a href='/samples' className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8  dark:bg-midnight-accent border border-border-soft text-text-main hover:bg-background-light dark:hover:bg-midnight-accent/80 transition-all text-base font-bold">
                 View Samples
               </a>
             </div>

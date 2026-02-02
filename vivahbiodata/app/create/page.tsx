@@ -859,7 +859,7 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
                 }}
                 placeholder="e.g., Looking for a well-educated, independent woman from Mumbai or nearby areas. Prefer someone with interest in travel and reading. Open to all castes and religions."
                 className={cn(
-                  "w-full rounded-lg border px-3 py-2.5 text-sm bg-background-light text-text-main outline-none focus:border-primary focus:ring-1 focus:ring-primary transition resize-none",
+                  "w-full rounded-lg border px-3 py-2.5 text-sm bg-white dark:bg-midnight-accent text-text-main outline-none focus:border-primary focus:ring-1 focus:ring-primary transition resize-none",
                   errors?.partnerExpectationsText ? "border-red-500" : "border-border-soft"
                 )}
                 rows={4}
@@ -905,7 +905,7 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
                     <select
                       value={contact.type}
                       onChange={(e) => handleContactNumberChange(index, "type", e.target.value)}
-                      className="rounded-lg border border-border-soft px-3 py-2.5 text-sm bg-background-light text-text-main outline-none focus:border-primary focus:ring-1 focus:ring-primary transition w-32"
+                      className="rounded-lg border border-border-soft px-3 py-2.5 text-sm bg-white dark:bg-midnight-accent text-text-main outline-none focus:border-primary focus:ring-1 focus:ring-primary transition w-32"
                     >
                       <option>Self</option>
                       <option>Parent</option>
@@ -916,7 +916,7 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
                       value={contact.number}
                       onChange={(e) => handleContactNumberChange(index, "number", e.target.value)}
                       placeholder="10-digit number"
-                      className="flex-1 rounded-lg border border-border-soft px-3 py-2.5 text-sm bg-background-light text-text-main outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
+                      className="flex-1 rounded-lg border border-border-soft px-3 py-2.5 text-sm bg-white dark:bg-midnight-accent text-text-main outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
                     />
                     {data.contactNumbers.length > 1 && (
                       <button
@@ -972,7 +972,7 @@ function InputField({ label, name, value, onChange, placeholder, type = "text", 
         {label}
         {optional && <span className="text-[10px] font-semibold text-text-muted">Optional</span>}
       </span>
-      <div className={cn("flex items-center gap-2 rounded-lg border px-3 py-2.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition bg-background-light", error ? "border-red-500 focus-within:ring-red-500 focus-within:border-red-500" : "border-border-soft")}>
+      <div className={cn("flex items-center gap-2 rounded-lg border px-3 py-2.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition bg-white dark:bg-midnight-accent", error ? "border-red-500 focus-within:ring-red-500 focus-within:border-red-500" : "border-border-soft")}>
         {icon && <span className="text-text-muted">{icon}</span>}
         <input
           type={type}
@@ -998,7 +998,7 @@ function SelectField({ label, name, value, onChange, placeholder, options, icon,
         {label}
         {optional && <span className="text-[10px] font-semibold text-text-muted">Optional</span>}
       </span>
-      <div className={cn("flex items-center gap-2 rounded-lg border px-3 py-2.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition bg-background-light", error && isTouched ? "border-red-500 focus-within:ring-red-500 focus-within:border-red-500" : "border-border-soft")}>
+      <div className={cn("flex items-center gap-2 rounded-lg border px-3 py-2.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition bg-white dark:bg-midnight-accent", error && isTouched ? "border-red-500 focus-within:ring-red-500 focus-within:border-red-500" : "border-border-soft")}>
         {icon && <span className="text-text-muted">{icon}</span>}
         <select
           name={name}
@@ -1026,7 +1026,7 @@ function SelectField({ label, name, value, onChange, placeholder, options, icon,
 
 function HelperHint({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-2 rounded-lg border border-dashed border-border-soft bg-background-light px-4 py-3 text-sm text-text-muted">
+    <div className="flex items-center gap-2 rounded-lg border border-dashed border-border-soft bg-white dark:bg-midnight-accent px-4 py-3 text-sm text-text-muted">
       <CheckCircle2 size={14} className="text-primary" />
       <span>{children}</span>
     </div>
@@ -1195,14 +1195,14 @@ function CustomFieldsManager({ fields, onChange }: { fields: Array<{ label: stri
               placeholder="Field Label (e.g., Hobbies)"
               value={field.label}
               onChange={(e) => updateField(index, "label", e.target.value)}
-              className="flex-1 px-3 py-2 text-sm border border-border-soft rounded-lg bg-background-light focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+              className="flex-1 px-3 py-2 text-sm border border-border-soft rounded-lg bg-white dark:bg-midnight-accent text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none"
             />
             <input
               type="text"
               placeholder="Field Value (e.g., Reading, Music)"
               value={field.value}
               onChange={(e) => updateField(index, "value", e.target.value)}
-              className="flex-1 px-3 py-2 text-sm border border-border-soft rounded-lg bg-background-light focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+              className="flex-1 px-3 py-2 text-sm border border-border-soft rounded-lg bg-white dark:bg-midnight-accent text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none"
             />
             <button
               type="button"

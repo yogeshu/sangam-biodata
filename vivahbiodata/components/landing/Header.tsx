@@ -35,7 +35,7 @@ const Header = () => {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <div className="w-full border-b border-solid border-slate-200 dark:border-border-soft bg-white dark:bg-background-dark sticky top-0 z-50 transition-colors duration-300 shadow-sm">
+    <div className="w-full border-b border-solid border-border-soft dark:bg-background-dark/95 backdrop-blur-sm sticky top-0 z-50 transition-colors duration-300 shadow-sm">
       <div className="flex justify-center">
         <div className="flex w-full max-w-[1280px] items-center justify-between px-4 py-3 md:px-8">
           
@@ -44,7 +44,7 @@ const Header = () => {
             <div className="size-9 flex items-center justify-center rounded-full bg-primary/10 text-primary">
               <Heart size={20} fill="currentColor" />
             </div>
-            <h2 className="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">
+            <h2 className="text-text-main text-xl font-bold leading-tight tracking-tight">
               sangam-biodata
             </h2>
           </Link>
@@ -59,7 +59,7 @@ const Header = () => {
                   className={`text-sm font-medium leading-normal transition-colors ${
                     isActive(item.href)
                       ? "text-primary font-semibold"
-                      : "text-slate-600 dark:text-slate-400 hover:text-primary"
+                      : "text-text-muted hover:text-primary"
                   }`}
                 >
                   {item.label}
@@ -111,7 +111,7 @@ const Header = () => {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white dark:bg-background-dark border-b border-border-soft shadow-lg py-4 px-4 flex flex-col gap-4 animate-in slide-in-from-top-2">
+        <div className="md:hidden absolute top-full left-0 w-full bg-white/95 dark:bg-background-dark/95 backdrop-blur-sm border-b border-border-soft shadow-lg py-4 px-4 flex flex-col gap-4 animate-in slide-in-from-top-2">
           {navLinks.map((item) => (
             <Link
               key={item.label}

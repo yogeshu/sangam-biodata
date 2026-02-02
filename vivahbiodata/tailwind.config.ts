@@ -1,27 +1,26 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  // 👇 THIS LINE IS MISSING OR INCORRECT
   darkMode: "class", 
   
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        "primary": "var(--color-primary)",
-        "primary-dark": "var(--color-primary-dark)",
-        "background-light": "var(--color-background-light)",
-        "background-dark": "var(--color-background-dark)",
-        "text-main": "var(--color-text-main)",
-        "text-muted": "var(--color-text-muted)",
-        "border-soft": "var(--color-border-soft)",
-        "border-strong": "var(--color-border-strong)",
-        "midnight-accent": "#1E293B",
-        "midnight-border": "#334155",
+        "primary": "#EAB308",
+        "primary-dark": "#CA8A04",
+        "background-light": "#F0F9FF",
+        "background-dark": "#0A1628",
+        "text-main": "#020617",
+        "text-muted": "#475569",
+        "border-soft": "#DBEAFE",
+        "border-strong": "#93C5FD",
+        "midnight-accent": "#0F1D35",
+        "midnight-border": "#1E3A5F",
       },
       fontFamily: {
         "display": ["var(--font-noto-serif)", "serif"],
