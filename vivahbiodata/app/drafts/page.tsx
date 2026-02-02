@@ -54,7 +54,7 @@ export default function DraftsPage() {
   if (loading || isLoading) {
     return (
       <CommonLayout>
-        <div className="min-h-screen bg-background-light flex items-center justify-center">
+        <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center">
           <p className="text-text-muted">Loading your drafts...</p>
         </div>
       </CommonLayout>
@@ -63,9 +63,9 @@ export default function DraftsPage() {
 
   return (
     <CommonLayout>
-      <div className="min-h-screen bg-background-light text-text-main font-body">
+      <div className="min-h-screen bg-background-light dark:bg-background-dark text-text-main font-body">
         {/* Header */}
-        <header className="border-b border-border-soft bg-white shadow-sm">
+        <header className="border-b border-border-soft bg-white dark:bg-background-dark shadow-sm">
           <div className="mx-auto max-w-7xl px-4 py-6 md:px-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -121,7 +121,7 @@ export default function DraftsPage() {
               {drafts.map((draft) => (
                 <div
                   key={draft.id}
-                  className="bg-white rounded-xl border border-border-soft shadow-md hover:shadow-lg transition p-6"
+                  className="bg-white dark:bg-midnight-accent rounded-xl border border-border-soft shadow-md hover:shadow-lg transition p-6"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
@@ -157,7 +157,7 @@ export default function DraftsPage() {
 
               {/* Empty slot card */}
               {drafts.length < 2 && (
-                <div className="bg-white rounded-xl border-2 border-dashed border-border-soft p-6 flex flex-col items-center justify-center text-center min-h-[200px]">
+                <div className="bg-white dark:bg-midnight-accent rounded-xl border-2 border-dashed border-border-soft p-6 flex flex-col items-center justify-center text-center min-h-[200px]">
                   <Plus size={32} className="text-text-muted mb-3" />
                   <p className="text-text-muted font-medium mb-4">
                     Empty Draft Slot

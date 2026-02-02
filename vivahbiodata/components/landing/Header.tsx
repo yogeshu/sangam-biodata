@@ -35,7 +35,7 @@ const Header = () => {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <div className="w-full border-b border-solid border-border-soft bg-white dark:bg-background-dark sticky top-0 z-50 transition-colors duration-300 shadow-sm">
+    <div className="w-full border-b border-solid border-slate-200 dark:border-border-soft bg-white dark:bg-background-dark sticky top-0 z-50 transition-colors duration-300 shadow-sm">
       <div className="flex justify-center">
         <div className="flex w-full max-w-[1280px] items-center justify-between px-4 py-3 md:px-8">
           
@@ -44,8 +44,8 @@ const Header = () => {
             <div className="size-9 flex items-center justify-center rounded-full bg-primary/10 text-primary">
               <Heart size={20} fill="currentColor" />
             </div>
-            <h2 className="text-text-main text-xl font-bold leading-tight tracking-tight dark:text-gray-100">
-              VivahBio
+            <h2 className="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">
+              sangam-biodata
             </h2>
           </Link>
 
@@ -59,7 +59,7 @@ const Header = () => {
                   className={`text-sm font-medium leading-normal transition-colors ${
                     isActive(item.href)
                       ? "text-primary font-semibold"
-                      : "text-text-muted dark:text-gray-300 hover:text-primary dark:hover:text-primary"
+                      : "text-slate-600 dark:text-slate-400 hover:text-primary"
                   }`}
                 >
                   {item.label}
@@ -71,7 +71,7 @@ const Header = () => {
             {mounted && (
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-text-main dark:text-gray-100 transition-colors"
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-text-main transition-colors"
                 aria-label="Toggle Dark Mode"
               >
                 {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
@@ -80,7 +80,7 @@ const Header = () => {
 
             <Link 
               href="/templates"
-              className="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary hover:bg-primary-dark transition-all text-background-dark dark:text-background-dark text-sm font-bold leading-normal shadow-md hover:shadow-lg"
+              className="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary hover:bg-primary-dark transition-all text-background-dark text-sm font-bold leading-normal shadow-md hover:shadow-lg"
             >
               Create Biodata
             </Link>
@@ -92,7 +92,7 @@ const Header = () => {
             {mounted && (
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-text-main dark:text-gray-100 transition-colors"
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-text-main transition-colors"
               >
                 {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
               </button>
@@ -101,7 +101,7 @@ const Header = () => {
             {/* Mobile Menu Icon */}
             <button 
               onClick={toggleMenu}
-              className="text-text-main dark:text-gray-100 p-1"
+              className="text-text-main p-1"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -116,10 +116,10 @@ const Header = () => {
             <Link
               key={item.label}
               href={item.href}
-              className={`py-2 border-b border-border-soft/50 dark:border-gray-800 last:border-0 ${
+              className={`py-2 border-b border-border-soft/50 last:border-0 ${
                 isActive(item.href)
                   ? "text-primary font-semibold text-base"
-                  : "text-text-main dark:text-gray-200 hover:text-primary text-base font-medium"
+                  : "text-text-main hover:text-primary text-base font-medium"
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >

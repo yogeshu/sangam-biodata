@@ -164,7 +164,7 @@ export default function UnifiedPremiumTemplate({
             style={{ backgroundColor: primary }}
           />
           <div className="py-3 text-center text-xs text-gray-500">
-            {data.watermarkText || "VivahBio.com"}
+            {data.watermarkText || "sangam-biodata.com"}
           </div>
         </div>
       </div>

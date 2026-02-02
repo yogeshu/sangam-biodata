@@ -110,9 +110,9 @@ export default function SamplesPage() {
 
   return (
     <CommonLayout>
-      <div className="min-h-screen bg-background-light text-text-main font-body">
+      <div className="min-h-screen bg-background-light dark:bg-background-dark text-text-main font-body">
         {/* Header */}
-        <header className="border-b border-border-soft bg-white shadow-sm">
+        <header className="border-b border-border-soft bg-white dark:bg-background-dark shadow-sm">
           <div className="mx-auto max-w-7xl px-4 py-6 md:px-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <button
@@ -161,13 +161,13 @@ export default function SamplesPage() {
 
           {/* Preview */}
           <div className="lg:col-span-2">
-            <div className="rounded-xl border border-border-soft bg-white shadow-lg overflow-hidden">
+            <div className="rounded-xl border border-border-soft bg-white dark:bg-midnight-accent shadow-lg overflow-hidden">
               <SamplePreview sample={selectedSample} />
             </div>
 
             {/* Action Buttons */}
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-border-soft text-text-main font-semibold rounded-lg hover:border-primary hover:text-primary transition">
+              <button className="flex items-center justify-center gap-2 px-4 py-3 bg-white dark:bg-midnight-accent border border-border-soft text-text-main font-semibold rounded-lg hover:border-primary hover:text-primary transition">
                 <Download size={18} />
                 Download Sample
               </button>

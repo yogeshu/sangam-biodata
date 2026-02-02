@@ -119,7 +119,7 @@ export default function TraditionalRedTemplate({
         className="px-8 py-6 text-center text-white text-sm"
         style={{ backgroundColor: theme.primary }}
       >
-        <p>{data.watermarkText || "VivahBio.com"}</p>
+        <p>{data.watermarkText || "sangam-biodata.com"}</p>
         <p className="opacity-75 mt-1">Making Matrimony Beautiful</p>
       </div>
     </div>

@@ -74,7 +74,7 @@ export async function downloadAsPDF(
   options: DownloadOptions = {}
 ): Promise<void> {
   const {
-    filename = 'biodata-vivahbio.pdf',
+    filename = 'biodata-sangam-biodata.pdf',
     quality = 0.95
   } = options;
 
@@ -129,7 +129,7 @@ export async function downloadAsImage(
   options: DownloadOptions = {}
 ): Promise<void> {
   const {
-    filename = 'biodata-vivahbio.png',
+    filename = 'biodata-sangam-biodata.png',
     format = 'png',
     quality = 0.95
   } = options;
@@ -184,7 +184,7 @@ export async function downloadAsImage(
  */
 export function shareOnWhatsApp(message: string = ''): void {
   const text = encodeURIComponent(
-    message || 'Check out my biodata created on VivahBio.com - Making Matrimony Beautiful!'
+    message || 'Check out my biodata created on sangam-biodata.com - Making Matrimony Beautiful!'
   );
   
   const whatsappUrl = `https://wa.me/?text=${text}`;

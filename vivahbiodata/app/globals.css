@@ -9,10 +9,10 @@
   --color-background-dark: #0F172A;
   
   --color-text-main: #0F172A;
-  --color-text-muted: #1E293B;
+  --color-text-muted: #475569;
   
-  --color-border-soft: #334155;
-  --color-border-strong: #1E293B;
+  --color-border-soft: #E2E8F0;
+  --color-border-strong: #CBD5E1;
 
   /* 2. Your Fonts */
   --font-display: "Noto Serif", serif;
@@ -26,7 +26,15 @@ body {
   font-family: var(--font-display);
 }
 
+/* 4. Dark Mode Overrides */
+.dark {
+  --color-text-main: #F8FAFC;
+  --color-text-muted: #CBD5E1;
+  --color-border-soft: #334155;
+  --color-border-strong: #475569;
+}
+
 .dark body {
   background-color: var(--color-background-dark);
-  color: var(--color-background-light);
+  color: var(--color-text-main);
 }

@@ -4,12 +4,12 @@
  */
 
 const STORAGE_KEYS = {
-  BIODATA_DRAFT: 'vivahbio_biodata_draft',
-  BIODATA_PHOTOS: 'vivahbio_biodata_photos',
-  FORM_STEP: 'vivahbio_form_step',
-  SELECTED_TEMPLATE: 'vivahbio_selected_template',
-  SELECTED_COLOR_THEME: 'vivahbio_selected_color_theme',
-  AUTO_SAVE_TIME: 'vivahbio_auto_save_time',
+  BIODATA_DRAFT: 'sangam_biodata_draft',
+  BIODATA_PHOTOS: 'sangam_biodata_photos',
+  FORM_STEP: 'sangam_form_step',
+  SELECTED_TEMPLATE: 'sangam_selected_template',
+  SELECTED_COLOR_THEME: 'sangam_selected_color_theme',
+  AUTO_SAVE_TIME: 'sangam_auto_save_time',
 } as const;
 
 export interface BiodataFormData {

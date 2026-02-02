@@ -3,15 +3,15 @@ import Link from 'next/link';
 import { ArrowLeft, Mail, MessageSquare, Send, ExternalLink, Linkedin, Github, Heart } from 'lucide-react';
 
 export const metadata = {
-  title: 'Contact Us | VivahBio',
-  description: 'Get in touch with VivahBio team for support, feedback, or questions.',
+  title: 'Contact Us | sangam-biodata',
+  description: 'Get in touch with sangam-biodata team for support, feedback, or questions.',
 };
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-background-light">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border-soft bg-white shadow-sm">
+      <header className="sticky top-0 z-40 border-b border-border-soft bg-white dark:bg-background-dark shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-4 md:px-8 flex items-center justify-between gap-4">
           <Link
             href="/"
@@ -75,8 +75,8 @@ export default function ContactPage() {
               </div>
               <h3 className="text-xl font-bold text-text-main">Portfolio</h3>
             </div>
-            <p className="text-text-muted mb-4 text-sm">
-              Learn more about who built VivahBio.
+              <p className="text-text-muted mb-4 text-sm">
+              Learn more about who built sangam-biodata.
             </p>
             <a
               href="https://consult.yogeshbhavsar.com/#contact"
@@ -110,7 +110,7 @@ export default function ContactPage() {
         </div>
 
         {/* Social Links */}
-        <div className="bg-white rounded-xl border border-border-soft p-8 shadow-sm mb-12">
+        <div className="bg-white dark:bg-midnight-accent rounded-xl border border-border-soft p-8 shadow-sm mb-12">
           <h3 className="text-xl font-bold text-text-main text-center mb-6">
             Connect on Social Media
           </h3>
@@ -140,7 +140,7 @@ export default function ContactPage() {
         </div>
 
         {/* Common Topics */}
-        <div className="bg-white rounded-xl border border-border-soft p-8 shadow-sm">
+        <div className="bg-white dark:bg-midnight-accent rounded-xl border border-border-soft p-8 shadow-sm">
           <h3 className="text-xl font-bold text-text-main mb-6">
             What Can We Help You With?
           </h3>

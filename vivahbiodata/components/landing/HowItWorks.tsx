@@ -11,12 +11,12 @@ const HowItWorks = () => {
   return (
     <div className="w-full max-w-[960px] px-4 md:px-10 py-16">
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-text-main dark:text-background-light mb-4">How it works</h2>
-        <p className="text-text-muted dark:text-gray-300 font-body">Generate a beautiful biodata in 3 simple steps</p>
+        <h2 className="text-3xl font-bold text-text-main mb-4">How it works</h2>
+        <p className="text-text-muted font-body">Generate a beautiful biodata in 3 simple steps</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
         {/* Connector Line (Desktop) */}
-        <div className="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-border-strong dark:bg-border-soft/30 -z-0 transform scale-x-75"></div>
+        <div className="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-border-strong -z-0 transform scale-x-75"></div>
         
         {steps.map((step, idx) => {
           const IconComponent = step.icon;
@@ -26,8 +26,8 @@ const HowItWorks = () => {
               <IconComponent size={32} />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-text-main dark:text-background-light">{step.title}</h3>
-              <p className="text-sm text-text-muted dark:text-gray-300 mt-2 font-body">{step.desc}</p>
+              <h3 className="text-lg font-bold text-text-main">{step.title}</h3>
+              <p className="text-sm text-text-muted mt-2 font-body">{step.desc}</p>
             </div>
           </div>
         );

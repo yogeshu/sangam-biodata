@@ -24,8 +24,8 @@ const notoSans = Noto_Sans({
 
 export default function LandingPage() {
   return (
-    <div className={`${notoSerif.variable} ${notoSans.variable} font-display text-text-main dark:text-background-light`}>
-      <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden bg-background-light dark:bg-background-dark transition-colors duration-300">
+    <div className={`${notoSerif.variable} ${notoSans.variable} font-display text-text-main min-h-screen`}>
+      <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden transition-colors duration-300">
         <Header />
         
         <main className="flex flex-col items-center w-full">

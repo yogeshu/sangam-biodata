@@ -183,8 +183,8 @@ export default function PremiumGoldenTemplate({
 
         {/* Footer */}
         <div className="text-center mt-12 pt-6 border-t-2" style={{ borderColor: theme.accent }}>
-          <p className="text-sm font-semibold" style={{ color: theme.secondary }}>
-            Created with ❤️ at VivahBio.com
+            <p className="text-sm font-semibold" style={{ color: theme.secondary }}>
+            Created with ❤️ at sangam-biodata.com
           </p>
         </div>
       </div>

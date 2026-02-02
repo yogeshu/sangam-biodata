@@ -6,7 +6,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-background-light dark:bg-background-dark border-t border-border-soft">
+    <footer className="w-full bg-gray-900 dark:bg-black border-t border-border-soft">
       <div className="max-w-[1280px] mx-auto px-4 md:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
@@ -15,19 +15,19 @@ const Footer = () => {
               <div className="size-10 flex items-center justify-center rounded-full bg-primary/10 text-primary">
                 <Heart size={22} fill="currentColor" />
               </div>
-              <h3 className="text-text-main dark:text-gray-100 text-2xl font-bold">VivahBio</h3>
+              <h3 className="text-white dark:text-gray-100 text-2xl font-bold">sangam-biodata</h3>
             </div>
-            <p className="text-sm text-text-muted dark:text-gray-400 max-w-sm leading-relaxed mb-4">
+            <p className="text-sm text-gray-300 dark:text-gray-400 max-w-sm leading-relaxed mb-4">
               Create beautiful marriage biodata in minutes. Professional PDF and Image formats designed for WhatsApp sharing and printing.
             </p>
-            <p className="text-xs text-text-muted dark:text-gray-500">
+            <p className="text-xs text-gray-400 dark:text-gray-500">
               Made with <Heart size={12} className="inline text-primary fill-primary" /> for families finding their perfect match.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-text-main dark:text-gray-100 font-semibold mb-4 text-sm uppercase tracking-wider">
+            <h4 className="text-white dark:text-gray-100 font-semibold mb-4 text-sm uppercase tracking-wider">
               Quick Links
             </h4>
             <ul className="space-y-2">
@@ -40,7 +40,7 @@ const Footer = () => {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm text-text-muted dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+                    className="text-sm text-gray-400 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -51,7 +51,7 @@ const Footer = () => {
 
           {/* Legal & Support */}
           <div>
-            <h4 className="text-text-main dark:text-gray-100 font-semibold mb-4 text-sm uppercase tracking-wider">
+            <h4 className="text-white dark:text-gray-100 font-semibold mb-4 text-sm uppercase tracking-wider">
               Support
             </h4>
             <ul className="space-y-2">
@@ -64,7 +64,7 @@ const Footer = () => {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm text-text-muted dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+                    className="text-sm text-gray-400 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -76,8 +76,8 @@ const Footer = () => {
 
         {/* Social Links */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-border-soft dark:border-gray-800">
-          <p className="text-sm text-text-muted dark:text-gray-400 font-body">
-            © {currentYear} VivahBio. All rights reserved.
+          <p className="text-sm text-gray-300 dark:text-gray-400 font-body">
+            © {currentYear} sangam-biodata. All rights reserved.
           </p>
           
           <div className="flex items-center gap-4">
@@ -93,7 +93,7 @@ const Footer = () => {
                 target={href.startsWith('http') && !href.startsWith('mailto') ? '_blank' : undefined}
                 rel={href.startsWith('http') && !href.startsWith('mailto') ? 'noopener noreferrer' : undefined}
                 aria-label={label}
-                className="p-2 rounded-full text-text-muted dark:text-gray-400 hover:text-primary dark:hover:text-primary hover:bg-primary/10 transition-all"
+                className="p-2 rounded-full text-gray-400 dark:text-gray-400 hover:text-primary dark:hover:text-primary hover:bg-primary/10 transition-all"
               >
                 <Icon size={18} />
               </a>
@@ -103,8 +103,8 @@ const Footer = () => {
 
         {/* Branding Note */}
         <div className="mt-6 pt-6 border-t border-border-soft/50 dark:border-gray-800/50 text-center">
-          <p className="text-xs text-text-muted dark:text-gray-500">
-            Trusted by thousands of families | VivahBio.com
+            <p className="text-xs text-text-muted dark:text-gray-500">
+            Trusted by thousands of families | sangam-biodata.com
           </p>
         </div>
       </div>

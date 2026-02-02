@@ -3,15 +3,15 @@ import Link from 'next/link';
 import { ArrowLeft, Shield, Lock, Eye, UserCheck, Database, Cookie } from 'lucide-react';
 
 export const metadata = {
-  title: 'Privacy Policy | VivahBio',
-  description: 'Learn how VivahBio protects your personal information and respects your privacy.',
+  title: 'Privacy Policy | sangam-biodata',
+  description: 'Learn how sangam-biodata protects your personal information and respects your privacy.',
 };
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-background-light">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border-soft bg-white shadow-sm">
+      <header className="sticky top-0 z-40 border-b border-border-soft bg-white dark:bg-background-dark shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-4 md:px-8 flex items-center justify-between gap-4">
           <Link
             href="/"
@@ -36,7 +36,7 @@ export default function PrivacyPolicyPage() {
             Your Privacy Matters
           </h2>
           <p className="text-text-muted text-lg max-w-2xl mx-auto">
-            At VivahBio, we are committed to protecting your personal information and respecting your privacy.
+            At sangam-biodata, we are committed to protecting your personal information and respecting your privacy.
           </p>
           <p className="text-sm text-text-muted mt-4">
             Last Updated: February 1, 2026
@@ -173,7 +173,7 @@ export default function PrivacyPolicyPage() {
             title="Children's Privacy"
           >
             <p className="text-text-muted">
-              VivahBio is intended for users aged 18 and above. We do not knowingly collect information from individuals under 18. If you believe we have inadvertently collected such information, please contact us immediately for removal.
+              sangam-biodata is intended for users aged 18 and above. We do not knowingly collect information from individuals under 18. If you believe we have inadvertently collected such information, please contact us immediately for removal.
             </p>
           </Section>
 
@@ -181,7 +181,7 @@ export default function PrivacyPolicyPage() {
             title="Changes to This Policy"
           >
             <p className="text-text-muted">
-              We may update this Privacy Policy periodically to reflect changes in our practices or legal requirements. We will notify users of significant changes through our website or via email. Your continued use of VivahBio after changes indicates acceptance of the updated policy.
+              We may update this Privacy Policy periodically to reflect changes in our practices or legal requirements. We will notify users of significant changes through our website or via email. Your continued use of sangam-biodata after changes indicates acceptance of the updated policy.
             </p>
           </Section>
 
@@ -234,7 +234,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="bg-white rounded-xl border border-border-soft p-6 md:p-8 shadow-sm">
+    <section className="bg-white dark:bg-midnight-accent rounded-xl border border-border-soft p-6 md:p-8 shadow-sm">
       <div className="flex items-start gap-3 mb-4">
         {icon && (
           <div className="flex-shrink-0 text-primary mt-1">

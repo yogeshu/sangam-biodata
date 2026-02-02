@@ -84,7 +84,7 @@ function normalizeBiodata(raw: any): BiodataData {
     partnerOccupation: raw?.partnerOccupation || "",
     partnerManglik: raw?.partnerManglik || "",
     expectations: raw?.expectations || buildExpectations(raw),
-    watermarkText: raw?.watermarkText || "VivahBio.com",
+    watermarkText: raw?.watermarkText || "sangam-biodata.com",
     photos: raw?.photos || [],
     customFields: raw?.customFields || [],
     layoutStyle: raw?.layoutStyle || 'compact',
@@ -211,7 +211,7 @@ function PreviewPageContent() {
     setIsDownloading(true);
     try {
       await downloadAsPDF("biodata-preview", {
-        filename: `${data?.fullName || "biodata"}-vivahbio.pdf`,
+        filename: `${data?.fullName || "biodata"}-sangam-biodata.pdf`,
       });
     } catch (error) {
       console.error("Download failed:", error);
@@ -227,7 +227,7 @@ function PreviewPageContent() {
     setIsImageDownloading(true);
     try {
       await downloadAsImage("biodata-preview", {
-        filename: `${data?.fullName || "biodata"}-vivahbio.png`,
+        filename: `${data?.fullName || "biodata"}-sangam-biodata.png`,
         format: 'png',
       });
     } catch (error) {
@@ -240,7 +240,7 @@ function PreviewPageContent() {
 
   const handleShareWhatsApp = () => {
     if (!isConfirmed) return;
-    shareOnWhatsApp(`Check out my biodata: ${data?.fullName || "Biodata"} - Created on VivahBio.com`);
+    shareOnWhatsApp(`Check out my biodata: ${data?.fullName || "Biodata"} - Created on sangam-biodata.com`);
   };
 
   const handleStartOver = () => {
@@ -250,7 +250,7 @@ function PreviewPageContent() {
 
   if (isLoading || !data) {
     return (
-      <div className="min-h-screen bg-background-light flex items-center justify-center">
+      <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center">
         <div className="text-center max-w-md mx-auto px-4">
           {isLoading ? (
             <>
@@ -295,9 +295,9 @@ function PreviewPageContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-background-light text-text-main font-body">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark text-text-main font-body">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border-soft bg-white shadow-sm">
+      <header className="sticky top-0 z-40 border-b border-border-soft bg-white dark:bg-background-dark shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-4 md:px-8 flex items-center justify-between gap-4">
           <button
             onClick={() => router.push("/create?step=3")}
@@ -352,7 +352,7 @@ function PreviewPageContent() {
           {/* Actions Panel */}
           <div className="flex flex-col gap-6">
             {/* Verification Card */}
-            <div className="rounded-xl border border-border-soft bg-white p-6 shadow-md">
+            <div className="rounded-xl border border-border-soft bg-white dark:bg-midnight-accent p-6 shadow-md">
               <div className="flex items-center gap-2 mb-4">
                 <CheckCircle size={20} className="text-primary" />
                 <h2 className="font-bold text-lg text-text-main">Verify Your Details</h2>
@@ -500,7 +500,7 @@ function BiodataPreview({ data, templateId }: { data: any; templateId: string })
 
       {/* Footer */}
       <div className="pt-6 border-t border-border-soft text-center text-xs text-text-muted">
-        <p>Created on VivahBio • confidential & secure</p>
+        <p>Created on sangam-biodata • confidential & secure</p>
       </div>
     </div>
   );

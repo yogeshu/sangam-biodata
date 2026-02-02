@@ -8,18 +8,18 @@ const TemplateGallery = () => {
   ];
 
   return (
-    <div className="w-full bg-white dark:bg-background-dark py-16 transition-colors">
+    <div className="w-full bg-slate-900 dark:bg-slate-800 py-16 transition-colors">
       <div className="max-w-[960px] mx-auto px-4 md:px-10">
         <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-6">
           <div className="flex flex-col gap-4 max-w-[600px]">
-            <h2 className="text-text-main dark:text-background-light text-3xl md:text-4xl font-bold leading-tight">
+            <h2 className="text-white dark:text-gray-100 text-3xl md:text-4xl font-bold leading-tight">
               Select from premium templates
             </h2>
-            <p className="text-text-muted dark:text-gray-300 text-base font-body">
+            <p className="text-gray-300 dark:text-gray-400 text-base font-body">
               Choose a design that reflects your personality and tradition. From classic auspicious reds to modern minimal styles.
             </p>
           </div>
-          <button className="flex items-center justify-center rounded-lg h-10 px-5 border border-primary text-primary hover:bg-primary hover:text-background-dark transition-colors text-sm font-bold w-fit whitespace-nowrap">
+          <button className="flex items-center justify-center rounded-lg h-10 px-5 border border-gray-400 text-gray-300 hover:bg-white hover:text-slate-900 transition-colors text-sm font-bold w-fit whitespace-nowrap">
             View all templates
           </button>
         </div>
@@ -27,13 +27,13 @@ const TemplateGallery = () => {
           {templates.map((template, idx) => (
             <div key={idx} className="group cursor-pointer">
               <div 
-                className="w-full aspect-[3/4] bg-cover bg-top rounded-lg shadow-md mb-4 group-hover:shadow-xl transition-shadow border border-border-soft dark:border-border-soft/30 overflow-hidden" 
+                className="w-full aspect-[3/4] bg-cover bg-top rounded-lg shadow-md mb-4 group-hover:shadow-xl transition-shadow border border-gray-600 overflow-hidden" 
                 data-alt={template.alt} 
                 style={{ backgroundImage: `url("${template.img}")` }}
               ></div>
               <div>
-                <h3 className="text-text-main dark:text-background-light text-lg font-bold group-hover:text-primary transition-colors">{template.title}</h3>
-                <p className="text-text-muted dark:text-gray-300 text-sm font-body">{template.desc}</p>
+                <h3 className="text-gray-100 dark:text-gray-200 text-lg font-bold group-hover:text-primary transition-colors">{template.title}</h3>
+                <p className="text-gray-400 dark:text-gray-500 text-sm font-body">{template.desc}</p>
               </div>
             </div>
           ))}

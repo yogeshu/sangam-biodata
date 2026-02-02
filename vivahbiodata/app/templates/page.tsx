@@ -29,22 +29,22 @@ export default function TemplatesPage() {
 
   return (
     <CommonLayout>
-      <div className="min-h-screen bg-background-light text-text-main font-body">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-body">
         {/* Header */}
-        <header className="border-b border-border-soft bg-white shadow-sm">
+        <header className="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm">
           <div className="mx-auto max-w-7xl px-4 py-6 md:px-8">
             <div className="flex flex-col gap-4">
               <button
                 onClick={() => router.back()}
-                className="inline-flex items-center gap-2 text-text-muted hover:text-primary transition self-start"
+                className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-primary transition self-start"
               >
                 <ArrowLeft size={20} />
                 <span className="text-sm font-medium">Back</span>
               </button>
               <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold text-text-main">Biodata Templates</h1>
-                  <p className="text-sm text-text-muted mt-1">Choose from {filteredTemplates.length} beautiful designs</p>
+                  <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Biodata Templates</h1>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Choose from {filteredTemplates.length} beautiful designs</p>
                 </div>
               </div>
             </div>
@@ -60,7 +60,7 @@ export default function TemplatesPage() {
             className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
               activeCategory === "all"
                 ? "bg-primary text-white"
-                : "border border-border-soft text-text-main hover:border-primary hover:text-primary"
+                : "border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 hover:border-primary hover:text-primary"
             }`}
           >
             All Templates
@@ -72,7 +72,7 @@ export default function TemplatesPage() {
               className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
                 activeCategory === cat.toLowerCase()
                   ? "bg-primary text-white"
-                  : "border border-border-soft text-text-main hover:border-primary hover:text-primary"
+                  : "border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 hover:border-primary hover:text-primary"
               }`}
             >
               {cat}
@@ -85,8 +85,8 @@ export default function TemplatesPage() {
           <div className="mb-12">
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-bold text-text-main">Premium Templates</h2>
-                <p className="text-sm text-text-muted">Exclusive designs with luxury styling</p>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white">Premium Templates</h2>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Exclusive designs with luxury styling</p>
               </div>
               <span className="text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full">Premium</span>
             </div>
@@ -135,7 +135,7 @@ function TemplateCard({ template, onPreview, onUse }: {
   onUse: () => void;
 }) {
   return (
-    <div className="group rounded-2xl border border-border-soft bg-white overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+    <div className="group rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
       {/* Preview Image */}
       <div className="relative h-96 bg-gradient-to-br from-background-light to-border-soft overflow-hidden">
         <div className="scale-[0.35] origin-top-left absolute" style={{ width: '285%', height: '285%' }}>
@@ -156,7 +156,7 @@ function TemplateCard({ template, onPreview, onUse }: {
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 pointer-events-none">
           <button
             onClick={onPreview}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-primary font-semibold rounded-lg hover:bg-gray-100 transition pointer-events-auto"
+            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 text-primary font-semibold rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 transition pointer-events-auto"
           >
             <Eye size={16} />
             Preview
@@ -173,20 +173,20 @@ function TemplateCard({ template, onPreview, onUse }: {
 
       {/* Info */}
       <div className="p-6">
-        <h3 className="text-lg font-bold text-text-main mb-2">{template.name}</h3>
-        <p className="text-sm text-text-muted mb-4">{template.description}</p>
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{template.name}</h3>
+        <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{template.description}</p>
 
         <div className="flex items-center gap-2 text-xs">
           {template.isPremium && (
             <span className="px-2 py-1 bg-primary/10 text-primary font-bold rounded-full">Premium</span>
           )}
           {template.category && (
-            <span className="px-2 py-1 bg-border-soft text-text-muted rounded-full">{template.category}</span>
+            <span className="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-full">{template.category}</span>
           )}
         </div>
 
         {/* Stats */}
-        <div className="mt-4 pt-4 border-t border-border-soft flex justify-between text-xs text-text-muted">
+        <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 flex justify-between text-xs text-slate-600 dark:text-slate-400">
           <span>✨ {template.category}</span>
           {template.isPremium && <span className="text-amber-600 font-semibold">Premium</span>}
         </div>

@@ -95,7 +95,7 @@ export default function ModernMinimalTemplate({
           color: 'white'
         }}
       >
-        <p className="font-light">{data.watermarkText || "VivahBio.com"}</p>
+        <p className="font-light">{data.watermarkText || "sangam-biodata.com"}</p>
       </div>
     </div>
   );

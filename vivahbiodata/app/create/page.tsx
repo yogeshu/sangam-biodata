@@ -157,7 +157,7 @@ function CreateBiodataContent() {
     partnerEducation: "Graduate or Post-Graduate",
     partnerOccupation: "Well-settled professional",
     partnerManglik: "No preference",
-    watermarkText: "VivahBio.com",
+    watermarkText: "sangam-biodata.com",
     contactNumbers: [
       { type: "Self", number: "98765 43210" },
       { type: "Parent", number: "99876 54321" },
@@ -223,7 +223,7 @@ function CreateBiodataContent() {
     partnerEducation: "",
     partnerOccupation: "",
     partnerManglik: "",
-    watermarkText: "VivahBio.com",
+    watermarkText: "sangam-biodata.com",
     contactNumbers: [{ type: "Self", number: "" }],
     state: "",
     // New fields
@@ -411,11 +411,11 @@ function CreateBiodataContent() {
 
   return (
     <CommonLayout showFooter={false}>
-      <div className="min-h-screen bg-background-light text-text-main font-body">
+      <div className="min-h-screen bg-background-light dark:bg-background-dark text-text-main font-body">
         <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 pb-16 pt-8 md:px-8 lg:pt-12">
           <HeaderBar router={router} />
 
-          <div className="rounded-2xl border border-border-soft bg-white shadow-sm">
+          <div className="rounded-2xl border border-border-soft bg-white dark:bg-midnight-accent shadow-sm">
             <div className="flex flex-col gap-6 p-6 md:p-8">
               <StepperHeader progress={progress} currentStep={currentStep} />
               <StepTabs currentStep={currentStep} onStepChange={setCurrentStep} allowSkipValidation={allowSkipValidation} />
@@ -472,7 +472,7 @@ function HeaderBar({ router }: { router: any }) {
             <Heart size={20} />
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">VivahBio</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">sangam-biodata</p>
             <p className="text-base font-bold text-text-main">Biodata Builder</p>
           </div>
         </div>
@@ -942,7 +942,7 @@ function StepCard({ step, data, onChange, selectedTemplate, onTemplateChange, er
         </div>
 
         <div>
-          <InputField label="Watermark / Site Name" name="watermarkText" value={data.watermarkText} onChange={onChange} placeholder="e.g., VivahBio.com" optional />
+          <InputField label="Watermark / Site Name" name="watermarkText" value={data.watermarkText} onChange={onChange} placeholder="e.g., sangam-biodata.com" optional />
         </div>
 
         <HelperHint>Provide reachable contact number(s) for serious inquiries. You can include self, parent, or relative numbers.</HelperHint>

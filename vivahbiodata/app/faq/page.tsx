@@ -14,8 +14,8 @@ export default function FAQPage() {
       icon: <FileText size={20} />,
       questions: [
         {
-          q: 'What is VivahBio?',
-          a: 'VivahBio is an online platform that helps you create professional marriage biodata in minutes. Choose from beautiful templates, fill in your details, and download a high-quality PDF ready to share with prospective families.',
+          q: 'What is sangam-biodata?',
+          a: 'sangam-biodata is an online platform that helps you create professional marriage biodata in minutes. Choose from beautiful templates, fill in your details, and download a high-quality PDF ready to share with prospective families.',
         },
         {
           q: 'How do I create a biodata?',
@@ -26,8 +26,8 @@ export default function FAQPage() {
           a: 'No account is required for basic biodata creation. However, creating an account (optional) allows you to save drafts, edit later, and access your biodatas from any device.',
         },
         {
-          q: 'Is VivahBio free to use?',
-          a: 'Yes! VivahBio is completely free to use. You can create, preview, and download your biodata at no cost. Premium templates with advanced designs are also included at no charge.',
+          q: 'Is sangam-biodata free to use?',
+          a: 'Yes! sangam-biodata is completely free to use. You can create, preview, and download your biodata at no cost. Premium templates with advanced designs are also included at no charge.',
         },
       ],
     },
@@ -75,7 +75,7 @@ export default function FAQPage() {
         },
         {
           q: 'Is there a watermark on the downloaded biodata?',
-          a: 'A small "VivahBio.com" watermark appears at the bottom of your biodata. This is discreet and helps others discover our service. The watermark doesn\'t interfere with your information.',
+          a: 'A small "sangam-biodata.com" watermark appears at the bottom of your biodata. This is discreet and helps others discover our service. The watermark doesn\'t interfere with your information.',
         },
       ],
     },
@@ -114,8 +114,8 @@ export default function FAQPage() {
           a: 'Our templates are designed to fit on one A4 page. If content overflows, try using the "compact" layout option, removing optional sections, or being more concise with descriptions.',
         },
         {
-          q: 'Which browsers work best with VivahBio?',
-          a: 'VivahBio works best on modern browsers: Chrome (recommended), Firefox, Safari, and Edge. Make sure your browser is updated to the latest version for best performance.',
+          q: 'Which browsers work best with sangam-biodata?',
+          a: 'sangam-biodata works best on modern browsers: Chrome (recommended), Firefox, Safari, and Edge. Make sure your browser is updated to the latest version for best performance.',
         },
       ],
     },
@@ -158,10 +158,9 @@ export default function FAQPage() {
           a: 'Currently, all features and templates are free! We may introduce optional premium features in the future, but basic biodata creation will always remain free.',
         },
         {
-          q: 'Can I use VivahBio for commercial purposes?',
-          a: 'VivahBio is designed for personal use. If you\'re a matchmaker or business interested in using our service commercially, please contact us for partnership opportunities.',
+          q: 'Can I use sangam-biodata for commercial purposes?',
+          a: 'sangam-biodata is designed for personal use. If you\'re a matchmaker or business interested in using our service commercially, please contact us for partnership opportunities.',
         },
-      ],
     },
   ];
 
@@ -181,9 +180,9 @@ export default function FAQPage() {
   let globalIndex = 0;
 
   return (
-    <div className="min-h-screen bg-background-light">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border-soft bg-white shadow-sm">
+      <header className="sticky top-0 z-40 border-b border-border-soft bg-white dark:bg-background-dark shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-4 md:px-8 flex items-center justify-between gap-4">
           <Link
             href="/"
@@ -208,7 +207,7 @@ export default function FAQPage() {
             Frequently Asked Questions
           </h2>
           <p className="text-text-muted text-lg max-w-2xl mx-auto mb-8">
-            Find quick answers to common questions about creating biodatas with VivahBio.
+            Find quick answers to common questions about creating biodatas with sangam-biodata.
           </p>
 
           {/* Search Bar */}
@@ -240,7 +239,7 @@ export default function FAQPage() {
             </div>
           ) : (
             filteredCategories.map((category, catIndex) => (
-              <div key={catIndex} className="bg-white rounded-xl border border-border-soft p-6 md:p-8 shadow-sm">
+              <div key={catIndex} className="bg-white dark:bg-midnight-accent rounded-xl border border-border-soft p-6 md:p-8 shadow-sm">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="flex-shrink-0 text-primary">
                     {category.icon}
@@ -306,7 +305,7 @@ export default function FAQPage() {
               </Link>
               <Link
                 href="/templates"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-primary border-2 border-primary rounded-lg hover:bg-primary/5 transition font-semibold"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-midnight-accent text-primary border-2 border-primary rounded-lg hover:bg-primary/5 transition font-semibold"
               >
                 Create Biodata
               </Link>

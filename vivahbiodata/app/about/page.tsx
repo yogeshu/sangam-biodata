@@ -3,15 +3,15 @@ import Link from 'next/link';
 import { ArrowLeft, Github, Linkedin, Mail, ExternalLink, Heart, Lightbulb, Code, Users } from 'lucide-react';
 
 export const metadata = {
-  title: 'About VivahBio | Created for Families',
-  description: 'Learn about VivahBio - a privacy-first biodata creation tool built with love for families.',
+  title: 'About sangam-biodata | Created for Families',
+  description: 'Learn about sangam-biodata - a privacy-first biodata creation tool built with love for families.',
 };
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-background-light">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border-soft bg-white shadow-sm">
+      <header className="sticky top-0 z-40 border-b border-border-soft bg-white dark:bg-background-dark shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-4 md:px-8 flex items-center justify-between gap-4">
           <Link
             href="/"
@@ -33,7 +33,7 @@ export default function AboutPage() {
             <Heart size={32} />
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-text-main mb-4">
-            About VivahBio
+            About sangam-biodata
           </h2>
           <p className="text-text-muted text-lg max-w-2xl mx-auto">
             A privacy-first biodata creation tool built with love for families finding their perfect match.
@@ -42,7 +42,7 @@ export default function AboutPage() {
 
         {/* Mission Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          <div className="bg-white rounded-xl border border-border-soft p-8 shadow-sm">
+          <div className="bg-white dark:bg-midnight-accent rounded-xl border border-border-soft p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <Lightbulb size={28} className="text-primary" />
               <h3 className="text-2xl font-bold text-text-main">Our Mission</h3>
@@ -52,7 +52,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-xl border border-border-soft p-8 shadow-sm">
+          <div className="bg-white dark:bg-midnight-accent rounded-xl border border-border-soft p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <Code size={28} className="text-primary" />
               <h3 className="text-2xl font-bold text-text-main">Our Values</h3>
@@ -87,14 +87,14 @@ export default function AboutPage() {
                 Built by Yogesh Bhavsar
               </h3>
               <p className="text-text-muted text-lg mb-6 leading-relaxed">
-                A passionate developer dedicated to building tools that solve real problems. With expertise in web development, privacy, and user experience, Yogesh created VivahBio to help families navigate matrimony with confidence and security.
+                A passionate developer dedicated to building tools that solve real problems. With expertise in web development, privacy, and user experience, Yogesh created sangam-biodata to help families navigate matrimony with confidence and security.
               </p>
               <div className="flex flex-wrap gap-3">
                 <a
                   href="https://github.com/yogeshu"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-border-soft hover:border-primary hover:bg-primary/5 transition font-semibold text-sm text-text-main"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-midnight-accent rounded-lg border border-border-soft hover:border-primary hover:bg-primary/5 transition font-semibold text-sm text-text-main"
                 >
                   <Github size={18} />
                   GitHub Profile
@@ -103,7 +103,7 @@ export default function AboutPage() {
                   href="https://linkedin.com/in/yogeshbhavsarui"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-border-soft hover:border-primary hover:bg-primary/5 transition font-semibold text-sm text-text-main"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-midnight-accent rounded-lg border border-border-soft hover:border-primary hover:bg-primary/5 transition font-semibold text-sm text-text-main"
                 >
                   <Linkedin size={18} />
                   LinkedIn Profile
@@ -112,7 +112,7 @@ export default function AboutPage() {
                   href="https://consult.yogeshbhavsar.com/#contact"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-border-soft hover:border-primary hover:bg-primary/5 transition font-semibold text-sm text-text-main"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-midnight-accent rounded-lg border border-border-soft hover:border-primary hover:bg-primary/5 transition font-semibold text-sm text-text-main"
                 >
                   <ExternalLink size={18} />
                   Portfolio
@@ -121,7 +121,7 @@ export default function AboutPage() {
             </div>
 
             {/* Contact Card */}
-            <div className="bg-white rounded-xl border border-border-soft p-6 shadow-sm">
+            <div className="bg-white dark:bg-midnight-accent rounded-xl border border-border-soft p-6 shadow-sm">
               <h4 className="text-lg font-bold text-text-main mb-4">Get in Touch</h4>
               <p className="text-sm text-text-muted mb-4">
                 Have feedback, questions, or partnership opportunities?
@@ -140,7 +140,7 @@ export default function AboutPage() {
         {/* Features Section */}
         <div className="mb-16">
           <h3 className="text-3xl font-bold text-text-main text-center mb-12">
-            What Makes VivahBio Special
+            What Makes sangam-biodata Special
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
@@ -162,7 +162,7 @@ export default function AboutPage() {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl border border-border-soft p-8 shadow-sm text-center hover:shadow-md transition"
+                className="bg-white dark:bg-midnight-accent rounded-xl border border-border-soft p-8 shadow-sm text-center hover:shadow-md transition"
               >
                 <div className="text-primary mb-4 flex justify-center">
                   {feature.icon}
@@ -179,7 +179,7 @@ export default function AboutPage() {
         </div>
 
         {/* Tech Stack */}
-        <div className="bg-white rounded-xl border border-border-soft p-8 shadow-sm mb-16">
+        <div className="bg-white dark:bg-midnight-accent rounded-xl border border-border-soft p-8 shadow-sm mb-16">
           <h3 className="text-2xl font-bold text-text-main mb-6">Built With</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
@@ -191,7 +191,7 @@ export default function AboutPage() {
               { name: 'Google Analytics', desc: 'Analytics' },
               { name: 'Lucide Icons', desc: 'Icons' },
             ].map((tech) => (
-              <div key={tech.name} className="text-center p-4 rounded-lg bg-background-light">
+              <div key={tech.name} className="text-center p-4 rounded-lg bg-white dark:bg-midnight-accent border border-border-soft">
                 <p className="font-semibold text-text-main text-sm">{tech.name}</p>
                 <p className="text-xs text-text-muted mt-1">{tech.desc}</p>
               </div>
@@ -204,8 +204,8 @@ export default function AboutPage() {
           <h3 className="text-2xl font-bold text-text-main mb-4">
             Ready to Create Your Biodata?
           </h3>
-          <p className="text-text-muted mb-6 max-w-xl mx-auto">
-            Join thousands of families who have created beautiful biodatas with VivahBio.
+            <p className="text-text-muted mb-6 max-w-xl mx-auto">
+            Join thousands of families who have created beautiful biodatas with sangam-biodata.
           </p>
           <Link
             href="/templates"

@@ -3,15 +3,15 @@ import Link from 'next/link';
 import { ArrowLeft, FileText, Scale, AlertCircle, CheckCircle, XCircle } from 'lucide-react';
 
 export const metadata = {
-  title: 'Terms and Conditions | VivahBio',
-  description: 'Terms of service and conditions for using VivahBio biodata creation platform.',
+  title: 'Terms and Conditions | sangam-biodata',
+  description: 'Terms of service and conditions for using sangam-biodata biodata creation platform.',
 };
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-background-light">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border-soft bg-white shadow-sm">
+      <header className="sticky top-0 z-40 border-b border-border-soft bg-white dark:bg-background-dark shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-4 md:px-8 flex items-center justify-between gap-4">
           <Link
             href="/"
@@ -36,7 +36,7 @@ export default function TermsPage() {
             Terms and Conditions
           </h2>
           <p className="text-text-muted text-lg max-w-2xl mx-auto">
-            Please read these terms carefully before using VivahBio services.
+            Please read these terms carefully before using sangam-biodata services.
           </p>
           <p className="text-sm text-text-muted mt-4">
             Last Updated: February 1, 2026
@@ -50,7 +50,7 @@ export default function TermsPage() {
             title="1. Acceptance of Terms"
           >
             <p className="text-text-muted mb-4">
-              By accessing and using VivahBio ("the Service"), you accept and agree to be bound by these Terms and Conditions. If you disagree with any part of these terms, you may not use our Service.
+              By accessing and using sangam-biodata ("the Service"), you accept and agree to be bound by these Terms and Conditions. If you disagree with any part of these terms, you may not use our Service.
             </p>
             <p className="text-text-muted">
               These terms apply to all visitors, users, and others who access or use the Service.
@@ -62,7 +62,7 @@ export default function TermsPage() {
             title="2. Service Description"
           >
             <p className="text-text-muted mb-4">
-              VivahBio is a <strong>privacy-first</strong> biodata creation tool that provides:
+              sangam-biodata is a <strong>privacy-first</strong> biodata creation tool that provides:
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
               <li>Online marriage biodata creation tools</li>
@@ -76,7 +76,7 @@ export default function TermsPage() {
                 🔒 Privacy-First: We only collect your email for account creation. Your biodata information stays with you.
               </p>
               <p className="text-sm text-blue-800">
-                <strong>Note:</strong> VivahBio is a document creation tool, not a matchmaking or matrimonial service.
+                <strong>Note:</strong> sangam-biodata is a document creation tool, not a matchmaking or matrimonial service.
               </p>
             </div>
           </Section>
@@ -85,7 +85,7 @@ export default function TermsPage() {
             title="3. User Responsibilities"
           >
             <p className="text-text-muted mb-4">
-              By using VivahBio, you agree to:
+              By using sangam-biodata, you agree to:
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
               <li>Provide accurate and truthful information</li>
@@ -103,7 +103,7 @@ export default function TermsPage() {
             title="4. Prohibited Uses"
           >
             <p className="text-text-muted mb-4">
-              You may NOT use VivahBio for:
+              You may NOT use sangam-biodata for:
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
               <li>Creating fake or fraudulent biodatas</li>
@@ -121,7 +121,7 @@ export default function TermsPage() {
             title="5. Intellectual Property"
           >
             <p className="text-text-muted mb-4">
-              <strong>Our Content:</strong> All templates, designs, logos, and service features are owned by VivahBio and protected by copyright and trademark laws.
+              <strong>Our Content:</strong> All templates, designs, logos, and service features are owned by sangam-biodata and protected by copyright and trademark laws.
             </p>
             <p className="text-text-muted mb-4">
               <strong>Your Content:</strong> You retain ownership of the information and photos you upload. By using our service, you grant us a limited license to use your content solely for providing the service (e.g., generating your biodata).
@@ -136,7 +136,7 @@ export default function TermsPage() {
             title="6. Disclaimer of Warranties"
           >
             <p className="text-text-muted mb-4">
-              VivahBio is provided "as is" and "as available" without any warranties of any kind, either express or implied, including but not limited to:
+              sangam-biodata is provided "as is" and "as available" without any warranties of any kind, either express or implied, including but not limited to:
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
               <li>Merchantability or fitness for a particular purpose</li>
@@ -146,7 +146,7 @@ export default function TermsPage() {
             </ul>
             <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
               <p className="text-sm text-amber-800">
-                <strong>Important:</strong> We do not guarantee matrimonial success or any outcomes from using your biodata. VivahBio is solely a document creation tool.
+                <strong>Important:</strong> We do not guarantee matrimonial success or any outcomes from using your biodata. sangam-biodata is solely a document creation tool.
               </p>
             </div>
           </Section>
@@ -155,7 +155,7 @@ export default function TermsPage() {
             title="7. Limitation of Liability"
           >
             <p className="text-text-muted mb-4">
-              To the fullest extent permitted by law, VivahBio shall not be liable for:
+              To the fullest extent permitted by law, sangam-biodata shall not be liable for:
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-muted ml-4">
               <li>Any indirect, incidental, special, or consequential damages</li>
@@ -236,7 +236,7 @@ export default function TermsPage() {
             title="12. Governing Law"
           >
             <p className="text-text-muted">
-              These Terms shall be governed by and construed in accordance with applicable laws. Any disputes arising from these terms or use of the service shall be resolved through appropriate legal channels in the jurisdiction where VivahBio operates.
+              These Terms shall be governed by and construed in accordance with applicable laws. Any disputes arising from these terms or use of the service shall be resolved through appropriate legal channels in the jurisdiction where sangam-biodata operates.
             </p>
           </Section>
 
@@ -244,7 +244,7 @@ export default function TermsPage() {
             title="13. Changes to Terms"
           >
             <p className="text-text-muted mb-4">
-              We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting. Your continued use of VivahBio after changes constitutes acceptance of the modified terms.
+              We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting. Your continued use of sangam-biodata after changes constitutes acceptance of the modified terms.
             </p>
             <p className="text-text-muted">
               We recommend reviewing these terms periodically for any updates.
@@ -278,7 +278,7 @@ export default function TermsPage() {
           <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
             <CheckCircle size={32} className="text-green-600 mx-auto mb-3" />
             <p className="text-text-main font-semibold mb-2">
-              By using VivahBio, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.
+              By using sangam-biodata, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.
             </p>
             <Link
               href="/templates"
@@ -303,7 +303,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="bg-white rounded-xl border border-border-soft p-6 md:p-8 shadow-sm">
+    <section className="bg-white dark:bg-midnight-accent rounded-xl border border-border-soft p-6 md:p-8 shadow-sm">
       <div className="flex items-start gap-3 mb-4">
         {icon && (
           <div className="flex-shrink-0 text-primary mt-1">

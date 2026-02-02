@@ -14,10 +14,10 @@ const Hero = () => {
               <span className="text-primary font-bold tracking-wider text-xs uppercase bg-primary/10 w-fit px-3 py-1 rounded-full mx-auto md:mx-0">
                 Trusted by 50,000+ Families
               </span>
-              <h1 className="text-text-main dark:text-background-light text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-[-0.033em]">
+              <h1 className="text-text-main text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-[-0.033em]">
                 Create your Marriage Biodata in <span className="text-primary italic">3 minutes</span>
               </h1>
-              <h2 className="text-text-muted dark:text-gray-300 text-lg font-medium leading-relaxed max-w-[600px] mx-auto md:mx-0 font-body">
+              <h2 className="text-text-muted text-lg font-medium leading-relaxed max-w-[600px] mx-auto md:mx-0 font-body">
                 Professional PDF formats designed for WhatsApp sharing. No public profile required—your data stays private and secure.
               </h2>
             </div>
@@ -25,11 +25,11 @@ const Hero = () => {
               <a href='/templates' className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-primary hover:bg-primary-dark transition-all shadow-lg shadow-primary/20 text-background-dark dark:text-background-dark text-base font-bold">
                 Create Biodata
               </a>
-              <a href='/samples' className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-white dark:bg-background-dark border border-border-strong dark:border-border-soft text-text-main dark:text-background-light hover:bg-gray-50 dark:hover:bg-gray-800 transition-all text-base font-bold">
+              <a href='/samples' className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-8 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-base font-bold">
                 View Samples
               </a>
             </div>
-            <div className="flex items-center justify-center md:justify-start gap-2 text-text-muted dark:text-gray-300 text-sm mt-2">
+            <div className="flex items-center justify-center md:justify-start gap-2 text-text-muted text-sm mt-2">
               <CheckCircle size={18} />
               <span>No sign-up required for preview</span>
             </div>
@@ -44,7 +44,7 @@ const Hero = () => {
               style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuC-qWpm9gV-Nt1fp25e1xzuzZMZb_vBUen4O0n5XtKf0Y4F44zGry7eNHqwUaQm4kmLjr8M6VNehj4mySeTblLzn0Kg478c_uwyJBMCFARRbUzIaFkundvusyNSlTx3TZK9I31YqKYtrjAezg_I7Sq7xYcqKv9OhvjQ8ZOxmCaru3mUncUdJh3IqvCesWAO3DJCvUenCOEorfCiq0EqwJlL8Bnpgw2KkB55kiMCql397Du8zmmemMKyZnZshU1NHUFl9I1n4NanHwlE")' }}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                <div className="bg-white/95 backdrop-blur-sm p-4 rounded-lg shadow-lg w-full">
+                <div className="bg-white dark:bg-midnight-accent/95 backdrop-blur-sm p-4 rounded-lg shadow-lg w-full">
                   <div className="flex items-center gap-3 border-b border-gray-100 pb-3 mb-2">
                     <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                       <User size={20} />
