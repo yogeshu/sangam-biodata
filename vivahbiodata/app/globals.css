@@ -62,3 +62,17 @@ body {
 .dark .text-primary {
   color: #EAB308 !important;
 }
+
+@layer components {
+  :is(button, a, [role="button"]).bg-primary {
+    background-color: var(--color-primary);
+    background-image: linear-gradient(135deg, #fde68a 0%, #facc15 45%, #eab308 100%);
+    border: 1px solid rgba(202, 138, 4, 0.35);
+    box-shadow: 0 12px 24px -16px rgba(234, 179, 8, 0.7);
+  }
+
+  :is(button, a, [role="button"]).hover\:bg-primary-dark:hover {
+    background-color: var(--color-primary-dark);
+    background-image: linear-gradient(135deg, #facc15 0%, #eab308 50%, #ca8a04 100%);
+  }
+}
