@@ -112,7 +112,7 @@ export default function SamplesPage() {
     <CommonLayout>
       <div className="min-h-screen bg-background-light dark:bg-background-dark text-text-main font-body">
         {/* Header */}
-        <header className="border-b border-border-soft bg-white dark:bg-background-dark shadow-sm">
+        <header className="border-b border-border-soft  dark:bg-background-dark shadow-sm">
           <div className="mx-auto max-w-7xl px-4 py-6 md:px-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <button

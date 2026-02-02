@@ -31,7 +31,7 @@ export default function TemplatesPage() {
     <CommonLayout>
       <div className="min-h-screen bg-background-light dark:bg-background-dark text-text-main font-body">
         {/* Header */}
-        <header className="border-b border-border-soft bg-white dark:bg-background-dark shadow-sm">
+        <header className="border-b border-border-soft dark:bg-background-dark shadow-sm">
           <div className="mx-auto max-w-7xl px-4 py-6 md:px-8">
             <div className="flex flex-col gap-4">
               <button
@@ -135,7 +135,7 @@ function TemplateCard({ template, onPreview, onUse }: {
   onUse: () => void;
 }) {
   return (
-    <div className="group rounded-2xl border border-border-soft bg-white dark:bg-midnight-accent overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+    <div className="group rounded-2xl border border-border-soft dark:bg-midnight-accent overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
       {/* Preview Image */}
       <div className="relative h-96 bg-gradient-to-br from-background-light to-border-soft overflow-hidden">
         <div className="scale-[0.35] origin-top-left absolute" style={{ width: '285%', height: '285%' }}>
@@ -156,7 +156,7 @@ function TemplateCard({ template, onPreview, onUse }: {
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 pointer-events-none">
           <button
             onClick={onPreview}
-            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-midnight-accent text-primary font-semibold rounded-lg hover:bg-primary/10 transition pointer-events-auto"
+            className="flex items-center gap-2 px-4 py-2 dark:bg-midnight-accent text-primary font-semibold rounded-lg hover:bg-primary/10 transition pointer-events-auto"
           >
             <Eye size={16} />
             Preview

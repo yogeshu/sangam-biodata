@@ -11,7 +11,7 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border-soft bg-white dark:bg-background-dark shadow-sm">
+      <header className="sticky top-0 z-40 border-b border-border-soft  dark:bg-background-dark shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-4 md:px-8 flex items-center justify-between gap-4">
           <Link
             href="/"
